@@ -1,0 +1,23 @@
+# ==========================================
+# PROYECTO IGOR - .gitignore
+# ==========================================
+
+# Dependencias
+node_modules/
+
+# Seguridad y Variables de Entorno
+.env
+
+# Archivos Temporales y de Logs Locales
+lista_completa.txt
+*.log
+
+# Carpetas de Herramientas AI / IDE locales
+# (Descomenta si el equipo completo necesita compartir estas configuraciones)
+.agents/
+.claude/
+.windsurf/
+
+# Builds y compilación (Estándar TS)
+dist/
+build/

@@ -1,0 +1,29 @@
+# Formato de puerto:
+# Puerto_Host : Puerto_Contenedor
+
+services:
+  postgres:
+    image: postgres:18-alpine3.24 
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: igor_db
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  redis:
+    image: redis:8.10.1-alpine
+    restart: always
+    ports:
+      - 6379:6379
+
+

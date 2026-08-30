@@ -1,0 +1,68 @@
+import {prisma} from "./prisma.js"
+import { UserEntity } from "../../domain/entities/UserEnt.js";
+import { UserRepoContract } from "../../domain/repoContracts/UserRepoContract.js";
+import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
+
+
+ export class UserRepo implements UserRepoContract{
+
+    constructor(){
+        return this
+    }
+
+     public async createUser(_user: UserEntity, _family:FamilyEntity): Promise<object | null> {
+        try {
+            const dbResponse = await prisma.user.create({data: {
+                id: _user.id,
+                email: _user.email,
+                password_hash: _user.password_hash,
+                alias: _user.alias,
+                avatar_icon: _user.avatar_icon,
+                role: _user.role,
+                family_id: _family.id
+
+                }})
+            console.log("Usuario Creado con exito")
+            return dbResponse;
+        } catch (error) {
+            console.error(error)
+            return null
+        }
+        
+    }
+
+
+    public async findByEmail(emailToFind: string): Promise<UserEntity | null> {
+        try {
+            const  response = await prisma.user.findFirst({
+                where: {email: emailToFind},
+            })
+          
+            //MODIFICAR A UN MAPER LUEGO
+            return response as unknown as UserEntity
+            
+
+        } catch (error) {
+            console.error(error, "Error al encontrar el email")    
+            return null        
+        }
+
+    
+        
+    }
+
+    public async findByAlias(alias: string): Promise<UserEntity | null> { 
+       try {
+            const userFound = await arreglar prisma.user.findFirstOrThrow()
+            return userFound as unknown as UserEntity
+
+       }catch (error) {
+            console.error(error)
+            return null
+       }
+            }
+
+
+
+
+}

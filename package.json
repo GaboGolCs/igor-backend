@@ -1,0 +1,55 @@
+{
+  "name": "igor-backend",
+  "version": "1.0.0",
+  "description": "API REST para la plataforma socioeducativa IGOR",
+  "main": "src/presentation/http/server.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/presentation/http/server.ts",
+    "build": "tsc",
+    "start": "node dist/presentation/http/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "igor",
+    "backend",
+    "express",
+    "prisma",
+    "hexagonal"
+  ],
+  "author": "Equipo Backend IGOR",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "argon2": "^0.45.1",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0",
+    "uuid": "^14.0.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.2.0",
+    "@types/pg": "^8.23.1",
+    "prisma": "^7.9.1",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "allowScripts": {
+    "argon2@0.45.1": true,
+    "esbuild@0.28.2": true,
+    "esbuild@0.21.5": true,
+    "@prisma/client@7.9.1": true,
+    "@types/node@26.2.0": true,
+    "@types/jsonwebtoken@9.0.10": true,
+    "@prisma/engines@7.9.1": true,
+    "prisma@7.9.1": true,
+    "@prisma/adapter-pg@7.9.1": true
+  }
+}

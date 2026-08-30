@@ -1,0 +1,126 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+
+model Family{
+        id String @db.Uuid @id // @id declara PK
+        name String @db.VarChar(100)
+        code String @db.VarChar(10) @unique
+        created_at DateTime  @default(now())
+
+        users User[] //relación uno a muchos con la tabla user
+        calendar_events CalendarEvent[] //relación uno a muchos con la tabla calendar_events
+        daily_reminders DailyReminder[] //relación uno a muchos con la tabla daily_reminder
+
+        //crea la tabla con el nombre families
+        @@map("families")
+}
+
+
+model User{
+    id String @db.Uuid @id
+
+    //Creamos relación 
+    family Family @relation(fields: [family_id], references: [id])
+    family_id String @db.Uuid
+    
+    email String? @db.VarChar(255)
+    password_hash String @db.VarChar(255)
+    alias String @db.VarChar(50) @unique
+    role Role @default(PARENT)
+    avatar_icon String @db.VarChar(100)
+
+    mood_logs MoodLog[] //relación uno a muchos con la tabla mood_log
+    calendar_events CalendarEvent[] //relación uno a muchos con la tabla calendar_events
+    daily_reminders DailyReminder[] //relación uno a muchos con la tabla daily_reminder
+    @@map("users")
+
+}
+
+enum Role{
+  PARENT
+  CHILD
+  ADMIN
+}
+
+model MoodLog{
+    id String @db.Uuid @id
+
+    user User @relation(fields: [user_id], references: [id])
+    user_id String @db.Uuid
+    emotion Emotion
+    activity_text String @db.Text
+    need_text String @db.Text
+    logged_at DateTime 
+
+    @@map("mood_logs")
+}
+
+enum Emotion{
+  HAPPY
+  SAD
+  ANXIOUS
+  NEUTRAL
+  ANGRY
+}
+
+model CalendarEvent{
+  id String @db.Uuid @id
+  
+  family Family @relation(fields: [family_id], references: [id])
+  family_id String @db.Uuid
+
+  user User @relation(fields: [created_by], references: [id])
+  created_by String @db.Uuid
+  
+  title String @db.VarChar(150)
+  category Category 
+  event_date DateTime
+
+  @@map("calendar_events")
+}
+
+enum Category{
+  EXAM
+  MEETING
+  MATERIAL
+  FAMILY
+  OTHER
+}
+
+
+
+model DailyReminder{
+  id String @db.Uuid @id
+  family Family @relation(fields: [family_id], references: [id])
+  family_id String @db.Uuid
+
+  user User @relation(fields: [targeted_user_id], references: [id])
+  targeted_user_id String @db.Uuid
+
+  title String @db.VarChar(150)
+  recurrence_time DateTime 
+  is_active Boolean @default(true)
+
+  @@map("daily_reminders")
+} 
+
+
+
+model TriviaQuestion{
+  id String @db.Uuid @id
+  category String @db.VarChar(50)
+  question_text String @db.Text
+  options_json Json
+  correct_option Int 
+
+  @@map("trivia_questions")
+}
