@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 
-async function verifyPassword(storedHash: string, providedPassword: string): Promise<boolean> {
+export async function verifyPassword(storedHash: string, providedPassword: string): Promise<boolean> {
     try {
         // The verify function returns true if the password matches
         // It returns false if the password doesn't match

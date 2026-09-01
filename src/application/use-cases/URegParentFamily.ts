@@ -1,8 +1,5 @@
 import {UserEntity} from "../../domain/entities/UserEnt.js"
 import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
-import { UserRepoContract } from "../../domain/repoContracts/UserRepoContract.js";
-import { FamilyRepoContract } from "../../domain/repoContracts/FamilyRepoContract.js";
-import { TransactionRepoContract } from "../../domain/repoContracts/TransactionRepoContract.js";
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
 import { FamilyRepo } from "../../infrastructure/database/FamilyRepo.js";
 import { TransactionRepo } from "../../infrastructure/database/TransactionRepo.js";
