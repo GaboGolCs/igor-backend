@@ -9,12 +9,12 @@ export class TransactionRepo implements TransactionRepoContract{
     public async executeTransaction(x: Function): Promise<object | null> {
         try {
             const transactionResponse = await prisma.$transaction( async (tx) => {
-                return x
+                return await x(tx)
             }) 
             return transactionResponse
         } catch (error) {
             console.error(error) 
-            return null   
+            throw error   
         } 
     
     }

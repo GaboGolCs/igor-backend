@@ -163,7 +163,7 @@ export type UserGroupByOutputType = {
   id: string
   family_id: string
   email: string | null
-  password_hash: string | null
+  password_hash: string
   alias: string
   role: $Enums.Role
   avatar_icon: string
@@ -194,7 +194,7 @@ export type UserWhereInput = {
   id?: Prisma.UuidFilter<"User"> | string
   family_id?: Prisma.UuidFilter<"User"> | string
   email?: Prisma.StringNullableFilter<"User"> | string | null
-  password_hash?: Prisma.StringNullableFilter<"User"> | string | null
+  password_hash?: Prisma.StringFilter<"User"> | string
   alias?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringFilter<"User"> | string
@@ -208,7 +208,7 @@ export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  password_hash?: Prisma.SortOrderInput | Prisma.SortOrder
+  password_hash?: Prisma.SortOrder
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
@@ -220,26 +220,26 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  email?: string
+  alias?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   family_id?: Prisma.UuidFilter<"User"> | string
-  email?: Prisma.StringNullableFilter<"User"> | string | null
-  password_hash?: Prisma.StringNullableFilter<"User"> | string | null
-  alias?: Prisma.StringFilter<"User"> | string
+  password_hash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringFilter<"User"> | string
   family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
   mood_logs?: Prisma.MoodLogListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
   daily_reminders?: Prisma.DailyReminderListRelationFilter
-}, "id">
+}, "id" | "email" | "alias">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  password_hash?: Prisma.SortOrderInput | Prisma.SortOrder
+  password_hash?: Prisma.SortOrder
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
@@ -255,7 +255,7 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"User"> | string
   family_id?: Prisma.UuidWithAggregatesFilter<"User"> | string
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  password_hash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  password_hash?: Prisma.StringWithAggregatesFilter<"User"> | string
   alias?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringWithAggregatesFilter<"User"> | string
@@ -264,7 +264,7 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -278,7 +278,7 @@ export type UserUncheckedCreateInput = {
   id: string
   family_id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -290,7 +290,7 @@ export type UserUncheckedCreateInput = {
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -304,7 +304,7 @@ export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -317,7 +317,7 @@ export type UserCreateManyInput = {
   id: string
   family_id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -326,7 +326,7 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -336,7 +336,7 @@ export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -482,7 +482,7 @@ export type UserUpdateOneRequiredWithoutDaily_remindersNestedInput = {
 export type UserCreateWithoutFamilyInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -494,7 +494,7 @@ export type UserCreateWithoutFamilyInput = {
 export type UserUncheckedCreateWithoutFamilyInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -536,7 +536,7 @@ export type UserScalarWhereInput = {
   id?: Prisma.UuidFilter<"User"> | string
   family_id?: Prisma.UuidFilter<"User"> | string
   email?: Prisma.StringNullableFilter<"User"> | string | null
-  password_hash?: Prisma.StringNullableFilter<"User"> | string | null
+  password_hash?: Prisma.StringFilter<"User"> | string
   alias?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringFilter<"User"> | string
@@ -545,7 +545,7 @@ export type UserScalarWhereInput = {
 export type UserCreateWithoutMood_logsInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -558,7 +558,7 @@ export type UserUncheckedCreateWithoutMood_logsInput = {
   id: string
   family_id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -585,7 +585,7 @@ export type UserUpdateToOneWithWhereWithoutMood_logsInput = {
 export type UserUpdateWithoutMood_logsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -598,7 +598,7 @@ export type UserUncheckedUpdateWithoutMood_logsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -609,7 +609,7 @@ export type UserUncheckedUpdateWithoutMood_logsInput = {
 export type UserCreateWithoutCalendar_eventsInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -622,7 +622,7 @@ export type UserUncheckedCreateWithoutCalendar_eventsInput = {
   id: string
   family_id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -649,7 +649,7 @@ export type UserUpdateToOneWithWhereWithoutCalendar_eventsInput = {
 export type UserUpdateWithoutCalendar_eventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -662,7 +662,7 @@ export type UserUncheckedUpdateWithoutCalendar_eventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -673,7 +673,7 @@ export type UserUncheckedUpdateWithoutCalendar_eventsInput = {
 export type UserCreateWithoutDaily_remindersInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -686,7 +686,7 @@ export type UserUncheckedCreateWithoutDaily_remindersInput = {
   id: string
   family_id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -713,7 +713,7 @@ export type UserUpdateToOneWithWhereWithoutDaily_remindersInput = {
 export type UserUpdateWithoutDaily_remindersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -726,7 +726,7 @@ export type UserUncheckedUpdateWithoutDaily_remindersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -737,7 +737,7 @@ export type UserUncheckedUpdateWithoutDaily_remindersInput = {
 export type UserCreateManyFamilyInput = {
   id: string
   email?: string | null
-  password_hash?: string | null
+  password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
@@ -746,7 +746,7 @@ export type UserCreateManyFamilyInput = {
 export type UserUpdateWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -758,7 +758,7 @@ export type UserUpdateWithoutFamilyInput = {
 export type UserUncheckedUpdateWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -770,7 +770,7 @@ export type UserUncheckedUpdateWithoutFamilyInput = {
 export type UserUncheckedUpdateManyWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -899,7 +899,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     family_id: string
     email: string | null
-    password_hash: string | null
+    password_hash: string
     alias: string
     role: $Enums.Role
     avatar_icon: string

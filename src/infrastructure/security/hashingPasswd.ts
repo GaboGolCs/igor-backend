@@ -1,7 +1,7 @@
 import argon2 from 'argon2';
 import crypto from 'crypto';
 
-async function hashPassword(password:string) {
+export async function hashPassword(password:string) {
     // Configure the algorithm
     const options: argon2.HashOptions = {
         type: argon2.argon2id,    // Variant of Argon2

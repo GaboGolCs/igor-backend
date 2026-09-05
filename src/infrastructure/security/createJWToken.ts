@@ -1,13 +1,19 @@
 import jwt from 'jsonwebtoken';
+import { UserEntity } from '../../domain/entities/UserEnt.js';
 
-export function createJWToken(payload:object): string | null {
+export function createJWToken(data:UserEntity): string | null {
     try { 
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET_CREATE as string, { expiresIn: '1h' });
+    const payload = {
+        id: data.id,
+        role: data.role,
+    }
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET_CREATE as string, { expiresIn: '1000h' });
     return token;
     }
     catch (error) {
-        console.error('Error creating JWT token');
+        console.error(error);
         return null;
     }   
 }

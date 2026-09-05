@@ -3,7 +3,8 @@
     /* Lenguaje y Entorno */
     "target": "ES2022",                                  
     "module": "NodeNext",                                
-    "moduleResolution": "NodeNext",                      
+    "moduleResolution": "NodeNext",  
+    "types": ["node"],                    
     
     /* Rutas y Directorios */
     "rootDir": "./src",                                  

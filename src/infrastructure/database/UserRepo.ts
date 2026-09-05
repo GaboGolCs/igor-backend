@@ -34,13 +34,12 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
 
     public async findByEmail(emailToFind: string): Promise<UserEntity | null> {
         try {
-            const  response = await prisma.user.findFirstOrThrow({
+            const  response = await prisma.user.findUnique({
                 where: {email: emailToFind},
             })
           
             //MODIFICAR A UN MAPER LUEGO
             return response as unknown as UserEntity
-            
 
         } catch (error) {
             console.error(error, "Error al encontrar el email")    
@@ -53,7 +52,7 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
 
     public async findByAlias(alias: string): Promise<UserEntity | null> { 
        try {
-            const userFound = await prisma.user.findUniqueOrThrow({
+            const userFound = await prisma.user.findUnique({
                 where: {alias: alias}
              })
             return userFound as unknown as UserEntity

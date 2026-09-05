@@ -1,7 +1,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated"
+  output   = "src/prisma"
 }
 
 datasource db {
@@ -32,7 +32,7 @@ model User{
     family Family @relation(fields: [family_id], references: [id])
     family_id String @db.Uuid
     
-    email String? @db.VarChar(255)
+    email String? @db.VarChar(255) @unique
     password_hash String @db.VarChar(255)
     alias String @db.VarChar(50) @unique
     role Role @default(PARENT)

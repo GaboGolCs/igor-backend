@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { Role } from "../../prisma/generated/enums.js";
+import { Role } from "../entities/RoleEnt.js";
 export  class UserEntity{
 
     public readonly id: string
@@ -23,13 +23,13 @@ export  class UserEntity{
 
     static createParent(email:string, password_hash:string, avatar_icon:string, family_id:string, alias:string){
        const id = randomUUID()
-       const role = "PARENT"
+       const role = Role.PARENT
        return new UserEntity(id, email, password_hash, alias, role, avatar_icon, family_id)
     }
 
     static createChild(password_hash:string, alias:string, avatar_icon:string, family_id:string){
         const id = randomUUID()
-        const role = "CHILD"
+        const role = Role.CHILD
         const email = null 
        return new UserEntity(id, email, password_hash, alias, role, avatar_icon, family_id)
     }
