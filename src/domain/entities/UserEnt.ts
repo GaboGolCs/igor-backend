@@ -21,13 +21,13 @@ export  class UserEntity{
         this.family_id = family_id
         }
 
-    static createParent(email:string, password_hash:string, avatar_icon:string, family_id:string, alias:string){
+    static createParent(email:string, password_hash:string, avatar_icon:string = "DefParentIcon", family_id:string, alias:string){
        const id = randomUUID()
        const role = Role.PARENT
        return new UserEntity(id, email, password_hash, alias, role, avatar_icon, family_id)
     }
 
-    static createChild(password_hash:string, alias:string, avatar_icon:string, family_id:string){
+    static createChild(password_hash:string, alias:string, avatar_icon:string = "DefChildIcon", family_id:string){
         const id = randomUUID()
         const role = Role.CHILD
         const email = null 

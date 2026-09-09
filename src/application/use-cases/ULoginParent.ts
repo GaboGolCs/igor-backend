@@ -1,41 +1,57 @@
-import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
-import { UserRepo } from "../../infrastructure/database/UserRepo.js";
-import { verifyPassword } from "../../infrastructure/security/verifyPasswd.js";
-import {createJWToken} from "../../infrastructure/security/createJWToken.js"
 import { UserEntity } from "../../domain/entities/UserEnt.js";
-export async function LoginChild(alias: string, passwordProvided: string){
+import { UserRepo } from "../../infrastructure/database/UserRepo.js";
+import { createJWToken } from "../../infrastructure/security/createJWToken.js";
+import { verifyPassword } from "../../infrastructure/security/verifyPasswd.js";
+import { AuthResponseDTO } from "../dtos/AuthResponseDTO.js";
+import { mapUserEntityToAuthResponseDTO } from "../mappers/AuthResponseMapper.js";
+export async function LoginParent(email: string, passwordProvided: string): Promise<AuthResponseDTO | null> {
     const UserRepoInstance = new UserRepo()
-   
-    let queryUserFound: UserEntity | null;
-    try {
-        queryUserFound = await UserRepoInstance.findByAlias(alias)
-    } catch (error) {
-       console.log(error)
-       return null 
-    }
+    let userFound: UserEntity | null;
 
-    try { 
-        if(!queryUserFound) {
-            console.log("Usuario no encontrado")
-            return null
+    try {
+
+        if(!email || !passwordProvided) {
+            console.error("Email o contraseña no proporcionados")
+            throw new Error("Email o contraseña no proporcionados")
         }
-        const passComparation = await verifyPassword(queryUserFound.password_hash, passwordProvided)
+
+        userFound = await UserRepoInstance.findByEmail(email)
+        if(!userFound) {
+            console.log("Usuario no encontrado")
+            throw new Error("Usuario no encontrado")
+        }
     } catch (error) {
-        console.log(error)
-        return null
+        console.error(error)
+        throw error
     }
 
     try {
-        const tokenToSend = createJWToken({queryUserFound}) 
+        const passComparation = await verifyPassword(userFound.password_hash, passwordProvided)
+        if(!passComparation) {
+            console.log("Contraseña incorrecta")
+            throw new Error("Contraseña incorrecta")
+        }
+    }catch (error) {
+        console.error(error)
+        throw error
+    } 
+
+    try {
+        if(userFound.email === null) {
+            console.error("Error de consistencia de datos: Email del usuario es null y no debería serlo")
+            throw new Error("Error de consistencia de datos: Email del usuario es null y no debería serlo")
+        }
+
+        const _user = UserEntity.createParent(userFound.email, userFound.password_hash, userFound.avatar_icon, userFound.family_id, userFound.alias)
+        const tokenToSend = createJWToken(_user)
         if(!tokenToSend) {
             console.error("Error al crear el token")
-            return null
+            throw new Error("Error al crear el token")
         }
-        return tokenToSend
-    } catch (error) {
-        console.log(error)
-        return null
-    }
+        return mapUserEntityToAuthResponseDTO(_user, tokenToSend) 
 
-    
+    }catch (error) {
+        console.error(error)
+        throw error
+    }
 }

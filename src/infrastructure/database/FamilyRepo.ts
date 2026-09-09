@@ -31,7 +31,25 @@ export class FamilyRepo implements FamilyRepoContract{
         }
 
     }
-    //public findById(id: FamilyEntity['id']): Promise<FamilyEntity | null>{}
+
+    public async findFamilyByParentId(parentId: string): Promise<FamilyEntity | null> {
+        try {
+            const family = await prisma.family.findFirst({
+                where: {
+                    users: {
+                        some: {
+                            id: parentId,
+                            role: 'PARENT'
+                        }
+                    }
+                }
+            });
+            return family as unknown as FamilyEntity;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 
     //public addMember(familyId: FamilyEntity['id'], userId: string): Promise<void>{}
     
