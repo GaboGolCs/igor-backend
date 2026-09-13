@@ -51,17 +51,17 @@ enum Role{
   ADMIN
 }
 
-model MoodLog{
-    id String @db.Uuid @id
+model MoodLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  user_id       String   @db.Uuid
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  emotion       Emotion
+  activity_text String   @db.Text
+  need_text     String   @db.Text
+  logged_at     DateTime @default(now())
 
-    user User @relation(fields: [user_id], references: [id])
-    user_id String @db.Uuid
-    emotion Emotion
-    activity_text String @db.Text
-    need_text String @db.Text
-    logged_at DateTime 
-
-    @@map("mood_logs")
+  @@index([user_id, logged_at])
+  @@map("mood_logs")
 }
 
 enum Emotion{

@@ -1,9 +1,10 @@
 import { Request } from 'express';
 
-export const extractTokenFromHeader = (req: Request): string | null => {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    return authHeader.split(' ')[1];
-  }
-  return null;
+export const extractTokenFromHeader = (req: Request): string | null  => {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        return authHeader.split(' ')[1];
+      }
+      return null
+  
 };

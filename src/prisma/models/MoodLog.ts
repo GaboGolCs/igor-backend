@@ -241,21 +241,21 @@ export type MoodLogScalarWhereWithAggregatesInput = {
 }
 
 export type MoodLogCreateInput = {
-  id: string
+  id?: string
   emotion: $Enums.Emotion
   activity_text: string
   need_text: string
-  logged_at: Date | string
+  logged_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutMood_logsInput
 }
 
 export type MoodLogUncheckedCreateInput = {
-  id: string
+  id?: string
   user_id: string
   emotion: $Enums.Emotion
   activity_text: string
   need_text: string
-  logged_at: Date | string
+  logged_at?: Date | string
 }
 
 export type MoodLogUpdateInput = {
@@ -277,12 +277,12 @@ export type MoodLogUncheckedUpdateInput = {
 }
 
 export type MoodLogCreateManyInput = {
-  id: string
+  id?: string
   user_id: string
   emotion: $Enums.Emotion
   activity_text: string
   need_text: string
-  logged_at: Date | string
+  logged_at?: Date | string
 }
 
 export type MoodLogUpdateManyMutationInput = {
@@ -386,19 +386,19 @@ export type EnumEmotionFieldUpdateOperationsInput = {
 }
 
 export type MoodLogCreateWithoutUserInput = {
-  id: string
+  id?: string
   emotion: $Enums.Emotion
   activity_text: string
   need_text: string
-  logged_at: Date | string
+  logged_at?: Date | string
 }
 
 export type MoodLogUncheckedCreateWithoutUserInput = {
-  id: string
+  id?: string
   emotion: $Enums.Emotion
   activity_text: string
   need_text: string
-  logged_at: Date | string
+  logged_at?: Date | string
 }
 
 export type MoodLogCreateOrConnectWithoutUserInput = {
@@ -440,11 +440,11 @@ export type MoodLogScalarWhereInput = {
 }
 
 export type MoodLogCreateManyUserInput = {
-  id: string
+  id?: string
   emotion: $Enums.Emotion
   activity_text: string
   need_text: string
-  logged_at: Date | string
+  logged_at?: Date | string
 }
 
 export type MoodLogUpdateWithoutUserInput = {

@@ -36,8 +36,8 @@ export async function LoginChild(alias: string, passwordProvided: string){
     }
 
     try {
-        const _user = UserEntity.createChild(userFound.password_hash, userFound.avatar_icon, userFound.family_id, userFound.alias)
-        const tokenToSend = createJWToken(_user) 
+
+        const tokenToSend = createJWToken(userFound) 
         if(!tokenToSend) {
             console.error("Error al crear el token")
             throw new Error("Error al crear el token")

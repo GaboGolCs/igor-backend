@@ -38,8 +38,7 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
                 where: {email: emailToFind},
             })
           
-            //MODIFICAR A UN MAPER LUEGO
-            return response as unknown as UserEntity
+            return response as UserEntity
 
         } catch (error) {
             console.error(error, "Error al encontrar el email")    
@@ -55,7 +54,7 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
             const userFound = await prisma.user.findUnique({
                 where: {alias: alias}
              })
-            return userFound as unknown as UserEntity
+            return userFound as UserEntity
 
        }catch (error) {
             console.error(error)
@@ -63,7 +62,18 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
        }
             }
 
+    public async findById(id: string): Promise<UserEntity | null> { 
+       try {
+            const userFound = await prisma.user.findUnique({
+                where: {id: id}
+             })
+            return userFound as UserEntity
 
+       }catch (error) {
+            console.error(error)
+            return null
+       }
+            }
 
 
 }
