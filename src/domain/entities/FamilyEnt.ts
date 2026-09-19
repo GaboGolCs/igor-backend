@@ -7,8 +7,7 @@ export class FamilyEntity {
     public readonly name: string;
     public readonly code: string;
     public readonly createdAt: Date;
-
-    constructor(id: string, name: string, code: string, createdAt: Date){
+    constructor(id: string, name: string, code: string, createdAt: Date ){
         this.id = id,
         this.name = name,
         this.code = code,
@@ -21,7 +20,7 @@ export class FamilyEntity {
          const code =  FamilyEntity.genSecureCode()
          const createdAt =  new Date()
         
-        return new FamilyEntity(id, name, code, createdAt)
+        return new FamilyEntity(id, name, code, createdAt, )
         
     }
 

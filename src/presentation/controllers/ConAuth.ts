@@ -11,7 +11,7 @@ export class ConAuth{
 
     public static async RegFamAndUser(req:Request,res:Response){    
         try {
-            const useCaseResponse = await CreateFamilyAndParent(req.body.familyName, req.body.parentEmail, req.body.password, req.body.alias, req.body.avatar_icon)
+            const useCaseResponse = await CreateFamilyAndParent(req.body.familyName, req.body.parentEmail, req.body.password, req.body.alias, req.body.avatar_icon, req.body.timezone)
             if(!useCaseResponse) {
                 return res.status(400).json({message: "Error al crear usuario y familia"})
             }

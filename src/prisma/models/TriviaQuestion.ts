@@ -258,7 +258,7 @@ export type TriviaQuestionScalarWhereWithAggregatesInput = {
 }
 
 export type TriviaQuestionCreateInput = {
-  id: string
+  id?: string
   category: string
   question_text: string
   options_json: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -266,7 +266,7 @@ export type TriviaQuestionCreateInput = {
 }
 
 export type TriviaQuestionUncheckedCreateInput = {
-  id: string
+  id?: string
   category: string
   question_text: string
   options_json: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -290,7 +290,7 @@ export type TriviaQuestionUncheckedUpdateInput = {
 }
 
 export type TriviaQuestionCreateManyInput = {
-  id: string
+  id?: string
   category: string
   question_text: string
   options_json: Prisma.JsonNullValueInput | runtime.InputJsonValue

@@ -25,7 +25,12 @@ export async function RegChild(alias:string, password:string, avatar_icon:string
 
         const hashedPassword = await hashPassword(password)
 
-        const _user = UserEntity.createChild(hashedPassword, alias, avatar_icon, familyFound.id)
+        const _parent = await UserRepoInstance.findById(parentID)
+        if(!_parent){
+            throw new Error("Bad Request: No existe un padre para la id enviada")
+        }
+
+        const _user = UserEntity.createChild(hashedPassword, alias, avatar_icon, familyFound.id, _parent.timezone)
 
         const childSaved = await UserRepoInstance.createUser(_user, familyFound)
         if(!childSaved) {

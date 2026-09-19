@@ -19,14 +19,15 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
                 alias: _user.alias,
                 avatar_icon: _user.avatar_icon,
                 role: _user.role,
-                family_id: _family.id
+                family_id: _family.id,
+                timezone: _user.timezone
 
                 }})
             console.log("Usuario Creado con exito")
             return dbResponse;
         } catch (error) {
             console.error(error)
-            return null
+            throw error
         }
         
     }

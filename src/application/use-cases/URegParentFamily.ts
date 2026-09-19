@@ -8,7 +8,7 @@ import { AuthResponseDTO } from "../dtos/AuthResponseDTO.js";
 import { mapUserEntityToAuthResponseDTO } from "../mappers/AuthResponseMapper.js";
 import { createJWToken } from "../../infrastructure/security/createJWToken.js";
 
-export async function CreateFamilyAndParent(familyName:string, parentEmail:string, password:string, alias:string, avatar_icon:string) : Promise<AuthResponseDTO | null> {
+export async function CreateFamilyAndParent(familyName:string, parentEmail:string, password:string, alias:string, avatar_icon:string, timezone: string) : Promise<AuthResponseDTO | null> {
 
 
     const UserRepoInstance = new UserRepo()
@@ -27,8 +27,9 @@ export async function CreateFamilyAndParent(familyName:string, parentEmail:strin
         }
 
         const hashedPassword = await hashPassword(password)
+        //aqui
         const _familiy = FamilyEntity.createFamily(familyName)
-        const _user = UserEntity.createParent(parentEmail,hashedPassword,avatar_icon, _familiy.id, alias)
+        const _user = UserEntity.createParent(parentEmail,hashedPassword,avatar_icon, _familiy.id, alias, timezone)
 
         const tokenToSend = createJWToken(_user) 
         if(!tokenToSend) {

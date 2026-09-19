@@ -223,7 +223,7 @@ export type FamilyScalarWhereWithAggregatesInput = {
 }
 
 export type FamilyCreateInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -233,7 +233,7 @@ export type FamilyCreateInput = {
 }
 
 export type FamilyUncheckedCreateInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -263,7 +263,7 @@ export type FamilyUncheckedUpdateInput = {
 }
 
 export type FamilyCreateManyInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -360,7 +360,7 @@ export type FamilyUpdateOneRequiredWithoutDaily_remindersNestedInput = {
 }
 
 export type FamilyCreateWithoutUsersInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -369,7 +369,7 @@ export type FamilyCreateWithoutUsersInput = {
 }
 
 export type FamilyUncheckedCreateWithoutUsersInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -412,7 +412,7 @@ export type FamilyUncheckedUpdateWithoutUsersInput = {
 }
 
 export type FamilyCreateWithoutCalendar_eventsInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -421,7 +421,7 @@ export type FamilyCreateWithoutCalendar_eventsInput = {
 }
 
 export type FamilyUncheckedCreateWithoutCalendar_eventsInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -464,7 +464,7 @@ export type FamilyUncheckedUpdateWithoutCalendar_eventsInput = {
 }
 
 export type FamilyCreateWithoutDaily_remindersInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string
@@ -473,7 +473,7 @@ export type FamilyCreateWithoutDaily_remindersInput = {
 }
 
 export type FamilyUncheckedCreateWithoutDaily_remindersInput = {
-  id: string
+  id?: string
   name: string
   code: string
   created_at?: Date | string

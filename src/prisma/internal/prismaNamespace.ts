@@ -922,7 +922,8 @@ export const UserScalarFieldEnum = {
   password_hash: 'password_hash',
   alias: 'alias',
   role: 'role',
-  avatar_icon: 'avatar_icon'
+  avatar_icon: 'avatar_icon',
+  timezone: 'timezone'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -944,9 +945,12 @@ export const CalendarEventScalarFieldEnum = {
   id: 'id',
   family_id: 'family_id',
   created_by: 'created_by',
+  targeted_user_id: 'targeted_user_id',
   title: 'title',
   category: 'category',
-  event_date: 'event_date'
+  event_date: 'event_date',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
@@ -958,7 +962,9 @@ export const DailyReminderScalarFieldEnum = {
   targeted_user_id: 'targeted_user_id',
   title: 'title',
   recurrence_time: 'recurrence_time',
-  is_active: 'is_active'
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type DailyReminderScalarFieldEnum = (typeof DailyReminderScalarFieldEnum)[keyof typeof DailyReminderScalarFieldEnum]

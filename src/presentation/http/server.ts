@@ -2,6 +2,8 @@ import express, { type Express } from 'express';
 import { rAuthInstance } from '../routes/RAuth.js';
 import { rFamilyInstance } from '../routes/RFamily.js';
 import { rMoodInstace } from '../routes/RMood.js';
+import { rCalendarEventInstance } from '../routes/RCalendarEvent.js';
+import { rReminderInstance } from '../routes/RReminder.js';
 const PORT = process.env.PORT || 3000;
   
 const app: Express = express();
@@ -11,6 +13,8 @@ console.log("Ya parseamos")
 app.use("/api/v1/auth",rAuthInstance)
 app.use("/api/v1/family",rFamilyInstance)
 app.use("/api/v1/moods",rMoodInstace)
+app.use("/api/v1/calendar/events",rCalendarEventInstance)
+app.use("api/v1/reminders",rReminderInstance)
 
 
 app.get('/', (req, res) => {

@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   alias: string | null
   role: $Enums.Role | null
   avatar_icon: string | null
+  timezone: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type UserMaxAggregateOutputType = {
   alias: string | null
   role: $Enums.Role | null
   avatar_icon: string | null
+  timezone: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -52,6 +54,7 @@ export type UserCountAggregateOutputType = {
   alias: number
   role: number
   avatar_icon: number
+  timezone: number
   _all: number
 }
 
@@ -64,6 +67,7 @@ export type UserMinAggregateInputType = {
   alias?: true
   role?: true
   avatar_icon?: true
+  timezone?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -74,6 +78,7 @@ export type UserMaxAggregateInputType = {
   alias?: true
   role?: true
   avatar_icon?: true
+  timezone?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type UserCountAggregateInputType = {
   alias?: true
   role?: true
   avatar_icon?: true
+  timezone?: true
   _all?: true
 }
 
@@ -167,6 +173,7 @@ export type UserGroupByOutputType = {
   alias: string
   role: $Enums.Role
   avatar_icon: string
+  timezone: string
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -198,6 +205,7 @@ export type UserWhereInput = {
   alias?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringFilter<"User"> | string
+  timezone?: Prisma.StringFilter<"User"> | string
   family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
   mood_logs?: Prisma.MoodLogListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
@@ -212,6 +220,7 @@ export type UserOrderByWithRelationInput = {
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   family?: Prisma.FamilyOrderByWithRelationInput
   mood_logs?: Prisma.MoodLogOrderByRelationAggregateInput
   calendar_events?: Prisma.CalendarEventOrderByRelationAggregateInput
@@ -229,6 +238,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   password_hash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringFilter<"User"> | string
+  timezone?: Prisma.StringFilter<"User"> | string
   family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
   mood_logs?: Prisma.MoodLogListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
@@ -243,6 +253,7 @@ export type UserOrderByWithAggregationInput = {
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -259,15 +270,17 @@ export type UserScalarWhereWithAggregatesInput = {
   alias?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringWithAggregatesFilter<"User"> | string
+  timezone?: Prisma.StringWithAggregatesFilter<"User"> | string
 }
 
 export type UserCreateInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
@@ -275,13 +288,14 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
-  id: string
+  id?: string
   family_id: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
@@ -294,6 +308,7 @@ export type UserUpdateInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
@@ -308,19 +323,21 @@ export type UserUncheckedUpdateInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
-  id: string
+  id?: string
   family_id: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -330,6 +347,7 @@ export type UserUpdateManyMutationInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -340,6 +358,7 @@ export type UserUncheckedUpdateManyInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type UserListRelationFilter = {
@@ -360,6 +379,7 @@ export type UserCountOrderByAggregateInput = {
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -370,6 +390,7 @@ export type UserMaxOrderByAggregateInput = {
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -380,6 +401,7 @@ export type UserMinOrderByAggregateInput = {
   alias?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatar_icon?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -480,24 +502,26 @@ export type UserUpdateOneRequiredWithoutDaily_remindersNestedInput = {
 }
 
 export type UserCreateWithoutFamilyInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFamilyInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
@@ -540,28 +564,31 @@ export type UserScalarWhereInput = {
   alias?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   avatar_icon?: Prisma.StringFilter<"User"> | string
+  timezone?: Prisma.StringFilter<"User"> | string
 }
 
 export type UserCreateWithoutMood_logsInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMood_logsInput = {
-  id: string
+  id?: string
   family_id: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -589,6 +616,7 @@ export type UserUpdateWithoutMood_logsInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
@@ -602,30 +630,33 @@ export type UserUncheckedUpdateWithoutMood_logsInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCalendar_eventsInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCalendar_eventsInput = {
-  id: string
+  id?: string
   family_id: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
 }
@@ -653,6 +684,7 @@ export type UserUpdateWithoutCalendar_eventsInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
@@ -666,30 +698,33 @@ export type UserUncheckedUpdateWithoutCalendar_eventsInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDaily_remindersInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDaily_remindersInput = {
-  id: string
+  id?: string
   family_id: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
 }
@@ -717,6 +752,7 @@ export type UserUpdateWithoutDaily_remindersInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
@@ -730,17 +766,19 @@ export type UserUncheckedUpdateWithoutDaily_remindersInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyFamilyInput = {
-  id: string
+  id?: string
   email?: string | null
   password_hash: string
   alias: string
   role?: $Enums.Role
   avatar_icon: string
+  timezone?: string
 }
 
 export type UserUpdateWithoutFamilyInput = {
@@ -750,6 +788,7 @@ export type UserUpdateWithoutFamilyInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
@@ -762,6 +801,7 @@ export type UserUncheckedUpdateWithoutFamilyInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
@@ -774,6 +814,7 @@ export type UserUncheckedUpdateManyWithoutFamilyInput = {
   alias?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -833,6 +874,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   alias?: boolean
   role?: boolean
   avatar_icon?: boolean
+  timezone?: boolean
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
   mood_logs?: boolean | Prisma.User$mood_logsArgs<ExtArgs>
   calendar_events?: boolean | Prisma.User$calendar_eventsArgs<ExtArgs>
@@ -848,6 +890,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   alias?: boolean
   role?: boolean
   avatar_icon?: boolean
+  timezone?: boolean
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -859,6 +902,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   alias?: boolean
   role?: boolean
   avatar_icon?: boolean
+  timezone?: boolean
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -870,9 +914,10 @@ export type UserSelectScalar = {
   alias?: boolean
   role?: boolean
   avatar_icon?: boolean
+  timezone?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "family_id" | "email" | "password_hash" | "alias" | "role" | "avatar_icon", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "family_id" | "email" | "password_hash" | "alias" | "role" | "avatar_icon" | "timezone", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
   mood_logs?: boolean | Prisma.User$mood_logsArgs<ExtArgs>
@@ -903,6 +948,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     alias: string
     role: $Enums.Role
     avatar_icon: string
+    timezone: string
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1337,6 +1383,7 @@ export interface UserFieldRefs {
   readonly alias: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly avatar_icon: Prisma.FieldRef<"User", 'String'>
+  readonly timezone: Prisma.FieldRef<"User", 'String'>
 }
     
 

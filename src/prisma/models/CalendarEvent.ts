@@ -28,27 +28,36 @@ export type CalendarEventMinAggregateOutputType = {
   id: string | null
   family_id: string | null
   created_by: string | null
+  targeted_user_id: string | null
   title: string | null
   category: $Enums.Category | null
-  event_date: Date | null
+  event_date: string | null
+  created_at: Date | null
+  updated_at: Date | null
 }
 
 export type CalendarEventMaxAggregateOutputType = {
   id: string | null
   family_id: string | null
   created_by: string | null
+  targeted_user_id: string | null
   title: string | null
   category: $Enums.Category | null
-  event_date: Date | null
+  event_date: string | null
+  created_at: Date | null
+  updated_at: Date | null
 }
 
 export type CalendarEventCountAggregateOutputType = {
   id: number
   family_id: number
   created_by: number
+  targeted_user_id: number
   title: number
   category: number
   event_date: number
+  created_at: number
+  updated_at: number
   _all: number
 }
 
@@ -57,27 +66,36 @@ export type CalendarEventMinAggregateInputType = {
   id?: true
   family_id?: true
   created_by?: true
+  targeted_user_id?: true
   title?: true
   category?: true
   event_date?: true
+  created_at?: true
+  updated_at?: true
 }
 
 export type CalendarEventMaxAggregateInputType = {
   id?: true
   family_id?: true
   created_by?: true
+  targeted_user_id?: true
   title?: true
   category?: true
   event_date?: true
+  created_at?: true
+  updated_at?: true
 }
 
 export type CalendarEventCountAggregateInputType = {
   id?: true
   family_id?: true
   created_by?: true
+  targeted_user_id?: true
   title?: true
   category?: true
   event_date?: true
+  created_at?: true
+  updated_at?: true
   _all?: true
 }
 
@@ -157,9 +175,12 @@ export type CalendarEventGroupByOutputType = {
   id: string
   family_id: string
   created_by: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date
+  event_date: string
+  created_at: Date
+  updated_at: Date
   _count: CalendarEventCountAggregateOutputType | null
   _min: CalendarEventMinAggregateOutputType | null
   _max: CalendarEventMaxAggregateOutputType | null
@@ -187,9 +208,12 @@ export type CalendarEventWhereInput = {
   id?: Prisma.UuidFilter<"CalendarEvent"> | string
   family_id?: Prisma.UuidFilter<"CalendarEvent"> | string
   created_by?: Prisma.UuidFilter<"CalendarEvent"> | string
+  targeted_user_id?: Prisma.UuidFilter<"CalendarEvent"> | string
   title?: Prisma.StringFilter<"CalendarEvent"> | string
   category?: Prisma.EnumCategoryFilter<"CalendarEvent"> | $Enums.Category
-  event_date?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  event_date?: Prisma.StringFilter<"CalendarEvent"> | string
+  created_at?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
   family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -198,9 +222,12 @@ export type CalendarEventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  targeted_user_id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   event_date?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
   family?: Prisma.FamilyOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -212,9 +239,12 @@ export type CalendarEventWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CalendarEventWhereInput | Prisma.CalendarEventWhereInput[]
   family_id?: Prisma.UuidFilter<"CalendarEvent"> | string
   created_by?: Prisma.UuidFilter<"CalendarEvent"> | string
+  targeted_user_id?: Prisma.UuidFilter<"CalendarEvent"> | string
   title?: Prisma.StringFilter<"CalendarEvent"> | string
   category?: Prisma.EnumCategoryFilter<"CalendarEvent"> | $Enums.Category
-  event_date?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  event_date?: Prisma.StringFilter<"CalendarEvent"> | string
+  created_at?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
   family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -223,9 +253,12 @@ export type CalendarEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  targeted_user_id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   event_date?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
   _count?: Prisma.CalendarEventCountOrderByAggregateInput
   _max?: Prisma.CalendarEventMaxOrderByAggregateInput
   _min?: Prisma.CalendarEventMinOrderByAggregateInput
@@ -238,34 +271,46 @@ export type CalendarEventScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"CalendarEvent"> | string
   family_id?: Prisma.UuidWithAggregatesFilter<"CalendarEvent"> | string
   created_by?: Prisma.UuidWithAggregatesFilter<"CalendarEvent"> | string
+  targeted_user_id?: Prisma.UuidWithAggregatesFilter<"CalendarEvent"> | string
   title?: Prisma.StringWithAggregatesFilter<"CalendarEvent"> | string
   category?: Prisma.EnumCategoryWithAggregatesFilter<"CalendarEvent"> | $Enums.Category
-  event_date?: Prisma.DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+  event_date?: Prisma.StringWithAggregatesFilter<"CalendarEvent"> | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
 }
 
 export type CalendarEventCreateInput = {
-  id: string
+  id?: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
   family: Prisma.FamilyCreateNestedOneWithoutCalendar_eventsInput
   user: Prisma.UserCreateNestedOneWithoutCalendar_eventsInput
 }
 
 export type CalendarEventUncheckedCreateInput = {
-  id: string
+  id?: string
   family_id: string
   created_by: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
 }
 
 export type CalendarEventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   family?: Prisma.FamilyUpdateOneRequiredWithoutCalendar_eventsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCalendar_eventsNestedInput
 }
@@ -274,34 +319,46 @@ export type CalendarEventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CalendarEventCreateManyInput = {
-  id: string
+  id?: string
   family_id: string
   created_by: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
 }
 
 export type CalendarEventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CalendarEventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CalendarEventListRelationFilter = {
@@ -318,27 +375,36 @@ export type CalendarEventCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  targeted_user_id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   event_date?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type CalendarEventMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  targeted_user_id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   event_date?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type CalendarEventMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
+  targeted_user_id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   event_date?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type CalendarEventCreateNestedManyWithoutFamilyInput = {
@@ -430,19 +496,25 @@ export type EnumCategoryFieldUpdateOperationsInput = {
 }
 
 export type CalendarEventCreateWithoutFamilyInput = {
-  id: string
+  id?: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
   user: Prisma.UserCreateNestedOneWithoutCalendar_eventsInput
 }
 
 export type CalendarEventUncheckedCreateWithoutFamilyInput = {
-  id: string
+  id?: string
   created_by: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
 }
 
 export type CalendarEventCreateOrConnectWithoutFamilyInput = {
@@ -478,25 +550,34 @@ export type CalendarEventScalarWhereInput = {
   id?: Prisma.UuidFilter<"CalendarEvent"> | string
   family_id?: Prisma.UuidFilter<"CalendarEvent"> | string
   created_by?: Prisma.UuidFilter<"CalendarEvent"> | string
+  targeted_user_id?: Prisma.UuidFilter<"CalendarEvent"> | string
   title?: Prisma.StringFilter<"CalendarEvent"> | string
   category?: Prisma.EnumCategoryFilter<"CalendarEvent"> | $Enums.Category
-  event_date?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  event_date?: Prisma.StringFilter<"CalendarEvent"> | string
+  created_at?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
 }
 
 export type CalendarEventCreateWithoutUserInput = {
-  id: string
+  id?: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
   family: Prisma.FamilyCreateNestedOneWithoutCalendar_eventsInput
 }
 
 export type CalendarEventUncheckedCreateWithoutUserInput = {
-  id: string
+  id?: string
   family_id: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
 }
 
 export type CalendarEventCreateOrConnectWithoutUserInput = {
@@ -526,67 +607,91 @@ export type CalendarEventUpdateManyWithWhereWithoutUserInput = {
 }
 
 export type CalendarEventCreateManyFamilyInput = {
-  id: string
+  id?: string
   created_by: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
 }
 
 export type CalendarEventUpdateWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCalendar_eventsNestedInput
 }
 
 export type CalendarEventUncheckedUpdateWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CalendarEventUncheckedUpdateManyWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CalendarEventCreateManyUserInput = {
-  id: string
+  id?: string
   family_id: string
+  targeted_user_id: string
   title: string
   category: $Enums.Category
-  event_date: Date | string
+  event_date: string
+  created_at?: Date | string
+  updated_at: Date | string
 }
 
 export type CalendarEventUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   family?: Prisma.FamilyUpdateOneRequiredWithoutCalendar_eventsNestedInput
 }
 
 export type CalendarEventUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CalendarEventUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
-  event_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_date?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -595,9 +700,12 @@ export type CalendarEventSelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   family_id?: boolean
   created_by?: boolean
+  targeted_user_id?: boolean
   title?: boolean
   category?: boolean
   event_date?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["calendarEvent"]>
@@ -606,9 +714,12 @@ export type CalendarEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   family_id?: boolean
   created_by?: boolean
+  targeted_user_id?: boolean
   title?: boolean
   category?: boolean
   event_date?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["calendarEvent"]>
@@ -617,9 +728,12 @@ export type CalendarEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   family_id?: boolean
   created_by?: boolean
+  targeted_user_id?: boolean
   title?: boolean
   category?: boolean
   event_date?: boolean
+  created_at?: boolean
+  updated_at?: boolean
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["calendarEvent"]>
@@ -628,12 +742,15 @@ export type CalendarEventSelectScalar = {
   id?: boolean
   family_id?: boolean
   created_by?: boolean
+  targeted_user_id?: boolean
   title?: boolean
   category?: boolean
   event_date?: boolean
+  created_at?: boolean
+  updated_at?: boolean
 }
 
-export type CalendarEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "family_id" | "created_by" | "title" | "category" | "event_date", ExtArgs["result"]["calendarEvent"]>
+export type CalendarEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "family_id" | "created_by" | "targeted_user_id" | "title" | "category" | "event_date" | "created_at" | "updated_at", ExtArgs["result"]["calendarEvent"]>
 export type CalendarEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -657,9 +774,12 @@ export type $CalendarEventPayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     family_id: string
     created_by: string
+    targeted_user_id: string
     title: string
     category: $Enums.Category
-    event_date: Date
+    event_date: string
+    created_at: Date
+    updated_at: Date
   }, ExtArgs["result"]["calendarEvent"]>
   composites: {}
 }
@@ -1088,9 +1208,12 @@ export interface CalendarEventFieldRefs {
   readonly id: Prisma.FieldRef<"CalendarEvent", 'String'>
   readonly family_id: Prisma.FieldRef<"CalendarEvent", 'String'>
   readonly created_by: Prisma.FieldRef<"CalendarEvent", 'String'>
+  readonly targeted_user_id: Prisma.FieldRef<"CalendarEvent", 'String'>
   readonly title: Prisma.FieldRef<"CalendarEvent", 'String'>
   readonly category: Prisma.FieldRef<"CalendarEvent", 'Category'>
-  readonly event_date: Prisma.FieldRef<"CalendarEvent", 'DateTime'>
+  readonly event_date: Prisma.FieldRef<"CalendarEvent", 'String'>
+  readonly created_at: Prisma.FieldRef<"CalendarEvent", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"CalendarEvent", 'DateTime'>
 }
     
 

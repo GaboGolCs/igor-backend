@@ -11,7 +11,7 @@ datasource db {
 
 
 model Family{
-        id String @db.Uuid @id // @id declara PK
+        id String @db.Uuid @id @default(uuid()) // @id declara PK
         name String @db.VarChar(100)
         code String @db.VarChar(10) @unique
         created_at DateTime  @default(now())
@@ -26,7 +26,7 @@ model Family{
 
 
 model User{
-    id String @db.Uuid @id
+    id String @db.Uuid @id @default(uuid())
 
     //Creamos relación 
     family Family @relation(fields: [family_id], references: [id])
@@ -37,6 +37,7 @@ model User{
     alias String @db.VarChar(50) @unique
     role Role @default(PARENT)
     avatar_icon String @db.VarChar(100)
+    timezone String @default("America/Santiago") @db.VarChar(50)
 
     mood_logs MoodLog[] //relación uno a muchos con la tabla mood_log
     calendar_events CalendarEvent[] //relación uno a muchos con la tabla calendar_events
@@ -73,17 +74,21 @@ enum Emotion{
 }
 
 model CalendarEvent{
-  id String @db.Uuid @id
+  id String @db.Uuid @id @default(uuid())
   
   family Family @relation(fields: [family_id], references: [id])
   family_id String @db.Uuid
 
   user User @relation(fields: [created_by], references: [id])
   created_by String @db.Uuid
+
+  targeted_user_id String @db.Uuid
   
   title String @db.VarChar(150)
   category Category 
-  event_date DateTime
+  event_date String 
+  created_at DateTime @default(now())
+  updated_at DateTime 
 
   @@map("calendar_events")
 }
@@ -99,7 +104,7 @@ enum Category{
 
 
 model DailyReminder{
-  id String @db.Uuid @id
+  id String @db.Uuid @id @default(uuid())
   family Family @relation(fields: [family_id], references: [id])
   family_id String @db.Uuid
 
@@ -110,13 +115,16 @@ model DailyReminder{
   recurrence_time DateTime 
   is_active Boolean @default(true)
 
+  created_at DateTime @default(now())
+  updated_at DateTime 
+
   @@map("daily_reminders")
 } 
 
 
 
-model TriviaQuestion{
-  id String @db.Uuid @id
+model TriviaQuestion{ 
+  id String @db.Uuid @id @default(uuid())
   category String @db.VarChar(50)
   question_text String @db.Text
   options_json Json
