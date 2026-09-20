@@ -1,9 +1,6 @@
 import {prisma} from "./prisma.js"
-import { UserEntity } from "../../domain/entities/UserEnt.js";
 import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
 import { FamilyRepoContract } from "../../domain/repoContracts/FamilyRepoContract.js";
-import { UserRepoContract } from "../../domain/repoContracts/UserRepoContract.js";
-import { TransactionRepoContract } from "../../domain/repoContracts/TransactionRepoContract.js";
 export class FamilyRepo implements FamilyRepoContract{
 
     constructor(){
@@ -40,6 +37,25 @@ export class FamilyRepo implements FamilyRepoContract{
                         some: {
                             id: parentId,
                             role: 'PARENT'
+                        }
+                    }
+                }
+            });
+            return family as unknown as FamilyEntity;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
+    public async findFamilyByUserId(id: string): Promise<FamilyEntity | null> {
+        try {
+            const family = await prisma.family.findFirst({
+                where: {
+                    users: {
+                        some: {
+                            id: id,
                         }
                     }
                 }

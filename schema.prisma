@@ -86,9 +86,9 @@ model CalendarEvent{
   
   title String @db.VarChar(150)
   category Category 
-  event_date String 
+  event_date DateTime
   created_at DateTime @default(now())
-  updated_at DateTime 
+  updated_at DateTime?  
 
   @@map("calendar_events")
 }
@@ -112,7 +112,7 @@ model DailyReminder{
   targeted_user_id String @db.Uuid
 
   title String @db.VarChar(150)
-  recurrence_time DateTime 
+  recurrence_time String
   is_active Boolean @default(true)
 
   created_at DateTime @default(now())

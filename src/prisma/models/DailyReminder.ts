@@ -29,7 +29,7 @@ export type DailyReminderMinAggregateOutputType = {
   family_id: string | null
   targeted_user_id: string | null
   title: string | null
-  recurrence_time: Date | null
+  recurrence_time: string | null
   is_active: boolean | null
   created_at: Date | null
   updated_at: Date | null
@@ -40,7 +40,7 @@ export type DailyReminderMaxAggregateOutputType = {
   family_id: string | null
   targeted_user_id: string | null
   title: string | null
-  recurrence_time: Date | null
+  recurrence_time: string | null
   is_active: boolean | null
   created_at: Date | null
   updated_at: Date | null
@@ -170,7 +170,7 @@ export type DailyReminderGroupByOutputType = {
   family_id: string
   targeted_user_id: string
   title: string
-  recurrence_time: Date
+  recurrence_time: string
   is_active: boolean
   created_at: Date
   updated_at: Date
@@ -202,7 +202,7 @@ export type DailyReminderWhereInput = {
   family_id?: Prisma.UuidFilter<"DailyReminder"> | string
   targeted_user_id?: Prisma.UuidFilter<"DailyReminder"> | string
   title?: Prisma.StringFilter<"DailyReminder"> | string
-  recurrence_time?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
+  recurrence_time?: Prisma.StringFilter<"DailyReminder"> | string
   is_active?: Prisma.BoolFilter<"DailyReminder"> | boolean
   created_at?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
@@ -231,7 +231,7 @@ export type DailyReminderWhereUniqueInput = Prisma.AtLeast<{
   family_id?: Prisma.UuidFilter<"DailyReminder"> | string
   targeted_user_id?: Prisma.UuidFilter<"DailyReminder"> | string
   title?: Prisma.StringFilter<"DailyReminder"> | string
-  recurrence_time?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
+  recurrence_time?: Prisma.StringFilter<"DailyReminder"> | string
   is_active?: Prisma.BoolFilter<"DailyReminder"> | boolean
   created_at?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
@@ -261,7 +261,7 @@ export type DailyReminderScalarWhereWithAggregatesInput = {
   family_id?: Prisma.UuidWithAggregatesFilter<"DailyReminder"> | string
   targeted_user_id?: Prisma.UuidWithAggregatesFilter<"DailyReminder"> | string
   title?: Prisma.StringWithAggregatesFilter<"DailyReminder"> | string
-  recurrence_time?: Prisma.DateTimeWithAggregatesFilter<"DailyReminder"> | Date | string
+  recurrence_time?: Prisma.StringWithAggregatesFilter<"DailyReminder"> | string
   is_active?: Prisma.BoolWithAggregatesFilter<"DailyReminder"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"DailyReminder"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"DailyReminder"> | Date | string
@@ -270,7 +270,7 @@ export type DailyReminderScalarWhereWithAggregatesInput = {
 export type DailyReminderCreateInput = {
   id?: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -283,7 +283,7 @@ export type DailyReminderUncheckedCreateInput = {
   family_id: string
   targeted_user_id: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -292,7 +292,7 @@ export type DailyReminderUncheckedCreateInput = {
 export type DailyReminderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -305,7 +305,7 @@ export type DailyReminderUncheckedUpdateInput = {
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -316,7 +316,7 @@ export type DailyReminderCreateManyInput = {
   family_id: string
   targeted_user_id: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -325,7 +325,7 @@ export type DailyReminderCreateManyInput = {
 export type DailyReminderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -336,7 +336,7 @@ export type DailyReminderUncheckedUpdateManyInput = {
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -476,7 +476,7 @@ export type BoolFieldUpdateOperationsInput = {
 export type DailyReminderCreateWithoutFamilyInput = {
   id?: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -487,7 +487,7 @@ export type DailyReminderUncheckedCreateWithoutFamilyInput = {
   id?: string
   targeted_user_id: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -527,7 +527,7 @@ export type DailyReminderScalarWhereInput = {
   family_id?: Prisma.UuidFilter<"DailyReminder"> | string
   targeted_user_id?: Prisma.UuidFilter<"DailyReminder"> | string
   title?: Prisma.StringFilter<"DailyReminder"> | string
-  recurrence_time?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
+  recurrence_time?: Prisma.StringFilter<"DailyReminder"> | string
   is_active?: Prisma.BoolFilter<"DailyReminder"> | boolean
   created_at?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"DailyReminder"> | Date | string
@@ -536,7 +536,7 @@ export type DailyReminderScalarWhereInput = {
 export type DailyReminderCreateWithoutUserInput = {
   id?: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -547,7 +547,7 @@ export type DailyReminderUncheckedCreateWithoutUserInput = {
   id?: string
   family_id: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -583,7 +583,7 @@ export type DailyReminderCreateManyFamilyInput = {
   id?: string
   targeted_user_id: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -592,7 +592,7 @@ export type DailyReminderCreateManyFamilyInput = {
 export type DailyReminderUpdateWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -603,7 +603,7 @@ export type DailyReminderUncheckedUpdateWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -613,7 +613,7 @@ export type DailyReminderUncheckedUpdateManyWithoutFamilyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   targeted_user_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -623,7 +623,7 @@ export type DailyReminderCreateManyUserInput = {
   id?: string
   family_id: string
   title: string
-  recurrence_time: Date | string
+  recurrence_time: string
   is_active?: boolean
   created_at?: Date | string
   updated_at: Date | string
@@ -632,7 +632,7 @@ export type DailyReminderCreateManyUserInput = {
 export type DailyReminderUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -643,7 +643,7 @@ export type DailyReminderUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -653,7 +653,7 @@ export type DailyReminderUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  recurrence_time?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recurrence_time?: Prisma.StringFieldUpdateOperationsInput | string
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -736,7 +736,7 @@ export type $DailyReminderPayload<ExtArgs extends runtime.Types.Extensions.Inter
     family_id: string
     targeted_user_id: string
     title: string
-    recurrence_time: Date
+    recurrence_time: string
     is_active: boolean
     created_at: Date
     updated_at: Date
@@ -1169,7 +1169,7 @@ export interface DailyReminderFieldRefs {
   readonly family_id: Prisma.FieldRef<"DailyReminder", 'String'>
   readonly targeted_user_id: Prisma.FieldRef<"DailyReminder", 'String'>
   readonly title: Prisma.FieldRef<"DailyReminder", 'String'>
-  readonly recurrence_time: Prisma.FieldRef<"DailyReminder", 'DateTime'>
+  readonly recurrence_time: Prisma.FieldRef<"DailyReminder", 'String'>
   readonly is_active: Prisma.FieldRef<"DailyReminder", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"DailyReminder", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"DailyReminder", 'DateTime'>
