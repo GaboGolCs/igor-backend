@@ -10,6 +10,7 @@
  */
 export type * from './models/Family.js'
 export type * from './models/User.js'
+export type * from './models/PushToken.js'
 export type * from './models/MoodLog.js'
 export type * from './models/CalendarEvent.js'
 export type * from './models/DailyReminder.js'

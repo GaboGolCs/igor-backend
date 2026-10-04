@@ -18,6 +18,15 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const DeviceType = {
+  ANDROID: 'ANDROID',
+  IOS: 'IOS',
+  WEB: 'WEB'
+} as const
+
+export type DeviceType = (typeof DeviceType)[keyof typeof DeviceType]
+
+
 export const Emotion = {
   HAPPY: 'HAPPY',
   SAD: 'SAD',

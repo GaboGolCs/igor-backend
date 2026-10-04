@@ -8,5 +8,4 @@ export const rReminderInstance = Router()
 
 const conReminderInstance = new ConReminder()
 
-rReminderInstance.get("/",conReminderInstance.getReminder)
 rReminderInstance.post("/", zodMiddleware(postReminderValidator), conReminderInstance.postReminder)

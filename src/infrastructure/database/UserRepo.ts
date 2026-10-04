@@ -34,6 +34,7 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
 
 
     public async findByEmail(emailToFind: string): Promise<UserEntity | null> {
+        if (!emailToFind) return null;
         try {
             const  response = await prisma.user.findUnique({
                 where: {email: emailToFind},
@@ -51,6 +52,7 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
     }
 
     public async findByAlias(alias: string): Promise<UserEntity | null> { 
+        if (!alias) return null;
        try {
             const userFound = await prisma.user.findUnique({
                 where: {alias: alias}
@@ -64,6 +66,7 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
             }
 
     public async findById(id: string): Promise<UserEntity | null> { 
+        if (!id) return null;
        try {
             const userFound = await prisma.user.findUnique({
                 where: {id: id}

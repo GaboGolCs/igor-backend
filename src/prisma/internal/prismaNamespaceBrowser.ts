@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Family: 'Family',
   User: 'User',
+  PushToken: 'PushToken',
   MoodLog: 'MoodLog',
   CalendarEvent: 'CalendarEvent',
   DailyReminder: 'DailyReminder',
@@ -97,6 +98,17 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const PushTokenScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  token: 'token',
+  device_type: 'device_type',
+  created_at: 'created_at'
+} as const
+
+export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof typeof PushTokenScalarFieldEnum]
 
 
 export const MoodLogScalarFieldEnum = {

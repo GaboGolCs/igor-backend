@@ -23,7 +23,7 @@ export class ReminderEnt{
         return this
     }
 
-    public createReminder(family_id: string, targeted_user_id: string, title: string, recurrence_time: string, is_active: boolean){
+    public static createReminder(family_id: string, targeted_user_id: string, title: string, recurrence_time: string, is_active: boolean){
         const id = randomUUID()
         const created_at = new Date()
         const updated_at = null

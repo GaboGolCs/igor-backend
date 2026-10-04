@@ -1,4 +1,4 @@
-import { CalendarEventEntity } from "../../domain/entities/CalendarEvent.js";
+import { CalendarEventEntity } from "../../domain/entities/CalendarEventEnt.js";
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
 import { FamilyRepo } from "../../infrastructure/database/FamilyRepo.js";
 import { EventCategoryEnt } from "../../domain/entities/EventCategoryEnt.js";
@@ -34,7 +34,6 @@ export async function postCalendarEvents(created_by: string, targeted_user_id: s
         }
 
         return calendarEventSaved
-        //INSERTAR CONECCION CON REDIS Y BULLMQ
 
     } catch (error) {
         console.error(error)

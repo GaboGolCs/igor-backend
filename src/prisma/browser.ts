@@ -28,6 +28,11 @@ export type Family = Prisma.FamilyModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model PushToken
+ * 
+ */
+export type PushToken = Prisma.PushTokenModel
+/**
  * Model MoodLog
  * 
  */

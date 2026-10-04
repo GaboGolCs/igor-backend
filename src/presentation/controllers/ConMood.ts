@@ -32,7 +32,7 @@ export class ConMood{
             //Retorna 400 si la id no existe y 500 si hay un error con la bd
             try {
                 const childAnalitics = await getMonthlyAnalitics(res.locals.childId, res.locals.month, res.locals.year)
-                res.status(200).json(childAnalitics) 
+                return res.status(200).json(childAnalitics) 
             } catch (error:any) {
                 if(error.message.startsWith("Bad Request")){
                     res.status(400)
@@ -46,7 +46,7 @@ export class ConMood{
                
         } catch (error:any)
         {
-           res.json({message: "Error: " + error.message});
+           return res.json({message: "Error: " + error.message});
            } 
         }
 
@@ -72,7 +72,7 @@ export class ConMood{
 
             const moodCreationResult = await registerMoodUC(req.body.emotion, req.body.activityText, req.body.needText, decodedToken.sub)  
             if(moodCreationResult){
-            res.status(201).json({message: "Mood creado con éxito"})
+            return res.status(201).json({message: "Mood creado con éxito"})
             }
 
 
@@ -80,10 +80,10 @@ export class ConMood{
         } catch (error:any)
         {
             if(error.message.startsWith("Interno")){
-                res.status(500).json({message: "Error: " + error.message})
+                return res.status(500).json({message: "Error: " + error.message})
             }
 
-            res.status(500).json({message: "Error: " + error.message});
+            return res.status(500).json({message: "Error: " + error.message});
            } 
         }      
     }

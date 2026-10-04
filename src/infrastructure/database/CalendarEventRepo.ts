@@ -1,4 +1,4 @@
-import { CalendarEventEntity } from "../../domain/entities/CalendarEvent.js";
+import { CalendarEventEntity } from "../../domain/entities/CalendarEventEnt.js";
 import { CalendarEventRepoContract } from "../../domain/repoContracts/CalendarEventContract.js";
 import {prisma} from "./prisma.js"
 

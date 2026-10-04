@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client"
   output   = "src/prisma"
@@ -6,9 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
 }
-
 
 model Family{
         id String @db.Uuid @id @default(uuid()) // @id declara PK
@@ -20,15 +17,12 @@ model Family{
         calendar_events CalendarEvent[] //relación uno a muchos con la tabla calendar_events
         daily_reminders DailyReminder[] //relación uno a muchos con la tabla daily_reminder
 
-        //crea la tabla con el nombre families
         @@map("families")
 }
-
 
 model User{
     id String @db.Uuid @id @default(uuid())
 
-    //Creamos relación 
     family Family @relation(fields: [family_id], references: [id])
     family_id String @db.Uuid
     
@@ -39,11 +33,14 @@ model User{
     avatar_icon String @db.VarChar(100)
     timezone String @default("America/Santiago") @db.VarChar(50)
 
-    mood_logs MoodLog[] //relación uno a muchos con la tabla mood_log
-    calendar_events CalendarEvent[] //relación uno a muchos con la tabla calendar_events
-    daily_reminders DailyReminder[] //relación uno a muchos con la tabla daily_reminder
-    @@map("users")
+    mood_logs MoodLog[] 
+    calendar_events CalendarEvent[] 
+    daily_reminders DailyReminder[] 
+    
+    // NUEVA RELACIÓN: Un usuario puede tener múltiples dispositivos registrados
+    push_tokens PushToken[] 
 
+    @@map("users")
 }
 
 enum Role{
@@ -51,6 +48,32 @@ enum Role{
   CHILD
   ADMIN
 }
+
+// ==========================================
+// NUEVO MODELO PARA SPRINT 4: NOTIFICACIONES
+// ==========================================
+model PushToken {
+  id          String     @id @default(uuid()) @db.Uuid
+  
+  user_id     String     @db.Uuid
+  user        User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  token       String     @unique @db.Text // Usamos Text porque los tokens de FCM pueden ser largos
+  device_type DeviceType
+  
+  created_at  DateTime   @default(now())
+
+  // Índice compuesto para acelerar las búsquedas al momento de notificar a un usuario
+  @@index([user_id])
+  @@map("push_tokens")
+}
+
+enum DeviceType {
+  ANDROID
+  IOS
+  WEB
+}
+// ==========================================
 
 model MoodLog {
   id            String   @id @default(uuid()) @db.Uuid
@@ -101,8 +124,6 @@ enum Category{
   OTHER
 }
 
-
-
 model DailyReminder{
   id String @db.Uuid @id @default(uuid())
   family Family @relation(fields: [family_id], references: [id])
@@ -116,12 +137,10 @@ model DailyReminder{
   is_active Boolean @default(true)
 
   created_at DateTime @default(now())
-  updated_at DateTime 
+  updated_at  DateTime ? 
 
   @@map("daily_reminders")
 } 
-
-
 
 model TriviaQuestion{ 
   id String @db.Uuid @id @default(uuid())
