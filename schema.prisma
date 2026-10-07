@@ -151,3 +151,15 @@ model TriviaQuestion{
 
   @@map("trivia_questions")
 }
+
+
+model RewardClaim {
+  id           String   @id @default(uuid())
+  child_id     String
+  family_id    String
+  reward_title String
+  status       String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  created_at   DateTime @default(now())
+
+  @@map("reward_claims")
+}

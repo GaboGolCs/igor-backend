@@ -403,7 +403,8 @@ export const ModelName = {
   MoodLog: 'MoodLog',
   CalendarEvent: 'CalendarEvent',
   DailyReminder: 'DailyReminder',
-  TriviaQuestion: 'TriviaQuestion'
+  TriviaQuestion: 'TriviaQuestion',
+  RewardClaim: 'RewardClaim'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "family" | "user" | "pushToken" | "moodLog" | "calendarEvent" | "dailyReminder" | "triviaQuestion"
+    modelProps: "family" | "user" | "pushToken" | "moodLog" | "calendarEvent" | "dailyReminder" | "triviaQuestion" | "rewardClaim"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +942,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RewardClaim: {
+      payload: Prisma.$RewardClaimPayload<ExtArgs>
+      fields: Prisma.RewardClaimFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RewardClaimFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RewardClaimFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>
+        }
+        findFirst: {
+          args: Prisma.RewardClaimFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RewardClaimFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>
+        }
+        findMany: {
+          args: Prisma.RewardClaimFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>[]
+        }
+        create: {
+          args: Prisma.RewardClaimCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>
+        }
+        createMany: {
+          args: Prisma.RewardClaimCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RewardClaimCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>[]
+        }
+        delete: {
+          args: Prisma.RewardClaimDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>
+        }
+        update: {
+          args: Prisma.RewardClaimUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>
+        }
+        deleteMany: {
+          args: Prisma.RewardClaimDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RewardClaimUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RewardClaimUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>[]
+        }
+        upsert: {
+          args: Prisma.RewardClaimUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RewardClaimPayload>
+        }
+        aggregate: {
+          args: Prisma.RewardClaimAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRewardClaim>
+        }
+        groupBy: {
+          args: Prisma.RewardClaimGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RewardClaimGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RewardClaimCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RewardClaimCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1065,6 +1140,18 @@ export const TriviaQuestionScalarFieldEnum = {
 } as const
 
 export type TriviaQuestionScalarFieldEnum = (typeof TriviaQuestionScalarFieldEnum)[keyof typeof TriviaQuestionScalarFieldEnum]
+
+
+export const RewardClaimScalarFieldEnum = {
+  id: 'id',
+  child_id: 'child_id',
+  family_id: 'family_id',
+  reward_title: 'reward_title',
+  status: 'status',
+  created_at: 'created_at'
+} as const
+
+export type RewardClaimScalarFieldEnum = (typeof RewardClaimScalarFieldEnum)[keyof typeof RewardClaimScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1403,6 +1490,7 @@ export type GlobalOmitConfig = {
   calendarEvent?: Prisma.CalendarEventOmit
   dailyReminder?: Prisma.DailyReminderOmit
   triviaQuestion?: Prisma.TriviaQuestionOmit
+  rewardClaim?: Prisma.RewardClaimOmit
 }
 
 /* Types for Logging */

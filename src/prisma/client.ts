@@ -76,3 +76,8 @@ export type DailyReminder = Prisma.DailyReminderModel
  * 
  */
 export type TriviaQuestion = Prisma.TriviaQuestionModel
+/**
+ * Model RewardClaim
+ * 
+ */
+export type RewardClaim = Prisma.RewardClaimModel

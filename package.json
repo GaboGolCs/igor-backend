@@ -53,6 +53,9 @@
     "@types/jsonwebtoken@9.0.10": true,
     "@prisma/engines@7.9.1": true,
     "prisma@7.9.1": true,
-    "@prisma/adapter-pg@7.9.1": true
+    "@prisma/adapter-pg@7.9.1": true,
+    "@firebase/util@1.15.3": true,
+    "msgpackr-extract@3.0.4": true,
+    "protobufjs@7.6.6": true
   }
 }
