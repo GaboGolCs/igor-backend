@@ -58,7 +58,8 @@ export const ModelName = {
   CalendarEvent: 'CalendarEvent',
   DailyReminder: 'DailyReminder',
   TriviaQuestion: 'TriviaQuestion',
-  RewardClaim: 'RewardClaim'
+  RewardClaim: 'RewardClaim',
+  ParentalTip: 'ParentalTip'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -174,6 +175,16 @@ export const RewardClaimScalarFieldEnum = {
 } as const
 
 export type RewardClaimScalarFieldEnum = (typeof RewardClaimScalarFieldEnum)[keyof typeof RewardClaimScalarFieldEnum]
+
+
+export const ParentalTipScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  created_at: 'created_at'
+} as const
+
+export type ParentalTipScalarFieldEnum = (typeof ParentalTipScalarFieldEnum)[keyof typeof ParentalTipScalarFieldEnum]
 
 
 export const SortOrder = {

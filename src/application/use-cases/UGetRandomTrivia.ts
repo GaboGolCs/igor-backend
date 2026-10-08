@@ -1,6 +1,6 @@
 import { IQuestionRepository } from '../../domain/repoContracts/QuestionRepoContract.js';
 import { TriviaQuestionDTO } from '../dtos/TriviaQuestionDTO.js';
-import {PrismaQuestionRepository} from "../../infrastructure/database/QuestionRepository.js";
+import {PrismaQuestionRepository} from "../../infrastructure/database/QuestionRepo.js";
 
 export async function  GetRandomTriviaUseCase(): Promise<TriviaQuestionDTO> {
 

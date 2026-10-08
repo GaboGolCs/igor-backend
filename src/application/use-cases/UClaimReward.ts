@@ -1,6 +1,6 @@
 import {RewardClaimEntity} from '../../domain/entities/RewardClaimEnt.js';
 import {ClaimRewardOutputDTO } from '../dtos/ClaimRewardDTO.js';
-import {RewardClaimRepository} from '../../infrastructure/database/RewardClaimRepository.js';
+import {RewardClaimRepository} from '../../infrastructure/database/RewardClaimRepo.js';
 import {FamilyRepo} from '../../infrastructure/database/FamilyRepo.js';
 
 export async function ClaimRewardUseCase(childId: string, rewardTitle: string): Promise<ClaimRewardOutputDTO> {

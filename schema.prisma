@@ -163,3 +163,13 @@ model RewardClaim {
 
   @@map("reward_claims")
 }
+
+
+model ParentalTip {
+  id         String   @id @default(uuid())
+  title      String
+  content    String
+  created_at DateTime @default(now())
+
+  @@map("parental_tips")
+}

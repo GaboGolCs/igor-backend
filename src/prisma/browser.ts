@@ -57,3 +57,8 @@ export type TriviaQuestion = Prisma.TriviaQuestionModel
  * 
  */
 export type RewardClaim = Prisma.RewardClaimModel
+/**
+ * Model ParentalTip
+ * 
+ */
+export type ParentalTip = Prisma.ParentalTipModel

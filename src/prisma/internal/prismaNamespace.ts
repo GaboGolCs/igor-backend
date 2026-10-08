@@ -404,7 +404,8 @@ export const ModelName = {
   CalendarEvent: 'CalendarEvent',
   DailyReminder: 'DailyReminder',
   TriviaQuestion: 'TriviaQuestion',
-  RewardClaim: 'RewardClaim'
+  RewardClaim: 'RewardClaim',
+  ParentalTip: 'ParentalTip'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "family" | "user" | "pushToken" | "moodLog" | "calendarEvent" | "dailyReminder" | "triviaQuestion" | "rewardClaim"
+    modelProps: "family" | "user" | "pushToken" | "moodLog" | "calendarEvent" | "dailyReminder" | "triviaQuestion" | "rewardClaim" | "parentalTip"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1016,6 +1017,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ParentalTip: {
+      payload: Prisma.$ParentalTipPayload<ExtArgs>
+      fields: Prisma.ParentalTipFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ParentalTipFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ParentalTipFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>
+        }
+        findFirst: {
+          args: Prisma.ParentalTipFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ParentalTipFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>
+        }
+        findMany: {
+          args: Prisma.ParentalTipFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>[]
+        }
+        create: {
+          args: Prisma.ParentalTipCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>
+        }
+        createMany: {
+          args: Prisma.ParentalTipCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ParentalTipCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>[]
+        }
+        delete: {
+          args: Prisma.ParentalTipDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>
+        }
+        update: {
+          args: Prisma.ParentalTipUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>
+        }
+        deleteMany: {
+          args: Prisma.ParentalTipDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ParentalTipUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ParentalTipUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>[]
+        }
+        upsert: {
+          args: Prisma.ParentalTipUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ParentalTipPayload>
+        }
+        aggregate: {
+          args: Prisma.ParentalTipAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateParentalTip>
+        }
+        groupBy: {
+          args: Prisma.ParentalTipGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ParentalTipGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ParentalTipCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ParentalTipCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1152,6 +1227,16 @@ export const RewardClaimScalarFieldEnum = {
 } as const
 
 export type RewardClaimScalarFieldEnum = (typeof RewardClaimScalarFieldEnum)[keyof typeof RewardClaimScalarFieldEnum]
+
+
+export const ParentalTipScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  created_at: 'created_at'
+} as const
+
+export type ParentalTipScalarFieldEnum = (typeof ParentalTipScalarFieldEnum)[keyof typeof ParentalTipScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1491,6 +1576,7 @@ export type GlobalOmitConfig = {
   dailyReminder?: Prisma.DailyReminderOmit
   triviaQuestion?: Prisma.TriviaQuestionOmit
   rewardClaim?: Prisma.RewardClaimOmit
+  parentalTip?: Prisma.ParentalTipOmit
 }
 
 /* Types for Logging */

@@ -10,6 +10,7 @@ import { rReminderInstance } from '../routes/RReminder.js';
 import { rPushTokens } from '../routes/RPushTokens.js';
 import { rTriviaQuestion } from '../routes/RTriviaQuestion.js';
 import { rRewardClaim } from '../routes/RRewardClaim.js';
+import { rParentalTip } from '../routes/RParentalTips.js';
 
 // Importación del worker de BullMQ y la conexión de Redis
 import '../../infrastructure/config/firebaseAdmin.js';
@@ -34,6 +35,10 @@ app.use("/api/v1/reminders", rReminderInstance);
 app.use("/api/v1/push-tokens", rPushTokens);
 app.use("/api/v1/games/questions", rTriviaQuestion);
 app.use("/api/v1/rewards/claims", rRewardClaim);
+app.use("/api/v1/tips", rParentalTip);
+
+
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
