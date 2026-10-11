@@ -1219,11 +1219,12 @@ export type TriviaQuestionScalarFieldEnum = (typeof TriviaQuestionScalarFieldEnu
 
 export const RewardClaimScalarFieldEnum = {
   id: 'id',
-  child_id: 'child_id',
   family_id: 'family_id',
+  child_id: 'child_id',
   reward_title: 'reward_title',
   status: 'status',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type RewardClaimScalarFieldEnum = (typeof RewardClaimScalarFieldEnum)[keyof typeof RewardClaimScalarFieldEnum]
@@ -1401,6 +1402,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RewardStatus'
+ */
+export type EnumRewardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'RewardStatus[]'
+ */
+export type ListEnumRewardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardStatus[]'>
     
 
 

@@ -34,7 +34,7 @@ app.use("/api/v1/calendar/events", rCalendarEventInstance);
 app.use("/api/v1/reminders", rReminderInstance);
 app.use("/api/v1/push-tokens", rPushTokens);
 app.use("/api/v1/games/questions", rTriviaQuestion);
-app.use("/api/v1/rewards/claims", rRewardClaim);
+app.use("/api/v1/games/rewards", rRewardClaim);
 app.use("/api/v1/tips", rParentalTip);
 
 

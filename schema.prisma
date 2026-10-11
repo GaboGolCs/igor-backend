@@ -16,6 +16,7 @@ model Family{
         users User[] //relación uno a muchos con la tabla user
         calendar_events CalendarEvent[] //relación uno a muchos con la tabla calendar_events
         daily_reminders DailyReminder[] //relación uno a muchos con la tabla daily_reminder
+        reward_claims RewardClaim[]
 
         @@map("families")
 }
@@ -36,6 +37,7 @@ model User{
     mood_logs MoodLog[] 
     calendar_events CalendarEvent[] 
     daily_reminders DailyReminder[] 
+    reward_claims RewardClaim[]
     
     // NUEVA RELACIÓN: Un usuario puede tener múltiples dispositivos registrados
     push_tokens PushToken[] 
@@ -154,16 +156,25 @@ model TriviaQuestion{
 
 
 model RewardClaim {
-  id           String   @id @default(uuid())
-  child_id     String
-  family_id    String
-  reward_title String
-  status       String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  created_at   DateTime @default(now())
+  id          String       @id @default(uuid()) @db.Uuid
+  family_id   String       @db.Uuid
+  family      Family       @relation(fields: [family_id], references: [id], onDelete: Cascade)
+  child_id    String       @db.Uuid
+  child       User         @relation(fields: [child_id], references: [id], onDelete: Cascade)
+  reward_title String       @db.VarChar(200)
+  status      RewardStatus @default(PENDING)
+  created_at  DateTime     @default(now())
+  updated_at  DateTime?    @updatedAt
 
   @@map("reward_claims")
 }
 
+
+enum RewardStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
 
 model ParentalTip {
   id         String   @id @default(uuid())

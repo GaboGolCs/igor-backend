@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { RegChild } from "../../application/use-cases/URegChild.js";
-import { extractTokenFromHeader } from "../validators/HExtractTokenInfo.js";
+import { extractTokenFromHeader } from "../validators/extractTokenInfo.js";
 import { verifyJWToken } from "../../infrastructure/security/verifyJWToken.js";
 
 export class ConFamily {

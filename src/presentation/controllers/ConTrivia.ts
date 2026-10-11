@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { GetRandomTriviaUseCase } from '../../application/use-cases/UGetRandomTrivia.js';
-import { extractTokenFromHeader } from '../validators/HExtractTokenInfo.js';
+import { extractTokenFromHeader } from '../validators/extractTokenInfo.js';
 import { verifyJWToken } from '../../infrastructure/security/verifyJWToken.js';
 
 export class TriviaController {

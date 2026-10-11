@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { extractTokenFromHeader } from "../validators/HExtractTokenInfo.js";
+import { extractTokenFromHeader } from "../validators/extractTokenInfo.js";
 import { verifyJWToken } from "../../infrastructure/security/verifyJWToken.js";
 import {RegisterPushTokenUseCase} from "../../application/use-cases/URegistertoken.js"
 import { PrismaPushTokenRepository } from "../../infrastructure/database/PushTokenRepo.js";

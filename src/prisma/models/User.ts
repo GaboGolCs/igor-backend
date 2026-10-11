@@ -210,6 +210,7 @@ export type UserWhereInput = {
   mood_logs?: Prisma.MoodLogListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
   daily_reminders?: Prisma.DailyReminderListRelationFilter
+  reward_claims?: Prisma.RewardClaimListRelationFilter
   push_tokens?: Prisma.PushTokenListRelationFilter
 }
 
@@ -226,6 +227,7 @@ export type UserOrderByWithRelationInput = {
   mood_logs?: Prisma.MoodLogOrderByRelationAggregateInput
   calendar_events?: Prisma.CalendarEventOrderByRelationAggregateInput
   daily_reminders?: Prisma.DailyReminderOrderByRelationAggregateInput
+  reward_claims?: Prisma.RewardClaimOrderByRelationAggregateInput
   push_tokens?: Prisma.PushTokenOrderByRelationAggregateInput
 }
 
@@ -245,6 +247,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   mood_logs?: Prisma.MoodLogListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
   daily_reminders?: Prisma.DailyReminderListRelationFilter
+  reward_claims?: Prisma.RewardClaimListRelationFilter
   push_tokens?: Prisma.PushTokenListRelationFilter
 }, "id" | "email" | "alias">
 
@@ -288,6 +291,7 @@ export type UserCreateInput = {
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
@@ -303,6 +307,7 @@ export type UserUncheckedCreateInput = {
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -318,6 +323,7 @@ export type UserUpdateInput = {
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -333,6 +339,7 @@ export type UserUncheckedUpdateInput = {
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -522,6 +529,20 @@ export type UserUpdateOneRequiredWithoutDaily_remindersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDaily_remindersInput, Prisma.UserUpdateWithoutDaily_remindersInput>, Prisma.UserUncheckedUpdateWithoutDaily_remindersInput>
 }
 
+export type UserCreateNestedOneWithoutReward_claimsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReward_claimsInput, Prisma.UserUncheckedCreateWithoutReward_claimsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReward_claimsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutReward_claimsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReward_claimsInput, Prisma.UserUncheckedCreateWithoutReward_claimsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReward_claimsInput
+  upsert?: Prisma.UserUpsertWithoutReward_claimsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReward_claimsInput, Prisma.UserUpdateWithoutReward_claimsInput>, Prisma.UserUncheckedUpdateWithoutReward_claimsInput>
+}
+
 export type UserCreateWithoutFamilyInput = {
   id?: string
   email?: string | null
@@ -533,6 +554,7 @@ export type UserCreateWithoutFamilyInput = {
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
@@ -547,6 +569,7 @@ export type UserUncheckedCreateWithoutFamilyInput = {
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -602,6 +625,7 @@ export type UserCreateWithoutPush_tokensInput = {
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutChildInput
 }
 
 export type UserUncheckedCreateWithoutPush_tokensInput = {
@@ -616,6 +640,7 @@ export type UserUncheckedCreateWithoutPush_tokensInput = {
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutChildInput
 }
 
 export type UserCreateOrConnectWithoutPush_tokensInput = {
@@ -646,6 +671,7 @@ export type UserUpdateWithoutPush_tokensInput = {
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutChildNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPush_tokensInput = {
@@ -660,6 +686,7 @@ export type UserUncheckedUpdateWithoutPush_tokensInput = {
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutChildNestedInput
 }
 
 export type UserCreateWithoutMood_logsInput = {
@@ -673,6 +700,7 @@ export type UserCreateWithoutMood_logsInput = {
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
@@ -687,6 +715,7 @@ export type UserUncheckedCreateWithoutMood_logsInput = {
   timezone?: string
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -717,6 +746,7 @@ export type UserUpdateWithoutMood_logsInput = {
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -731,6 +761,7 @@ export type UserUncheckedUpdateWithoutMood_logsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -745,6 +776,7 @@ export type UserCreateWithoutCalendar_eventsInput = {
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
@@ -759,6 +791,7 @@ export type UserUncheckedCreateWithoutCalendar_eventsInput = {
   timezone?: string
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -789,6 +822,7 @@ export type UserUpdateWithoutCalendar_eventsInput = {
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -803,6 +837,7 @@ export type UserUncheckedUpdateWithoutCalendar_eventsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -817,6 +852,7 @@ export type UserCreateWithoutDaily_remindersInput = {
   family: Prisma.FamilyCreateNestedOneWithoutUsersInput
   mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
@@ -831,6 +867,7 @@ export type UserUncheckedCreateWithoutDaily_remindersInput = {
   timezone?: string
   mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutChildInput
   push_tokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -861,6 +898,7 @@ export type UserUpdateWithoutDaily_remindersInput = {
   family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -875,6 +913,83 @@ export type UserUncheckedUpdateWithoutDaily_remindersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutChildNestedInput
+  push_tokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutReward_claimsInput = {
+  id?: string
+  email?: string | null
+  password_hash: string
+  alias: string
+  role?: $Enums.Role
+  avatar_icon: string
+  timezone?: string
+  family: Prisma.FamilyCreateNestedOneWithoutUsersInput
+  mood_logs?: Prisma.MoodLogCreateNestedManyWithoutUserInput
+  calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
+  daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutUserInput
+  push_tokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReward_claimsInput = {
+  id?: string
+  family_id: string
+  email?: string | null
+  password_hash: string
+  alias: string
+  role?: $Enums.Role
+  avatar_icon: string
+  timezone?: string
+  mood_logs?: Prisma.MoodLogUncheckedCreateNestedManyWithoutUserInput
+  calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
+  daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutUserInput
+  push_tokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReward_claimsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReward_claimsInput, Prisma.UserUncheckedCreateWithoutReward_claimsInput>
+}
+
+export type UserUpsertWithoutReward_claimsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReward_claimsInput, Prisma.UserUncheckedUpdateWithoutReward_claimsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReward_claimsInput, Prisma.UserUncheckedCreateWithoutReward_claimsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReward_claimsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReward_claimsInput, Prisma.UserUncheckedUpdateWithoutReward_claimsInput>
+}
+
+export type UserUpdateWithoutReward_claimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  alias?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  family?: Prisma.FamilyUpdateOneRequiredWithoutUsersNestedInput
+  mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
+  calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
+  daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
+  push_tokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReward_claimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  alias?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatar_icon?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
+  calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
+  daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
   push_tokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -899,6 +1014,7 @@ export type UserUpdateWithoutFamilyInput = {
   mood_logs?: Prisma.MoodLogUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
@@ -913,6 +1029,7 @@ export type UserUncheckedUpdateWithoutFamilyInput = {
   mood_logs?: Prisma.MoodLogUncheckedUpdateManyWithoutUserNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutUserNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutChildNestedInput
   push_tokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -935,6 +1052,7 @@ export type UserCountOutputType = {
   mood_logs: number
   calendar_events: number
   daily_reminders: number
+  reward_claims: number
   push_tokens: number
 }
 
@@ -942,6 +1060,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   mood_logs?: boolean | UserCountOutputTypeCountMood_logsArgs
   calendar_events?: boolean | UserCountOutputTypeCountCalendar_eventsArgs
   daily_reminders?: boolean | UserCountOutputTypeCountDaily_remindersArgs
+  reward_claims?: boolean | UserCountOutputTypeCountReward_claimsArgs
   push_tokens?: boolean | UserCountOutputTypeCountPush_tokensArgs
 }
 
@@ -979,6 +1098,13 @@ export type UserCountOutputTypeCountDaily_remindersArgs<ExtArgs extends runtime.
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountReward_claimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RewardClaimWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountPush_tokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PushTokenWhereInput
 }
@@ -997,6 +1123,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   mood_logs?: boolean | Prisma.User$mood_logsArgs<ExtArgs>
   calendar_events?: boolean | Prisma.User$calendar_eventsArgs<ExtArgs>
   daily_reminders?: boolean | Prisma.User$daily_remindersArgs<ExtArgs>
+  reward_claims?: boolean | Prisma.User$reward_claimsArgs<ExtArgs>
   push_tokens?: boolean | Prisma.User$push_tokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1042,6 +1169,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   mood_logs?: boolean | Prisma.User$mood_logsArgs<ExtArgs>
   calendar_events?: boolean | Prisma.User$calendar_eventsArgs<ExtArgs>
   daily_reminders?: boolean | Prisma.User$daily_remindersArgs<ExtArgs>
+  reward_claims?: boolean | Prisma.User$reward_claimsArgs<ExtArgs>
   push_tokens?: boolean | Prisma.User$push_tokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1059,6 +1187,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     mood_logs: Prisma.$MoodLogPayload<ExtArgs>[]
     calendar_events: Prisma.$CalendarEventPayload<ExtArgs>[]
     daily_reminders: Prisma.$DailyReminderPayload<ExtArgs>[]
+    reward_claims: Prisma.$RewardClaimPayload<ExtArgs>[]
     push_tokens: Prisma.$PushTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1468,6 +1597,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   mood_logs<T extends Prisma.User$mood_logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mood_logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MoodLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   calendar_events<T extends Prisma.User$calendar_eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$calendar_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   daily_reminders<T extends Prisma.User$daily_remindersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$daily_remindersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DailyReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reward_claims<T extends Prisma.User$reward_claimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reward_claimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RewardClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   push_tokens<T extends Prisma.User$push_tokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$push_tokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1976,6 +2106,30 @@ export type User$daily_remindersArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.DailyReminderScalarFieldEnum | Prisma.DailyReminderScalarFieldEnum[]
+}
+
+/**
+ * User.reward_claims
+ */
+export type User$reward_claimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RewardClaim
+   */
+  select?: Prisma.RewardClaimSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RewardClaim
+   */
+  omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
+  where?: Prisma.RewardClaimWhereInput
+  orderBy?: Prisma.RewardClaimOrderByWithRelationInput | Prisma.RewardClaimOrderByWithRelationInput[]
+  cursor?: Prisma.RewardClaimWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RewardClaimScalarFieldEnum | Prisma.RewardClaimScalarFieldEnum[]
 }
 
 /**

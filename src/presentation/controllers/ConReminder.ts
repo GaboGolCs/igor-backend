@@ -1,5 +1,5 @@
 import {Request, Response} from "express"
-import { extractTokenFromHeader } from "../validators/HExtractTokenInfo.js"
+import { extractTokenFromHeader } from "../validators/extractTokenInfo.js"
 import { verifyJWToken } from "../../infrastructure/security/verifyJWToken.js"
 import { ReminderEnt } from "../../domain/entities/ReminderEnt.js"
 import { UPostReminder } from "../../application/use-cases/UPostReminder.js"

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {GetParentalTipsUC} from "../../application/use-cases/UGetParentalTips.js";
-import { extractTokenFromHeader } from '../validators/HExtractTokenInfo.js';
+import { extractTokenFromHeader } from '../validators/extractTokenInfo.js';
 import { verifyJWToken } from '../../infrastructure/security/verifyJWToken.js';
 export class ParentalTipController {
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { zodMiddleware } from "../middlewares/zodMiddleware.js";
 import { postReminderValidator } from "../validators/reminderValidators.js";
-import {TriviaController} from "../controllers/TriviaController.js";
+import {TriviaController} from "../controllers/ConTrivia.js";
 
 const triviaControllerInstance = new TriviaController();
 const router = Router();

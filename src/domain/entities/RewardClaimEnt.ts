@@ -1,4 +1,4 @@
-export type RewardClaimStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type RewardClaimStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
 export class RewardClaimEntity {
   constructor(
@@ -7,7 +7,8 @@ export class RewardClaimEntity {
     public readonly familyId: string,
     public readonly rewardTitle: string,
     public readonly status: RewardClaimStatus,
-    public readonly createdAt?: Date
+    public readonly createdAt?: Date,
+    public readonly updatedAt?: Date
   ) {}
 
 

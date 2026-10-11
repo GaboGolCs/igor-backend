@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { extractTokenFromHeader } from "../validators/HExtractTokenInfo.js";
+import { extractTokenFromHeader } from "../validators/extractTokenInfo.js";
 import { verifyJWToken } from "../../infrastructure/security/verifyJWToken.js";
 import { getCalendarEventsUC } from "../../application/use-cases/UGetCalendarEvents.js";
 import { postCalendarEvents } from "../../application/use-cases/UPostCalendarEvent.js";

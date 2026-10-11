@@ -1,0 +1,568 @@
+openapi: 3.0.3
+info:
+  title: IGOR Backend API - Especificación Completa
+  description: |
+    API REST para la plataforma socioeducativa IGOR (sin módulo GPS).
+    Incluye todos los contratos para Autenticación, Afectividad, Calendario, Recordatorios, Gamificación y Consejos.
+  version: 1.2.0
+servers:
+- url: http://localhost:3000/api/v1
+  description: Servidor Local de Desarrollo
+paths:
+  /auth/register-parent:
+    post:
+      tags:
+      - Autenticación
+      summary: Registro de Apoderado / Tutor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterParentRequest"
+        required: true
+      responses:
+        "201":
+          description: Registro exitoso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /auth/login:
+    post:
+      tags:
+      - Autenticación
+      summary: Iniciar Sesión (Padres e Hijos)
+      description: |
+        Login unificado para ambos roles:
+        - Apoderado (ROLE_PARENT): identifier = email, secret = password. Requiere haberse registrado previamente.
+        - Hijo (ROLE_CHILD): identifier = alias, secret = pin.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: Autenticación exitosa.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /family/children:
+    post:
+      tags:
+      - Gestión Familiar
+      summary: Crear y vincular perfil de Hijo
+      description: |
+        Crea el perfil de un Hijo y lo vincula automáticamente a la cuenta del Apoderado autenticado.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChildRequest"
+        required: true
+      responses:
+        "201":
+          description: Perfil del niño creado con éxito y vinculado al padre autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChildProfile"
+        "401":
+          description: Token ausente o inválido (el padre no ha iniciado sesión).
+        "403":
+          description: El token es válido pero no corresponde a un usuario con rol ROLE_PARENT.
+      security:
+      - BearerAuth: []
+  /moods:
+    post:
+      tags:
+      - Afectividad
+      summary: Registrar estado emocional y actividad del niño
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogMoodRequest"
+        required: true
+      responses:
+        "201":
+          description: Estado registrado exitosamente.
+      security:
+      - BearerAuth: []
+  /moods/analytics:
+    get:
+      tags:
+      - Afectividad
+      summary: Obtener reporte analítico mensual de emociones
+      parameters:
+      - name: childId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: month
+        in: query
+        required: true
+        schema:
+          type: integer
+          example: 8
+      - name: year
+        in: query
+        required: true
+        schema:
+          type: integer
+          example: 2026
+      responses:
+        "200":
+          description: Datos agregados para los gráficos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MoodAnalyticsResponse"
+      security:
+      - BearerAuth: []
+  /calendar/events:
+    get:
+      tags:
+      - Calendario
+      summary: Listar eventos del calendario familiar
+      responses:
+        "200":
+          description: Lista de eventos del mes/semana.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalendarEvent"
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - Calendario
+      summary: "Crear evento en el calendario (Pruebas, Reuniones, Materiales)"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+        required: true
+      responses:
+        "201":
+          description: Evento creado.
+      security:
+      - BearerAuth: []
+  /reminders:
+    get:
+      tags:
+      - Recordatorios Cotidianos
+      summary: Obtener recordatorios cotidianos
+      responses:
+        "200":
+          description: Lista de recordatorios rutinarios.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailyReminder"
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - Recordatorios Cotidianos
+      summary: Crear o activar recordatorio cotidiano
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReminderRequest"
+        required: true
+      responses:
+        "201":
+          description: Recordatorio creado y programado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyReminder"
+        "400":
+          description: Datos de entrada inválidos (Error de validación Zod).
+        "401":
+          description: Token de autenticación ausente o inválido.
+      security:
+      - BearerAuth: []
+  /push-tokens:
+    post:
+      tags:
+      - Notificaciones
+      summary: Registrar token FCM del dispositivo móvil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pushtokens_body"
+        required: true
+      responses:
+        "200":
+          description: Token registrado para envío de notificaciones push.
+      security:
+      - BearerAuth: []
+  /games/questions/random:
+    get:
+      tags:
+      - Gamificación
+      summary: Obtener trivia o pregunta para jugar
+      responses:
+        "200":
+          description: Pregunta obtenida exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TriviaQuestion"
+      security:
+      - BearerAuth: []
+  /games/rewards/claim:
+    post:
+      tags:
+      - Gamificación
+      summary: Solicitar recompensa afectiva a los padres
+      description: |
+        Permite al niño solicitar una recompensa. 
+        **Requiere Rol:** `ROLE_CHILD`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/rewards_claim_body"
+        required: true
+      responses:
+        "201":
+          description: Solicitud de recompensa creada y enviada al apoderado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardClaimResponse"
+      security:
+      - BearerAuth: []
+  /tips:
+    get:
+      tags:
+      - Consejos e Interacción Parental
+      summary: Obtener tips educativos y guías de crianza
+      description: |
+        Devuelve una lista de consejos educativos orientados a mejorar la comunicación familiar.
+        **Requiere Rol:** `ROLE_PARENT`.
+      responses:
+        "200":
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ParentalTip"
+      security:
+      - BearerAuth: []
+components:
+  schemas:
+    RegisterParentRequest:
+      required:
+      - email
+      - familyName
+      - fullName
+      - password
+      type: object
+      properties:
+        fullName:
+          type: string
+          example: Juan Pérez
+        email:
+          type: string
+          format: email
+          example: juan.perez@email.com
+        password:
+          type: string
+          example: PasswordSeguro123!
+        familyName:
+          type: string
+          example: Familia Pérez González
+    LoginRequest:
+      required:
+      - identifier
+      - secret
+      type: object
+      properties:
+        identifier:
+          type: string
+          example: juan.perez@email.com
+        secret:
+          type: string
+          example: PasswordSeguro123!
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1Ni...
+        user:
+          $ref: "#/components/schemas/AuthResponse_user"
+    CreateChildRequest:
+      required:
+      - alias
+      - pin
+      type: object
+      properties:
+        alias:
+          type: string
+          example: Sofi
+        pin:
+          type: string
+          example: "1234"
+        avatarIcon:
+          type: string
+          example: "hero_avatar_1.png"
+    ChildProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        parentId:
+          type: string
+          format: uuid
+          readOnly: true
+        alias:
+          type: string
+          example: Sofi
+        role:
+          type: string
+          example: ROLE_CHILD
+        avatarIcon:
+          type: string
+          example: "hero_avatar_1.png"
+    LogMoodRequest:
+      required:
+      - activityText
+      - emotion
+      type: object
+      properties:
+        emotion:
+          type: string
+          example: HAPPY
+          enum:
+          - HAPPY
+          - SAD
+          - ANXIOUS
+          - NEUTRAL
+          - ANGRY
+        activityText:
+          type: string
+          example: Jugando en casa
+        needText:
+          type: string
+          example: Llegar a tomar once juntos
+    MoodAnalyticsResponse:
+      type: object
+      properties:
+        totalLogs:
+          type: integer
+          example: 28
+        emotionBreakdown:
+          $ref: "#/components/schemas/MoodAnalyticsResponse_emotionBreakdown"
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Prueba de Ciencias
+        category:
+          type: string
+          example: EXAM
+          enum:
+          - EXAM
+          - MEETING
+          - MATERIAL
+          - FAMILY
+          - OTHER
+        eventDate:
+          type: string
+          format: date-time
+          example: 2026-09-15T10:00:00Z
+        targeted_user_id:
+          type: string
+          format: uuid
+          example: 722daa09-ec2c-429f-8912-8eea36b6b600
+    CreateEventRequest:
+      required:
+      - category
+      - eventDate
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: Comprar materiales de arte
+        category:
+          type: string
+          example: MATERIAL
+          enum:
+          - EXAM
+          - MEETING
+          - MATERIAL
+          - FAMILY
+          - OTHER
+        eventDate:
+          type: string
+          format: date-time
+          example: 2026-09-18T18:00:00Z
+        targeted_user_id:
+          type: string
+          format: uuid
+          description: UUID del usuario (hijo o padre) al que se le asigna el evento. Si se omite, se asigna al creador.
+    DailyReminder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e9b11b51-17ef-4d3b-9e4a-9b168685e3b9
+        family_id:
+          type: string
+          format: uuid
+          example: f8123a45-92bc-42d1-8110-123456789abc
+        target_user_id:
+          type: string
+          format: uuid
+          example: 3a7c8d92-881a-4f5c-89a1-21c830029bc4
+        title:
+          type: string
+          example: Recuerda cambiarte el uniforme
+        recurrenceTime:
+          type: string
+          example: "15:00"
+        is_active:
+          type: boolean
+          example: true
+    CreateReminderRequest:
+      required:
+      - recurrenceTime
+      - title
+      - childId
+      type: object
+      properties:
+        title:
+          type: string
+          example: Recuerda cambiarte el uniforme
+        recurrenceTime:
+          type: string
+          example: "15:00"
+        childId:
+          type: string
+          format: uuid
+          example: 3a7c8d92-881a-4f5c-89a1-21c830029bc4
+    TriviaQuestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+          example: ¿Cuál es el planeta más grande del sistema solar?
+        options:
+          type: array
+          example:
+          - Tierra
+          - Júpiter
+          - Marte
+          - Saturno
+          items:
+            type: string
+    ParentalTip:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Crianza Respetuosa
+        content:
+          type: string
+          example: Fomentar el diálogo al validar las emociones de los niños.
+    pushtokens_body:
+      required:
+      - deviceType
+      - token
+      type: object
+      properties:
+        token:
+          type: string
+          example: fcm_token_string_here
+        deviceType:
+          type: string
+          enum:
+          - ANDROID
+          - IOS
+          - WEB
+    rewards_claim_body:
+      required:
+      - rewardTitle
+      type: object
+      properties:
+        rewardTitle:
+          type: string
+          example: Ir al cine el fin de semana
+    AuthResponse_user:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          example: ROLE_PARENT
+    MoodAnalyticsResponse_emotionBreakdown:
+      type: object
+      properties:
+        HAPPY:
+          type: integer
+          example: 15
+        SAD:
+          type: integer
+          example: 3
+        NEUTRAL:
+          type: integer
+          example: 10
+    RewardClaimResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4a2b9c3d-881a-4f5c-89a1-21c830029bc4
+        rewardTitle:
+          type: string
+          example: Ir al cine el fin de semana
+        status:
+          type: string
+          example: PENDING
+          enum:
+            - PENDING
+            - APPROVED
+            - REJECTED
+        message:
+          type: string
+          example: Solicitud enviada al apoderado.
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

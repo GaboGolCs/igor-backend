@@ -5,7 +5,7 @@
   "main": "src/presentation/http/server.ts",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/presentation/http/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "test:worker": "tsx tests/test-worker.ts"

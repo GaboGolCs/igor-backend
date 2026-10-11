@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { extractTokenFromHeader } from "../validators/HExtractTokenInfo.js"
+import { extractTokenFromHeader } from "../validators/extractTokenInfo.js"
 import { verifyJWToken } from "../../infrastructure/security/verifyJWToken.js"
 import { getMonthlyAnalitics } from "../../application/use-cases/UGetMonthlyAnalitics.js"
 import { registerMoodUC } from "../../application/use-cases/URegisterMood.js"

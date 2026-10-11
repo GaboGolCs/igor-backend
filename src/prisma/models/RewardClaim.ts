@@ -26,58 +26,64 @@ export type AggregateRewardClaim = {
 
 export type RewardClaimMinAggregateOutputType = {
   id: string | null
-  child_id: string | null
   family_id: string | null
+  child_id: string | null
   reward_title: string | null
-  status: string | null
+  status: $Enums.RewardStatus | null
   created_at: Date | null
+  updated_at: Date | null
 }
 
 export type RewardClaimMaxAggregateOutputType = {
   id: string | null
-  child_id: string | null
   family_id: string | null
+  child_id: string | null
   reward_title: string | null
-  status: string | null
+  status: $Enums.RewardStatus | null
   created_at: Date | null
+  updated_at: Date | null
 }
 
 export type RewardClaimCountAggregateOutputType = {
   id: number
-  child_id: number
   family_id: number
+  child_id: number
   reward_title: number
   status: number
   created_at: number
+  updated_at: number
   _all: number
 }
 
 
 export type RewardClaimMinAggregateInputType = {
   id?: true
-  child_id?: true
   family_id?: true
+  child_id?: true
   reward_title?: true
   status?: true
   created_at?: true
+  updated_at?: true
 }
 
 export type RewardClaimMaxAggregateInputType = {
   id?: true
-  child_id?: true
   family_id?: true
+  child_id?: true
   reward_title?: true
   status?: true
   created_at?: true
+  updated_at?: true
 }
 
 export type RewardClaimCountAggregateInputType = {
   id?: true
-  child_id?: true
   family_id?: true
+  child_id?: true
   reward_title?: true
   status?: true
   created_at?: true
+  updated_at?: true
   _all?: true
 }
 
@@ -155,11 +161,12 @@ export type RewardClaimGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 
 export type RewardClaimGroupByOutputType = {
   id: string
-  child_id: string
   family_id: string
+  child_id: string
   reward_title: string
-  status: string
+  status: $Enums.RewardStatus
   created_at: Date
+  updated_at: Date | null
   _count: RewardClaimCountAggregateOutputType | null
   _min: RewardClaimMinAggregateOutputType | null
   _max: RewardClaimMaxAggregateOutputType | null
@@ -184,21 +191,27 @@ export type RewardClaimWhereInput = {
   AND?: Prisma.RewardClaimWhereInput | Prisma.RewardClaimWhereInput[]
   OR?: Prisma.RewardClaimWhereInput[]
   NOT?: Prisma.RewardClaimWhereInput | Prisma.RewardClaimWhereInput[]
-  id?: Prisma.StringFilter<"RewardClaim"> | string
-  child_id?: Prisma.StringFilter<"RewardClaim"> | string
-  family_id?: Prisma.StringFilter<"RewardClaim"> | string
+  id?: Prisma.UuidFilter<"RewardClaim"> | string
+  family_id?: Prisma.UuidFilter<"RewardClaim"> | string
+  child_id?: Prisma.UuidFilter<"RewardClaim"> | string
   reward_title?: Prisma.StringFilter<"RewardClaim"> | string
-  status?: Prisma.StringFilter<"RewardClaim"> | string
+  status?: Prisma.EnumRewardStatusFilter<"RewardClaim"> | $Enums.RewardStatus
   created_at?: Prisma.DateTimeFilter<"RewardClaim"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"RewardClaim"> | Date | string | null
+  family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
+  child?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type RewardClaimOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  child_id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
+  child_id?: Prisma.SortOrder
   reward_title?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  family?: Prisma.FamilyOrderByWithRelationInput
+  child?: Prisma.UserOrderByWithRelationInput
 }
 
 export type RewardClaimWhereUniqueInput = Prisma.AtLeast<{
@@ -206,20 +219,24 @@ export type RewardClaimWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.RewardClaimWhereInput | Prisma.RewardClaimWhereInput[]
   OR?: Prisma.RewardClaimWhereInput[]
   NOT?: Prisma.RewardClaimWhereInput | Prisma.RewardClaimWhereInput[]
-  child_id?: Prisma.StringFilter<"RewardClaim"> | string
-  family_id?: Prisma.StringFilter<"RewardClaim"> | string
+  family_id?: Prisma.UuidFilter<"RewardClaim"> | string
+  child_id?: Prisma.UuidFilter<"RewardClaim"> | string
   reward_title?: Prisma.StringFilter<"RewardClaim"> | string
-  status?: Prisma.StringFilter<"RewardClaim"> | string
+  status?: Prisma.EnumRewardStatusFilter<"RewardClaim"> | $Enums.RewardStatus
   created_at?: Prisma.DateTimeFilter<"RewardClaim"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"RewardClaim"> | Date | string | null
+  family?: Prisma.XOR<Prisma.FamilyScalarRelationFilter, Prisma.FamilyWhereInput>
+  child?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type RewardClaimOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  child_id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
+  child_id?: Prisma.SortOrder
   reward_title?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.RewardClaimCountOrderByAggregateInput
   _max?: Prisma.RewardClaimMaxOrderByAggregateInput
   _min?: Prisma.RewardClaimMinOrderByAggregateInput
@@ -229,154 +246,460 @@ export type RewardClaimScalarWhereWithAggregatesInput = {
   AND?: Prisma.RewardClaimScalarWhereWithAggregatesInput | Prisma.RewardClaimScalarWhereWithAggregatesInput[]
   OR?: Prisma.RewardClaimScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RewardClaimScalarWhereWithAggregatesInput | Prisma.RewardClaimScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"RewardClaim"> | string
-  child_id?: Prisma.StringWithAggregatesFilter<"RewardClaim"> | string
-  family_id?: Prisma.StringWithAggregatesFilter<"RewardClaim"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"RewardClaim"> | string
+  family_id?: Prisma.UuidWithAggregatesFilter<"RewardClaim"> | string
+  child_id?: Prisma.UuidWithAggregatesFilter<"RewardClaim"> | string
   reward_title?: Prisma.StringWithAggregatesFilter<"RewardClaim"> | string
-  status?: Prisma.StringWithAggregatesFilter<"RewardClaim"> | string
+  status?: Prisma.EnumRewardStatusWithAggregatesFilter<"RewardClaim"> | $Enums.RewardStatus
   created_at?: Prisma.DateTimeWithAggregatesFilter<"RewardClaim"> | Date | string
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"RewardClaim"> | Date | string | null
 }
 
 export type RewardClaimCreateInput = {
   id?: string
-  child_id: string
-  family_id: string
   reward_title: string
-  status?: string
+  status?: $Enums.RewardStatus
   created_at?: Date | string
+  updated_at?: Date | string | null
+  family: Prisma.FamilyCreateNestedOneWithoutReward_claimsInput
+  child: Prisma.UserCreateNestedOneWithoutReward_claimsInput
 }
 
 export type RewardClaimUncheckedCreateInput = {
   id?: string
-  child_id: string
   family_id: string
+  child_id: string
   reward_title: string
-  status?: string
+  status?: $Enums.RewardStatus
   created_at?: Date | string
+  updated_at?: Date | string | null
 }
 
 export type RewardClaimUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  child_id?: Prisma.StringFieldUpdateOperationsInput | string
-  family_id?: Prisma.StringFieldUpdateOperationsInput | string
   reward_title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  family?: Prisma.FamilyUpdateOneRequiredWithoutReward_claimsNestedInput
+  child?: Prisma.UserUpdateOneRequiredWithoutReward_claimsNestedInput
 }
 
 export type RewardClaimUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  child_id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  child_id?: Prisma.StringFieldUpdateOperationsInput | string
   reward_title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RewardClaimCreateManyInput = {
   id?: string
-  child_id: string
   family_id: string
+  child_id: string
   reward_title: string
-  status?: string
+  status?: $Enums.RewardStatus
   created_at?: Date | string
+  updated_at?: Date | string | null
 }
 
 export type RewardClaimUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  child_id?: Prisma.StringFieldUpdateOperationsInput | string
-  family_id?: Prisma.StringFieldUpdateOperationsInput | string
   reward_title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RewardClaimUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  child_id?: Prisma.StringFieldUpdateOperationsInput | string
   family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  child_id?: Prisma.StringFieldUpdateOperationsInput | string
   reward_title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type RewardClaimListRelationFilter = {
+  every?: Prisma.RewardClaimWhereInput
+  some?: Prisma.RewardClaimWhereInput
+  none?: Prisma.RewardClaimWhereInput
+}
+
+export type RewardClaimOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type RewardClaimCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  child_id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
+  child_id?: Prisma.SortOrder
   reward_title?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type RewardClaimMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  child_id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
+  child_id?: Prisma.SortOrder
   reward_title?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type RewardClaimMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  child_id?: Prisma.SortOrder
   family_id?: Prisma.SortOrder
+  child_id?: Prisma.SortOrder
   reward_title?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+}
+
+export type RewardClaimCreateNestedManyWithoutFamilyInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutFamilyInput, Prisma.RewardClaimUncheckedCreateWithoutFamilyInput> | Prisma.RewardClaimCreateWithoutFamilyInput[] | Prisma.RewardClaimUncheckedCreateWithoutFamilyInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutFamilyInput | Prisma.RewardClaimCreateOrConnectWithoutFamilyInput[]
+  createMany?: Prisma.RewardClaimCreateManyFamilyInputEnvelope
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+}
+
+export type RewardClaimUncheckedCreateNestedManyWithoutFamilyInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutFamilyInput, Prisma.RewardClaimUncheckedCreateWithoutFamilyInput> | Prisma.RewardClaimCreateWithoutFamilyInput[] | Prisma.RewardClaimUncheckedCreateWithoutFamilyInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutFamilyInput | Prisma.RewardClaimCreateOrConnectWithoutFamilyInput[]
+  createMany?: Prisma.RewardClaimCreateManyFamilyInputEnvelope
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+}
+
+export type RewardClaimUpdateManyWithoutFamilyNestedInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutFamilyInput, Prisma.RewardClaimUncheckedCreateWithoutFamilyInput> | Prisma.RewardClaimCreateWithoutFamilyInput[] | Prisma.RewardClaimUncheckedCreateWithoutFamilyInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutFamilyInput | Prisma.RewardClaimCreateOrConnectWithoutFamilyInput[]
+  upsert?: Prisma.RewardClaimUpsertWithWhereUniqueWithoutFamilyInput | Prisma.RewardClaimUpsertWithWhereUniqueWithoutFamilyInput[]
+  createMany?: Prisma.RewardClaimCreateManyFamilyInputEnvelope
+  set?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  disconnect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  delete?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  update?: Prisma.RewardClaimUpdateWithWhereUniqueWithoutFamilyInput | Prisma.RewardClaimUpdateWithWhereUniqueWithoutFamilyInput[]
+  updateMany?: Prisma.RewardClaimUpdateManyWithWhereWithoutFamilyInput | Prisma.RewardClaimUpdateManyWithWhereWithoutFamilyInput[]
+  deleteMany?: Prisma.RewardClaimScalarWhereInput | Prisma.RewardClaimScalarWhereInput[]
+}
+
+export type RewardClaimUncheckedUpdateManyWithoutFamilyNestedInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutFamilyInput, Prisma.RewardClaimUncheckedCreateWithoutFamilyInput> | Prisma.RewardClaimCreateWithoutFamilyInput[] | Prisma.RewardClaimUncheckedCreateWithoutFamilyInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutFamilyInput | Prisma.RewardClaimCreateOrConnectWithoutFamilyInput[]
+  upsert?: Prisma.RewardClaimUpsertWithWhereUniqueWithoutFamilyInput | Prisma.RewardClaimUpsertWithWhereUniqueWithoutFamilyInput[]
+  createMany?: Prisma.RewardClaimCreateManyFamilyInputEnvelope
+  set?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  disconnect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  delete?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  update?: Prisma.RewardClaimUpdateWithWhereUniqueWithoutFamilyInput | Prisma.RewardClaimUpdateWithWhereUniqueWithoutFamilyInput[]
+  updateMany?: Prisma.RewardClaimUpdateManyWithWhereWithoutFamilyInput | Prisma.RewardClaimUpdateManyWithWhereWithoutFamilyInput[]
+  deleteMany?: Prisma.RewardClaimScalarWhereInput | Prisma.RewardClaimScalarWhereInput[]
+}
+
+export type RewardClaimCreateNestedManyWithoutChildInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutChildInput, Prisma.RewardClaimUncheckedCreateWithoutChildInput> | Prisma.RewardClaimCreateWithoutChildInput[] | Prisma.RewardClaimUncheckedCreateWithoutChildInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutChildInput | Prisma.RewardClaimCreateOrConnectWithoutChildInput[]
+  createMany?: Prisma.RewardClaimCreateManyChildInputEnvelope
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+}
+
+export type RewardClaimUncheckedCreateNestedManyWithoutChildInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutChildInput, Prisma.RewardClaimUncheckedCreateWithoutChildInput> | Prisma.RewardClaimCreateWithoutChildInput[] | Prisma.RewardClaimUncheckedCreateWithoutChildInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutChildInput | Prisma.RewardClaimCreateOrConnectWithoutChildInput[]
+  createMany?: Prisma.RewardClaimCreateManyChildInputEnvelope
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+}
+
+export type RewardClaimUpdateManyWithoutChildNestedInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutChildInput, Prisma.RewardClaimUncheckedCreateWithoutChildInput> | Prisma.RewardClaimCreateWithoutChildInput[] | Prisma.RewardClaimUncheckedCreateWithoutChildInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutChildInput | Prisma.RewardClaimCreateOrConnectWithoutChildInput[]
+  upsert?: Prisma.RewardClaimUpsertWithWhereUniqueWithoutChildInput | Prisma.RewardClaimUpsertWithWhereUniqueWithoutChildInput[]
+  createMany?: Prisma.RewardClaimCreateManyChildInputEnvelope
+  set?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  disconnect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  delete?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  update?: Prisma.RewardClaimUpdateWithWhereUniqueWithoutChildInput | Prisma.RewardClaimUpdateWithWhereUniqueWithoutChildInput[]
+  updateMany?: Prisma.RewardClaimUpdateManyWithWhereWithoutChildInput | Prisma.RewardClaimUpdateManyWithWhereWithoutChildInput[]
+  deleteMany?: Prisma.RewardClaimScalarWhereInput | Prisma.RewardClaimScalarWhereInput[]
+}
+
+export type RewardClaimUncheckedUpdateManyWithoutChildNestedInput = {
+  create?: Prisma.XOR<Prisma.RewardClaimCreateWithoutChildInput, Prisma.RewardClaimUncheckedCreateWithoutChildInput> | Prisma.RewardClaimCreateWithoutChildInput[] | Prisma.RewardClaimUncheckedCreateWithoutChildInput[]
+  connectOrCreate?: Prisma.RewardClaimCreateOrConnectWithoutChildInput | Prisma.RewardClaimCreateOrConnectWithoutChildInput[]
+  upsert?: Prisma.RewardClaimUpsertWithWhereUniqueWithoutChildInput | Prisma.RewardClaimUpsertWithWhereUniqueWithoutChildInput[]
+  createMany?: Prisma.RewardClaimCreateManyChildInputEnvelope
+  set?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  disconnect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  delete?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  connect?: Prisma.RewardClaimWhereUniqueInput | Prisma.RewardClaimWhereUniqueInput[]
+  update?: Prisma.RewardClaimUpdateWithWhereUniqueWithoutChildInput | Prisma.RewardClaimUpdateWithWhereUniqueWithoutChildInput[]
+  updateMany?: Prisma.RewardClaimUpdateManyWithWhereWithoutChildInput | Prisma.RewardClaimUpdateManyWithWhereWithoutChildInput[]
+  deleteMany?: Prisma.RewardClaimScalarWhereInput | Prisma.RewardClaimScalarWhereInput[]
+}
+
+export type EnumRewardStatusFieldUpdateOperationsInput = {
+  set?: $Enums.RewardStatus
+}
+
+export type RewardClaimCreateWithoutFamilyInput = {
+  id?: string
+  reward_title: string
+  status?: $Enums.RewardStatus
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  child: Prisma.UserCreateNestedOneWithoutReward_claimsInput
+}
+
+export type RewardClaimUncheckedCreateWithoutFamilyInput = {
+  id?: string
+  child_id: string
+  reward_title: string
+  status?: $Enums.RewardStatus
+  created_at?: Date | string
+  updated_at?: Date | string | null
+}
+
+export type RewardClaimCreateOrConnectWithoutFamilyInput = {
+  where: Prisma.RewardClaimWhereUniqueInput
+  create: Prisma.XOR<Prisma.RewardClaimCreateWithoutFamilyInput, Prisma.RewardClaimUncheckedCreateWithoutFamilyInput>
+}
+
+export type RewardClaimCreateManyFamilyInputEnvelope = {
+  data: Prisma.RewardClaimCreateManyFamilyInput | Prisma.RewardClaimCreateManyFamilyInput[]
+  skipDuplicates?: boolean
+}
+
+export type RewardClaimUpsertWithWhereUniqueWithoutFamilyInput = {
+  where: Prisma.RewardClaimWhereUniqueInput
+  update: Prisma.XOR<Prisma.RewardClaimUpdateWithoutFamilyInput, Prisma.RewardClaimUncheckedUpdateWithoutFamilyInput>
+  create: Prisma.XOR<Prisma.RewardClaimCreateWithoutFamilyInput, Prisma.RewardClaimUncheckedCreateWithoutFamilyInput>
+}
+
+export type RewardClaimUpdateWithWhereUniqueWithoutFamilyInput = {
+  where: Prisma.RewardClaimWhereUniqueInput
+  data: Prisma.XOR<Prisma.RewardClaimUpdateWithoutFamilyInput, Prisma.RewardClaimUncheckedUpdateWithoutFamilyInput>
+}
+
+export type RewardClaimUpdateManyWithWhereWithoutFamilyInput = {
+  where: Prisma.RewardClaimScalarWhereInput
+  data: Prisma.XOR<Prisma.RewardClaimUpdateManyMutationInput, Prisma.RewardClaimUncheckedUpdateManyWithoutFamilyInput>
+}
+
+export type RewardClaimScalarWhereInput = {
+  AND?: Prisma.RewardClaimScalarWhereInput | Prisma.RewardClaimScalarWhereInput[]
+  OR?: Prisma.RewardClaimScalarWhereInput[]
+  NOT?: Prisma.RewardClaimScalarWhereInput | Prisma.RewardClaimScalarWhereInput[]
+  id?: Prisma.UuidFilter<"RewardClaim"> | string
+  family_id?: Prisma.UuidFilter<"RewardClaim"> | string
+  child_id?: Prisma.UuidFilter<"RewardClaim"> | string
+  reward_title?: Prisma.StringFilter<"RewardClaim"> | string
+  status?: Prisma.EnumRewardStatusFilter<"RewardClaim"> | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFilter<"RewardClaim"> | Date | string
+  updated_at?: Prisma.DateTimeNullableFilter<"RewardClaim"> | Date | string | null
+}
+
+export type RewardClaimCreateWithoutChildInput = {
+  id?: string
+  reward_title: string
+  status?: $Enums.RewardStatus
+  created_at?: Date | string
+  updated_at?: Date | string | null
+  family: Prisma.FamilyCreateNestedOneWithoutReward_claimsInput
+}
+
+export type RewardClaimUncheckedCreateWithoutChildInput = {
+  id?: string
+  family_id: string
+  reward_title: string
+  status?: $Enums.RewardStatus
+  created_at?: Date | string
+  updated_at?: Date | string | null
+}
+
+export type RewardClaimCreateOrConnectWithoutChildInput = {
+  where: Prisma.RewardClaimWhereUniqueInput
+  create: Prisma.XOR<Prisma.RewardClaimCreateWithoutChildInput, Prisma.RewardClaimUncheckedCreateWithoutChildInput>
+}
+
+export type RewardClaimCreateManyChildInputEnvelope = {
+  data: Prisma.RewardClaimCreateManyChildInput | Prisma.RewardClaimCreateManyChildInput[]
+  skipDuplicates?: boolean
+}
+
+export type RewardClaimUpsertWithWhereUniqueWithoutChildInput = {
+  where: Prisma.RewardClaimWhereUniqueInput
+  update: Prisma.XOR<Prisma.RewardClaimUpdateWithoutChildInput, Prisma.RewardClaimUncheckedUpdateWithoutChildInput>
+  create: Prisma.XOR<Prisma.RewardClaimCreateWithoutChildInput, Prisma.RewardClaimUncheckedCreateWithoutChildInput>
+}
+
+export type RewardClaimUpdateWithWhereUniqueWithoutChildInput = {
+  where: Prisma.RewardClaimWhereUniqueInput
+  data: Prisma.XOR<Prisma.RewardClaimUpdateWithoutChildInput, Prisma.RewardClaimUncheckedUpdateWithoutChildInput>
+}
+
+export type RewardClaimUpdateManyWithWhereWithoutChildInput = {
+  where: Prisma.RewardClaimScalarWhereInput
+  data: Prisma.XOR<Prisma.RewardClaimUpdateManyMutationInput, Prisma.RewardClaimUncheckedUpdateManyWithoutChildInput>
+}
+
+export type RewardClaimCreateManyFamilyInput = {
+  id?: string
+  child_id: string
+  reward_title: string
+  status?: $Enums.RewardStatus
+  created_at?: Date | string
+  updated_at?: Date | string | null
+}
+
+export type RewardClaimUpdateWithoutFamilyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reward_title?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  child?: Prisma.UserUpdateOneRequiredWithoutReward_claimsNestedInput
+}
+
+export type RewardClaimUncheckedUpdateWithoutFamilyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  child_id?: Prisma.StringFieldUpdateOperationsInput | string
+  reward_title?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type RewardClaimUncheckedUpdateManyWithoutFamilyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  child_id?: Prisma.StringFieldUpdateOperationsInput | string
+  reward_title?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type RewardClaimCreateManyChildInput = {
+  id?: string
+  family_id: string
+  reward_title: string
+  status?: $Enums.RewardStatus
+  created_at?: Date | string
+  updated_at?: Date | string | null
+}
+
+export type RewardClaimUpdateWithoutChildInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reward_title?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  family?: Prisma.FamilyUpdateOneRequiredWithoutReward_claimsNestedInput
+}
+
+export type RewardClaimUncheckedUpdateWithoutChildInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  reward_title?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type RewardClaimUncheckedUpdateManyWithoutChildInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  family_id?: Prisma.StringFieldUpdateOperationsInput | string
+  reward_title?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRewardStatusFieldUpdateOperationsInput | $Enums.RewardStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
 
 export type RewardClaimSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  child_id?: boolean
   family_id?: boolean
+  child_id?: boolean
   reward_title?: boolean
   status?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
+  child?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["rewardClaim"]>
 
 export type RewardClaimSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  child_id?: boolean
   family_id?: boolean
+  child_id?: boolean
   reward_title?: boolean
   status?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
+  child?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["rewardClaim"]>
 
 export type RewardClaimSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  child_id?: boolean
   family_id?: boolean
+  child_id?: boolean
   reward_title?: boolean
   status?: boolean
   created_at?: boolean
+  updated_at?: boolean
+  family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
+  child?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["rewardClaim"]>
 
 export type RewardClaimSelectScalar = {
   id?: boolean
-  child_id?: boolean
   family_id?: boolean
+  child_id?: boolean
   reward_title?: boolean
   status?: boolean
   created_at?: boolean
+  updated_at?: boolean
 }
 
-export type RewardClaimOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "child_id" | "family_id" | "reward_title" | "status" | "created_at", ExtArgs["result"]["rewardClaim"]>
+export type RewardClaimOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "family_id" | "child_id" | "reward_title" | "status" | "created_at" | "updated_at", ExtArgs["result"]["rewardClaim"]>
+export type RewardClaimInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
+  child?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type RewardClaimIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
+  child?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type RewardClaimIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  family?: boolean | Prisma.FamilyDefaultArgs<ExtArgs>
+  child?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $RewardClaimPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "RewardClaim"
-  objects: {}
+  objects: {
+    family: Prisma.$FamilyPayload<ExtArgs>
+    child: Prisma.$UserPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    child_id: string
     family_id: string
+    child_id: string
     reward_title: string
-    status: string
+    status: $Enums.RewardStatus
     created_at: Date
+    updated_at: Date | null
   }, ExtArgs["result"]["rewardClaim"]>
   composites: {}
 }
@@ -771,6 +1094,8 @@ readonly fields: RewardClaimFieldRefs;
  */
 export interface Prisma__RewardClaimClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  family<T extends Prisma.FamilyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FamilyDefaultArgs<ExtArgs>>): Prisma.Prisma__FamilyClient<runtime.Types.Result.GetResult<Prisma.$FamilyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  child<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -801,11 +1126,12 @@ export interface Prisma__RewardClaimClient<T, Null = never, ExtArgs extends runt
  */
 export interface RewardClaimFieldRefs {
   readonly id: Prisma.FieldRef<"RewardClaim", 'String'>
-  readonly child_id: Prisma.FieldRef<"RewardClaim", 'String'>
   readonly family_id: Prisma.FieldRef<"RewardClaim", 'String'>
+  readonly child_id: Prisma.FieldRef<"RewardClaim", 'String'>
   readonly reward_title: Prisma.FieldRef<"RewardClaim", 'String'>
-  readonly status: Prisma.FieldRef<"RewardClaim", 'String'>
+  readonly status: Prisma.FieldRef<"RewardClaim", 'RewardStatus'>
   readonly created_at: Prisma.FieldRef<"RewardClaim", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"RewardClaim", 'DateTime'>
 }
     
 
@@ -822,6 +1148,10 @@ export type RewardClaimFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
   /**
    * Filter, which RewardClaim to fetch.
    */
@@ -841,6 +1171,10 @@ export type RewardClaimFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
+  /**
    * Filter, which RewardClaim to fetch.
    */
   where: Prisma.RewardClaimWhereUniqueInput
@@ -858,6 +1192,10 @@ export type RewardClaimFindFirstArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
   /**
    * Filter, which RewardClaim to fetch.
    */
@@ -907,6 +1245,10 @@ export type RewardClaimFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
+  /**
    * Filter, which RewardClaim to fetch.
    */
   where?: Prisma.RewardClaimWhereInput
@@ -954,6 +1296,10 @@ export type RewardClaimFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
   /**
    * Filter, which RewardClaims to fetch.
    */
@@ -1003,6 +1349,10 @@ export type RewardClaimCreateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
+  /**
    * The data needed to create a RewardClaim.
    */
   data: Prisma.XOR<Prisma.RewardClaimCreateInput, Prisma.RewardClaimUncheckedCreateInput>
@@ -1036,6 +1386,10 @@ export type RewardClaimCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    */
   data: Prisma.RewardClaimCreateManyInput | Prisma.RewardClaimCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1050,6 +1404,10 @@ export type RewardClaimUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
   /**
    * The data needed to update a RewardClaim.
    */
@@ -1102,6 +1460,10 @@ export type RewardClaimUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * Limit how many RewardClaims to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1116,6 +1478,10 @@ export type RewardClaimUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
   /**
    * The filter to search for the RewardClaim to update in case it exists.
    */
@@ -1142,6 +1508,10 @@ export type RewardClaimDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
   /**
    * Filter which RewardClaim to delete.
    */
@@ -1174,4 +1544,8 @@ export type RewardClaimDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the RewardClaim
    */
   omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
 }

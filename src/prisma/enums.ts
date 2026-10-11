@@ -47,3 +47,12 @@ export const Category = {
 } as const
 
 export type Category = (typeof Category)[keyof typeof Category]
+
+
+export const RewardStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type RewardStatus = (typeof RewardStatus)[keyof typeof RewardStatus]

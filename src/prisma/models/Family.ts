@@ -177,6 +177,7 @@ export type FamilyWhereInput = {
   users?: Prisma.UserListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
   daily_reminders?: Prisma.DailyReminderListRelationFilter
+  reward_claims?: Prisma.RewardClaimListRelationFilter
 }
 
 export type FamilyOrderByWithRelationInput = {
@@ -187,6 +188,7 @@ export type FamilyOrderByWithRelationInput = {
   users?: Prisma.UserOrderByRelationAggregateInput
   calendar_events?: Prisma.CalendarEventOrderByRelationAggregateInput
   daily_reminders?: Prisma.DailyReminderOrderByRelationAggregateInput
+  reward_claims?: Prisma.RewardClaimOrderByRelationAggregateInput
 }
 
 export type FamilyWhereUniqueInput = Prisma.AtLeast<{
@@ -200,6 +202,7 @@ export type FamilyWhereUniqueInput = Prisma.AtLeast<{
   users?: Prisma.UserListRelationFilter
   calendar_events?: Prisma.CalendarEventListRelationFilter
   daily_reminders?: Prisma.DailyReminderListRelationFilter
+  reward_claims?: Prisma.RewardClaimListRelationFilter
 }, "id" | "code">
 
 export type FamilyOrderByWithAggregationInput = {
@@ -230,6 +233,7 @@ export type FamilyCreateInput = {
   users?: Prisma.UserCreateNestedManyWithoutFamilyInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutFamilyInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyUncheckedCreateInput = {
@@ -240,6 +244,7 @@ export type FamilyUncheckedCreateInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutFamilyInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutFamilyInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyUpdateInput = {
@@ -250,6 +255,7 @@ export type FamilyUpdateInput = {
   users?: Prisma.UserUpdateManyWithoutFamilyNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutFamilyNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyUncheckedUpdateInput = {
@@ -260,6 +266,7 @@ export type FamilyUncheckedUpdateInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutFamilyNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutFamilyNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyCreateManyInput = {
@@ -359,6 +366,20 @@ export type FamilyUpdateOneRequiredWithoutDaily_remindersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FamilyUpdateToOneWithWhereWithoutDaily_remindersInput, Prisma.FamilyUpdateWithoutDaily_remindersInput>, Prisma.FamilyUncheckedUpdateWithoutDaily_remindersInput>
 }
 
+export type FamilyCreateNestedOneWithoutReward_claimsInput = {
+  create?: Prisma.XOR<Prisma.FamilyCreateWithoutReward_claimsInput, Prisma.FamilyUncheckedCreateWithoutReward_claimsInput>
+  connectOrCreate?: Prisma.FamilyCreateOrConnectWithoutReward_claimsInput
+  connect?: Prisma.FamilyWhereUniqueInput
+}
+
+export type FamilyUpdateOneRequiredWithoutReward_claimsNestedInput = {
+  create?: Prisma.XOR<Prisma.FamilyCreateWithoutReward_claimsInput, Prisma.FamilyUncheckedCreateWithoutReward_claimsInput>
+  connectOrCreate?: Prisma.FamilyCreateOrConnectWithoutReward_claimsInput
+  upsert?: Prisma.FamilyUpsertWithoutReward_claimsInput
+  connect?: Prisma.FamilyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FamilyUpdateToOneWithWhereWithoutReward_claimsInput, Prisma.FamilyUpdateWithoutReward_claimsInput>, Prisma.FamilyUncheckedUpdateWithoutReward_claimsInput>
+}
+
 export type FamilyCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -366,6 +387,7 @@ export type FamilyCreateWithoutUsersInput = {
   created_at?: Date | string
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutFamilyInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyUncheckedCreateWithoutUsersInput = {
@@ -375,6 +397,7 @@ export type FamilyUncheckedCreateWithoutUsersInput = {
   created_at?: Date | string
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutFamilyInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyCreateOrConnectWithoutUsersInput = {
@@ -400,6 +423,7 @@ export type FamilyUpdateWithoutUsersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutFamilyNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyUncheckedUpdateWithoutUsersInput = {
@@ -409,6 +433,7 @@ export type FamilyUncheckedUpdateWithoutUsersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutFamilyNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyCreateWithoutCalendar_eventsInput = {
@@ -418,6 +443,7 @@ export type FamilyCreateWithoutCalendar_eventsInput = {
   created_at?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutFamilyInput
   daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyUncheckedCreateWithoutCalendar_eventsInput = {
@@ -427,6 +453,7 @@ export type FamilyUncheckedCreateWithoutCalendar_eventsInput = {
   created_at?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutFamilyInput
   daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyCreateOrConnectWithoutCalendar_eventsInput = {
@@ -452,6 +479,7 @@ export type FamilyUpdateWithoutCalendar_eventsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutFamilyNestedInput
   daily_reminders?: Prisma.DailyReminderUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyUncheckedUpdateWithoutCalendar_eventsInput = {
@@ -461,6 +489,7 @@ export type FamilyUncheckedUpdateWithoutCalendar_eventsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutFamilyNestedInput
   daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyCreateWithoutDaily_remindersInput = {
@@ -470,6 +499,7 @@ export type FamilyCreateWithoutDaily_remindersInput = {
   created_at?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutFamilyInput
   calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyUncheckedCreateWithoutDaily_remindersInput = {
@@ -479,6 +509,7 @@ export type FamilyUncheckedCreateWithoutDaily_remindersInput = {
   created_at?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutFamilyInput
   calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutFamilyInput
+  reward_claims?: Prisma.RewardClaimUncheckedCreateNestedManyWithoutFamilyInput
 }
 
 export type FamilyCreateOrConnectWithoutDaily_remindersInput = {
@@ -504,6 +535,7 @@ export type FamilyUpdateWithoutDaily_remindersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutFamilyNestedInput
   calendar_events?: Prisma.CalendarEventUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUpdateManyWithoutFamilyNestedInput
 }
 
 export type FamilyUncheckedUpdateWithoutDaily_remindersInput = {
@@ -513,6 +545,63 @@ export type FamilyUncheckedUpdateWithoutDaily_remindersInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutFamilyNestedInput
   calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutFamilyNestedInput
+  reward_claims?: Prisma.RewardClaimUncheckedUpdateManyWithoutFamilyNestedInput
+}
+
+export type FamilyCreateWithoutReward_claimsInput = {
+  id?: string
+  name: string
+  code: string
+  created_at?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutFamilyInput
+  calendar_events?: Prisma.CalendarEventCreateNestedManyWithoutFamilyInput
+  daily_reminders?: Prisma.DailyReminderCreateNestedManyWithoutFamilyInput
+}
+
+export type FamilyUncheckedCreateWithoutReward_claimsInput = {
+  id?: string
+  name: string
+  code: string
+  created_at?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutFamilyInput
+  calendar_events?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutFamilyInput
+  daily_reminders?: Prisma.DailyReminderUncheckedCreateNestedManyWithoutFamilyInput
+}
+
+export type FamilyCreateOrConnectWithoutReward_claimsInput = {
+  where: Prisma.FamilyWhereUniqueInput
+  create: Prisma.XOR<Prisma.FamilyCreateWithoutReward_claimsInput, Prisma.FamilyUncheckedCreateWithoutReward_claimsInput>
+}
+
+export type FamilyUpsertWithoutReward_claimsInput = {
+  update: Prisma.XOR<Prisma.FamilyUpdateWithoutReward_claimsInput, Prisma.FamilyUncheckedUpdateWithoutReward_claimsInput>
+  create: Prisma.XOR<Prisma.FamilyCreateWithoutReward_claimsInput, Prisma.FamilyUncheckedCreateWithoutReward_claimsInput>
+  where?: Prisma.FamilyWhereInput
+}
+
+export type FamilyUpdateToOneWithWhereWithoutReward_claimsInput = {
+  where?: Prisma.FamilyWhereInput
+  data: Prisma.XOR<Prisma.FamilyUpdateWithoutReward_claimsInput, Prisma.FamilyUncheckedUpdateWithoutReward_claimsInput>
+}
+
+export type FamilyUpdateWithoutReward_claimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutFamilyNestedInput
+  calendar_events?: Prisma.CalendarEventUpdateManyWithoutFamilyNestedInput
+  daily_reminders?: Prisma.DailyReminderUpdateManyWithoutFamilyNestedInput
+}
+
+export type FamilyUncheckedUpdateWithoutReward_claimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutFamilyNestedInput
+  calendar_events?: Prisma.CalendarEventUncheckedUpdateManyWithoutFamilyNestedInput
+  daily_reminders?: Prisma.DailyReminderUncheckedUpdateManyWithoutFamilyNestedInput
 }
 
 
@@ -524,12 +613,14 @@ export type FamilyCountOutputType = {
   users: number
   calendar_events: number
   daily_reminders: number
+  reward_claims: number
 }
 
 export type FamilyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | FamilyCountOutputTypeCountUsersArgs
   calendar_events?: boolean | FamilyCountOutputTypeCountCalendar_eventsArgs
   daily_reminders?: boolean | FamilyCountOutputTypeCountDaily_remindersArgs
+  reward_claims?: boolean | FamilyCountOutputTypeCountReward_claimsArgs
 }
 
 /**
@@ -563,6 +654,13 @@ export type FamilyCountOutputTypeCountDaily_remindersArgs<ExtArgs extends runtim
   where?: Prisma.DailyReminderWhereInput
 }
 
+/**
+ * FamilyCountOutputType without action
+ */
+export type FamilyCountOutputTypeCountReward_claimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RewardClaimWhereInput
+}
+
 
 export type FamilySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -572,6 +670,7 @@ export type FamilySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   users?: boolean | Prisma.Family$usersArgs<ExtArgs>
   calendar_events?: boolean | Prisma.Family$calendar_eventsArgs<ExtArgs>
   daily_reminders?: boolean | Prisma.Family$daily_remindersArgs<ExtArgs>
+  reward_claims?: boolean | Prisma.Family$reward_claimsArgs<ExtArgs>
   _count?: boolean | Prisma.FamilyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["family"]>
 
@@ -601,6 +700,7 @@ export type FamilyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   users?: boolean | Prisma.Family$usersArgs<ExtArgs>
   calendar_events?: boolean | Prisma.Family$calendar_eventsArgs<ExtArgs>
   daily_reminders?: boolean | Prisma.Family$daily_remindersArgs<ExtArgs>
+  reward_claims?: boolean | Prisma.Family$reward_claimsArgs<ExtArgs>
   _count?: boolean | Prisma.FamilyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FamilyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -612,6 +712,7 @@ export type $FamilyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     users: Prisma.$UserPayload<ExtArgs>[]
     calendar_events: Prisma.$CalendarEventPayload<ExtArgs>[]
     daily_reminders: Prisma.$DailyReminderPayload<ExtArgs>[]
+    reward_claims: Prisma.$RewardClaimPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1015,6 +1116,7 @@ export interface Prisma__FamilyClient<T, Null = never, ExtArgs extends runtime.T
   users<T extends Prisma.Family$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Family$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   calendar_events<T extends Prisma.Family$calendar_eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Family$calendar_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CalendarEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   daily_reminders<T extends Prisma.Family$daily_remindersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Family$daily_remindersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DailyReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reward_claims<T extends Prisma.Family$reward_claimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Family$reward_claimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RewardClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1510,6 +1612,30 @@ export type Family$daily_remindersArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.DailyReminderScalarFieldEnum | Prisma.DailyReminderScalarFieldEnum[]
+}
+
+/**
+ * Family.reward_claims
+ */
+export type Family$reward_claimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RewardClaim
+   */
+  select?: Prisma.RewardClaimSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RewardClaim
+   */
+  omit?: Prisma.RewardClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RewardClaimInclude<ExtArgs> | null
+  where?: Prisma.RewardClaimWhereInput
+  orderBy?: Prisma.RewardClaimOrderByWithRelationInput | Prisma.RewardClaimOrderByWithRelationInput[]
+  cursor?: Prisma.RewardClaimWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RewardClaimScalarFieldEnum | Prisma.RewardClaimScalarFieldEnum[]
 }
 
 /**

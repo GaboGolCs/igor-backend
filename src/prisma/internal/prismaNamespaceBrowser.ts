@@ -167,11 +167,12 @@ export type TriviaQuestionScalarFieldEnum = (typeof TriviaQuestionScalarFieldEnu
 
 export const RewardClaimScalarFieldEnum = {
   id: 'id',
-  child_id: 'child_id',
   family_id: 'family_id',
+  child_id: 'child_id',
   reward_title: 'reward_title',
   status: 'status',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 } as const
 
 export type RewardClaimScalarFieldEnum = (typeof RewardClaimScalarFieldEnum)[keyof typeof RewardClaimScalarFieldEnum]
