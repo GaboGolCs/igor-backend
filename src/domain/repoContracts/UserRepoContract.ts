@@ -15,5 +15,7 @@ export interface UserRepoContract{
 
     findById(id: string): Promise<UserEntity | null>
 
+    updatePassword(userId: string, passwordHash: string): Promise<Boolean>
+
 
 }

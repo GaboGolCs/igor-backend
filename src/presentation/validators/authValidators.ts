@@ -19,3 +19,20 @@ export const RegChild = z.object({
     password: z.string().regex(/\d/, "Debe contener al menos un número").min(4,"La contraseña debe ser de minimo 4 caracteres"), 
     avatar_icon: z.string().optional()
 }).strict()
+
+export const ChildIdParams = z.object({
+    childId: z.uuid('El ID del niño (rewardId) debe ser un UUID válido.')
+})
+
+export const ChildNewPin = z.object({
+    newPin: z.string().length(4, "El PIN debe tener exactamente 4 dígitos").regex(/^\d+$/, "El PIN solo debe contener números")
+})
+export const ForgotPasswd = z.object({
+    email: z.email("Debe ingresar un email válido")
+}).strict()
+
+
+export const ResetPasswd = z.object({
+    token: z.string("El token debe ser una cadena de texto").min(1, "El token no puede estar vacío"), 
+    newPassword: z.string().regex(/\d/, "Debe contener al menos un número").min(4,"La contraseña debe ser de minimo 4 caracteres"), 
+})

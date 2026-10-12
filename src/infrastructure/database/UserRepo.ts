@@ -2,6 +2,7 @@ import {prisma} from "./prisma.js"
 import { UserEntity } from "../../domain/entities/UserEnt.js";
 import { UserRepoContract } from "../../domain/repoContracts/UserRepoContract.js";
 import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
+import { tryCatch } from "bullmq";
 
 
  export class UserRepo implements UserRepoContract{
@@ -78,6 +79,21 @@ import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
             return null
        }
             }
+
+
+    public async updatePassword(id: string, newPasswd: string): Promise<boolean>{
+        try {
+            await prisma.user.update({
+                where:{id: id},
+                data:{password_hash: newPasswd}
+            })
+            return true
+            
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
 
 
 }
