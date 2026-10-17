@@ -59,4 +59,7 @@ export const startReminderWorker = () => {
   });
 
   console.log('[Worker] Servicio de recordatorios en ejecución y escuchando a Redis (con FCM activado)...');
+
+  // Se devuelve para poder cerrarlo (worker.close()) en tests o en el apagado
+  return worker;
 };
