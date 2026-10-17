@@ -20,10 +20,20 @@ docker build -t igor-backend .   # production image; runs `prisma migrate deploy
 npx prisma migrate dev --name <nombre>   # create/apply a migration (migrations live in src/prisma/migrations)
 npx prisma generate           # regenerate the client into src/prisma/
 npx tsx src/presentation/routes/seedTips.ts   # seed parental tips
-npm run test:worker -- <USER_UUID>            # enqueue a test reminder job on Redis
+npm test                                      # vitest integration suite (needs `docker compose up -d`)
+npx vitest run tests/auth.test.ts             # a single test file
+npx vitest run -t "email ya registrado"       # tests whose name matches
+npm run test:worker -- <USER_UUID>            # manually enqueue a reminder job on the dev Redis (scripts/test-worker.ts)
 ```
 
-There is no automated test suite or linter configured (vitest is installed but unused). `prisma` is a runtime dependency (not dev) because the Docker image runs `migrate deploy` on startup.
+## Tests
+
+- The suite in `tests/*.test.ts` runs against the docker-compose Postgres and Redis using `.env.test`: database `igor_test` and Redis db 1, so the dev data in `igor_db` is untouched. `tests/setup/global.ts` creates `igor_test` if missing and runs `prisma migrate deploy`. `tests/setup/env.ts` loads `.env.test` with `override` before each file's imports. Files run serially (`fileParallelism: false`).
+- HTTP tests use `supertest` against `app` from `src/presentation/http/app.ts` (no `listen`). `server.ts` only adds `listen`, the worker, Firebase init and shutdown.
+- Helpers: `tests/helpers/fixtures.ts` (`registerParent`, `registerChild`, unique aliases and emails) and `tests/helpers/db.ts` (`resetDb`, `resetRedis`, `closeConnections`). Each file resets in `beforeAll` and closes connections in `afterAll`.
+- FCM is mocked with `vi.mock('../src/infrastructure/messaging/FCMPushService.js')`. `startReminderWorker()` returns the `Worker` so tests can `close()` it.
+
+There is no linter configured. `prisma` is a runtime dependency (not dev) because the Docker image runs `migrate deploy` on startup.
 
 Required `.env` variables: `DATABASE_URL`, `REDIS_URL`, `PORT`, `JWT_SECRET`, `JWT_SECRET_CREATE`, `JWT_EXPIRES_IN`, `FCM_PROJECT_ID`, `FCM_CLIENT_EMAIL`, `FCM_PRIVATE_KEY`, `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `FRONTEND_URL`.
 
@@ -41,7 +51,8 @@ All imports use explicit `.js` extensions (ESM `NodeNext`).
 Request flow: **route → zod middleware → controller → use case → domain entity + repository → Prisma**.
 
 - `src/presentation/`
-  - `http/server.ts`: entry point. Mounts every router under `/api/v1/...`, imports `firebaseAdmin` for side effects, starts the reminder worker after `listen`, and handles graceful shutdown (closes Redis).
+  - `http/app.ts`: builds the Express app and mounts every router under `/api/v1/...`. New routers are registered here.
+  - `http/server.ts`: entry point. Imports `app`, imports `firebaseAdmin` for side effects, starts the reminder worker after `listen`, and handles graceful shutdown (closes Redis).
   - `routes/R*.ts`: export a `Router`, instantiate the controller, and attach `zodMiddleware(schema)` (body), `zodParamsMiddleware` (params) or `zodQParametersMiddleware` (query). `IANAValidator` validates timezones.
   - `validators/`: Zod schemas per resource, plus `extractTokenFromHeader` (Bearer).
   - `controllers/Con*.ts`: classes whose methods do auth **inline**. There is no auth middleware: each handler calls `extractTokenFromHeader` → `verifyJWToken` → checks `decodedToken.role` (`PARENT` / `CHILD`) and uses `decodedToken.sub` as the user id. Errors are thrown and mapped in the `catch`, typically by matching substrings of `error.message` (for example `"Bad Request"` → 400), and anything else → 500.
@@ -61,4 +72,4 @@ Domain concepts: a `Family` (unique join `code`) has `User`s with role `PARENT` 
 
 ## Adding an endpoint
 
-The pattern used throughout: add the Zod schema in `presentation/validators/`, a use case function in `application/use-cases/`, a repo contract and Prisma repo if needed, a controller method that does the token and role check, and a route in the resource's `R*.ts`. Then mount it in `server.ts` if it's a new router, and keep it consistent with `IGOR-API-1.3.0.yaml`.
+The pattern used throughout: add the Zod schema in `presentation/validators/`, a use case function in `application/use-cases/`, a repo contract and Prisma repo if needed, a controller method that does the token and role check, and a route in the resource's `R*.ts`. Then mount it in `app.ts` if it's a new router, add a test under `tests/`, and keep it consistent with `IGOR-API-1.3.0.yaml`.

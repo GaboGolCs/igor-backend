@@ -1,16 +1,6 @@
-import express, { type Express } from 'express';
 import dotenv from 'dotenv';
 
-// Importación de rutas
-import { rAuthInstance } from '../routes/RAuth.js';
-import { rFamilyInstance } from '../routes/RFamily.js';
-import { rMoodInstace } from '../routes/RMood.js';
-import { rCalendarEventInstance } from '../routes/RCalendarEvent.js';
-import { rReminderInstance } from '../routes/RReminder.js';
-import { rPushTokens } from '../routes/RPushTokens.js';
-import { rTriviaQuestion } from '../routes/RTriviaQuestion.js';
-import { rRewardClaim } from '../routes/RRewardClaim.js';
-import { rParentalTip } from '../routes/RParentalTips.js';
+import { app } from './app.js';
 
 // Importación del worker de BullMQ y la conexión de Redis
 import '../../infrastructure/config/firebaseAdmin.js';
@@ -21,27 +11,6 @@ import { redisConnection } from '../../infrastructure/messaging/redisConnection.
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-const app: Express = express();
-
-// Middlewares
-app.use(express.json());
-
-// Registro de rutas API v1
-app.use("/api/v1/auth", rAuthInstance);
-app.use("/api/v1/family", rFamilyInstance);
-app.use("/api/v1/moods", rMoodInstace);
-app.use("/api/v1/calendar/events", rCalendarEventInstance);
-app.use("/api/v1/reminders", rReminderInstance);
-app.use("/api/v1/push-tokens", rPushTokens);
-app.use("/api/v1/games/questions", rTriviaQuestion);
-app.use("/api/v1/games/rewards", rRewardClaim);
-app.use("/api/v1/tips", rParentalTip);
-
-
-
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
 
 // Inicialización del servidor HTTP y encendido del Worker
 const server = app.listen(PORT, () => {
