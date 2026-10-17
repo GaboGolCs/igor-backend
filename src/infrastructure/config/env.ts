@@ -18,7 +18,9 @@ const envSchema = z
         REDIS_URL: z.string().min(1).default('redis://127.0.0.1:6379'),
 
         JWT_SECRET: z.string().min(1),
-        JWT_EXPIRES_IN: z.string().min(1).default('24h'),
+        // Access token corto; la sesión se mantiene con el refresh token
+        JWT_EXPIRES_IN: z.string().min(1).default('15m'),
+        REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
 
         // Orígenes permitidos para CORS, separados por coma (ej: "http://localhost:5173,https://app.igor.cl")
         CORS_ORIGINS: z
@@ -34,6 +36,8 @@ const envSchema = z
             ),
         // Intentos permitidos por IP cada 15 minutos en login / forgot / reset
         AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
+        // Renovaciones de sesión por IP cada 15 minutos (más alto: varios dispositivos pueden compartir IP)
+        REFRESH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(60),
         API_DOCS_ENABLED: booleanFromString.default(true),
 
         FRONTEND_URL: z.url().optional(),

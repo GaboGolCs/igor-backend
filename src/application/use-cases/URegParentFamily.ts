@@ -6,9 +6,8 @@ import { TransactionRepo } from "../../infrastructure/database/TransactionRepo.j
 import type { Prisma } from "../../prisma/client.js";
 import { hashPassword } from "../../infrastructure/security/hashingPasswd.js";
 import { AuthResponseDTO } from "../dtos/AuthResponseDTO.js";
-import { mapUserEntityToAuthResponseDTO } from "../mappers/AuthResponseMapper.js";
-import { createJWToken } from "../../infrastructure/security/createJWToken.js";
 import { ConflictError } from "../errors/AppError.js";
+import { issueSession } from "./USession.js";
 
 export async function CreateFamilyAndParent(familyName:string, parentEmail:string, password:string, alias:string, avatar_icon:string, timezone: string) : Promise<AuthResponseDTO> {
 
@@ -28,13 +27,12 @@ export async function CreateFamilyAndParent(familyName:string, parentEmail:strin
     const _familiy = FamilyEntity.createFamily(familyName)
     const _user = UserEntity.createParent(parentEmail,hashedPassword,avatar_icon, _familiy.id, alias, timezone)
 
-    const tokenToSend = createJWToken(_user)
-
     // Ambas inserciones usan el mismo tx: si una falla, se revierte la otra
     await TransactionRepoInstance.executeTransaction(async(tx: Prisma.TransactionClient)=>{
         await FamilyRepoInstance.createFamily(_familiy, tx)
         await UserRepoInstance.createUser(_user,_familiy, tx)
     })
 
-    return mapUserEntityToAuthResponseDTO(_user, tokenToSend)
+    // La sesión se emite después de confirmar la transacción
+    return await issueSession(_user)
 }

@@ -33,6 +33,7 @@ describe('POST /api/v1/auth/register-parent', () => {
     expect(res.status).toBe(201);
     expect(res.body.data).toEqual({
       accessToken: expect.any(String),
+      refreshToken: expect.any(String),
       user: { id: expect.any(String), role: 'PARENT' },
     });
     const saved = await prisma.user.findUniqueOrThrow({ where: { id: res.body.data.user.id } });
@@ -96,6 +97,7 @@ describe('POST /api/v1/auth/login', () => {
     expect(res.status).toBe(200);
     expect(res.body.data).toEqual({
       accessToken: expect.any(String),
+      refreshToken: expect.any(String),
       user: { id: child.userId, role: 'CHILD' },
     });
   });

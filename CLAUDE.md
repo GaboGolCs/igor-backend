@@ -32,15 +32,15 @@ There is no linter configured. `prisma` is a runtime dependency (not dev) becaus
 
 ## Configuration
 
-`src/infrastructure/config/env.ts` is the only place that loads dotenv and reads `process.env`. It validates everything with zod at import time and exports a typed `env`; import that instead of reading `process.env`. `.env.example` lists every variable. `DATABASE_URL` and `JWT_SECRET` are required (`JWT_SECRET_CREATE` is accepted as an alias). `FRONTEND_URL`, `GMAIL_*` and `FCM_*` are required only when `NODE_ENV=production`. Frontend-related: `CORS_ORIGINS` (comma-separated), `TRUST_PROXY`, `AUTH_RATE_LIMIT_MAX`, `API_DOCS_ENABLED`.
+`src/infrastructure/config/env.ts` is the only place that loads dotenv and reads `process.env`. It validates everything with zod at import time and exports a typed `env`; import that instead of reading `process.env`. `.env.example` lists every variable. `DATABASE_URL` and `JWT_SECRET` are required (`JWT_SECRET_CREATE` is accepted as an alias). `FRONTEND_URL`, `GMAIL_*` and `FCM_*` are required only when `NODE_ENV=production`. Sessions: `JWT_EXPIRES_IN` (access token, default `15m`) and `REFRESH_TOKEN_TTL_DAYS` (default 30). Frontend-related: `CORS_ORIGINS` (comma-separated), `TRUST_PROXY`, `AUTH_RATE_LIMIT_MAX`, `REFRESH_RATE_LIMIT_MAX`, `API_DOCS_ENABLED`.
 
 ## Tests
 
-- `tests/endpoints/<recurso>.test.ts` covers every endpoint: happy path, 400, 401 (missing, invalid and ghost-user tokens), 403 (wrong role), 404/409, and cross-family access. `tests/app.test.ts` covers CORS, JSON 404/400/413, helmet, `/health` and `/api/docs`. `tests/rate-limit.test.ts` reloads the app with a low limit (`vi.stubEnv` + `vi.resetModules`). `tests/reminder-worker.test.ts` and `tests/fcm-guard.test.ts` cover the BullMQ worker and FCM.
+- `tests/endpoints/<recurso>.test.ts` covers every endpoint: happy path, 400, 401 (missing, invalid and ghost-user tokens), 403 (wrong role), 404/409, and cross-family access. `tests/app.test.ts` covers CORS, JSON 404/400/413, helmet, `/health` and `/api/docs`. `tests/endpoints/auth-session.test.ts` covers refresh rotation, reuse detection, logout and revocation. `tests/rate-limit.test.ts` reloads the app with low limits (`vi.stubEnv` + `vi.resetModules`), loading it twice to simulate two replicas that share the Redis counter. `tests/reminder-worker.test.ts` and `tests/fcm-guard.test.ts` cover the BullMQ worker and FCM.
 - The suite runs against the docker-compose Postgres and Redis using `.env.test`: database `igor_test` and Redis db 1, so the dev data in `igor_db` is untouched. `tests/setup/global.ts` creates `igor_test` if missing and runs `prisma migrate deploy`. `tests/setup/env.ts` loads `.env.test` with `override` before each file's imports. Files run serially (`fileParallelism: false`).
 - HTTP tests use `supertest` against `app` from `src/presentation/http/app.ts` (no `listen`). `server.ts` only adds `listen`, the worker, Firebase init and shutdown.
 - `tests/helpers/fixtures.ts`:
-  - `createFamily()` returns a parent and a child, each with a token. `registerParent` and `registerChild` are the individual pieces.
+  - `createFamily()` returns a parent and a child, each with a `token` (access) and a `refreshToken`. `registerParent` and `registerChild` are the individual pieces.
   - `invalidToken()` and `ghostToken(role)` cover the 401 cases.
   - `expectError(res, status, code)` asserts the error shape.
   - `seedTrivia()` loads sample questions.
@@ -74,7 +74,7 @@ Request flow: **route → `requireAuth` → `requireRole` → zod middleware →
     - `AppError` uses its own status and code.
     - `ZodError` → 400. Malformed JSON → 400 `INVALID_JSON`. Body too large → 413. Prisma `P2002` → 409.
     - Anything else → 500 `INTERNAL_ERROR` with a generic message.
-  - `middlewares/rateLimit.ts`: `authRateLimit` on login, forgot and reset. In-memory store; use a Redis store if the API ever runs with several replicas.
+  - `middlewares/rateLimit.ts`: `createRateLimit({ prefix, limit, windowMs })` builds limiters whose counters live in Redis (`rate-limit-redis`), so they are shared across replicas. `passOnStoreError` means that if Redis is down, requests pass without a limit instead of returning 500. `authRateLimit` (`igor:rl:auth:`) covers login, forgot and reset; `refreshRateLimit` (`igor:rl:refresh:`) covers `/auth/refresh`.
   - `controllers/Con*.ts`: thin and async, with no try/catch. Express 5 forwards rejected promises to `errorHandler`. They read the user from `res.locals.user`.
   - `validators/`: Zod schemas per resource (timezone is validated with `Intl` inside the schema), plus `extractTokenFromHeader`.
 - `src/application/`
@@ -92,14 +92,22 @@ Request flow: **route → `requireAuth` → `requireRole` → zod middleware →
     - Conditional updates (`updateMany` with a status filter, as in `RewardClaimRepo.updateStatusIfPending`) prevent races.
   - `security/`: JWT create/verify (`jsonwebtoken`, secret from `env`) and argon2 hashing/verification.
   - `messaging/`:
-    - `ReminderQueue`: the producer. Uses `upsertJobScheduler` with a cron pattern in the user's IANA timezone, and owns `REMINDER_QUEUE_NAME`. If scheduling fails, `UPostReminder` deletes the saved row.
+    - `ReminderQueue`: the producer. `scheduleDailyReminder` uses `upsertJobScheduler` (scheduler key = reminder id) with a cron pattern in the parent's IANA timezone; `removeDailyReminder` removes it. It owns `REMINDER_QUEUE_NAME`. The DB and the scheduler must stay in sync:
+      - `UPostReminder` deletes the row if scheduling fails.
+      - `UPatchReminder` updates the scheduler first (re-upsert if the reminder stays active, remove if paused), then the DB, and restores the scheduler if the DB write fails.
+      - `UDeleteReminder` removes the scheduler and then the row.
     - `ReminderWorker`: the consumer, sends through `FCMPushService`. Job data must match its `ReminderJobPayload`: `{reminderId, targetUserId, title, body?}`.
     - `redisConnection`: shared ioredis, with `maxRetriesPerRequest: null` as BullMQ requires.
     - `RedisRecoveryPassWdToken`: password-reset tokens stored in Redis with a 15-minute TTL.
+    - `RedisRefreshTokenRepo`: refresh tokens.
+      - Only the SHA-256 is stored, as `igor:refresh:<hash>` → `{ userId, used }`, plus a per-user set `igor:refresh:user:<id>` for `revokeAll`.
+      - `consume` is an atomic Lua script, so rotation is single-use even under concurrency.
+      - `application/use-cases/USession.ts` holds the session logic: `issueSession`, `refreshSession`, `logoutSession` and `revokeAllSessions`. Reusing an already-used token revokes all of the user's sessions.
+      - Call `revokeAllSessions(userId)` whenever a user's credentials change; reset-password and the PIN change already do.
     - `MailService`.
   - `config/env.ts` (see Configuration) and `config/firebaseAdmin.ts`.
 
-Domain concepts: a `Family` (unique join `code`) has `User`s with role `PARENT` (always has an email) or `CHILD` (never has an email; logs in with alias + 4-digit PIN). Login routes by identifier: one containing `@` is a parent's email, otherwise it is a child's alias, which is why aliases can't contain `@`. forgot-password and reset-password are public. forgot always returns 200 so it doesn't reveal which emails exist. Other models: `MoodLog` (`need_text` optional), `CalendarEvent`, `DailyReminder`, `PushToken` (per device; re-registering moves it to the current user), `TriviaQuestion`, `RewardClaim` (`PENDING`/`ACCEPTED`/`REJECTED`, a child claims and a parent patches the status once), `ParentalTip`.
+Domain concepts: a `Family` (unique join `code`) has `User`s with role `PARENT` (always has an email) or `CHILD` (never has an email; logs in with alias + 4-digit PIN). Login routes by identifier: one containing `@` is a parent's email, otherwise it is a child's alias, which is why aliases can't contain `@`. Sessions: login, register and refresh return `{ accessToken, refreshToken, user }`. `/auth/refresh` and `/auth/logout` are public, because the refresh token itself is the credential. forgot-password and reset-password are public. forgot always returns 200 so it doesn't reveal which emails exist. Other models: `MoodLog` (`need_text` optional), `CalendarEvent`, `DailyReminder` (a parent can list, edit, pause via `is_active` and delete them; a child lists their own), `PushToken` (per device; re-registering moves it to the current user), `TriviaQuestion`, `RewardClaim` (`PENDING`/`ACCEPTED`/`REJECTED`, a child claims and a parent patches the status once), `ParentalTip`.
 
 ## Adding an endpoint
 

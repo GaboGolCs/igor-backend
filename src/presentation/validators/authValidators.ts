@@ -56,6 +56,11 @@ export const ForgotPasswd = z.object({
 }).strict()
 
 
+// Usado por /auth/refresh y /auth/logout
+export const RefreshTokenBody = z.object({
+    refreshToken: z.string("El refreshToken debe ser una cadena de texto").min(1, "El refreshToken no puede estar vacío")
+}).strict()
+
 export const ResetPasswd = z.object({
     token: z.string("El token debe ser una cadena de texto").min(1, "El token no puede estar vacío"),
     newPassword: z.string().regex(/\d/, "Debe contener al menos un número").min(4,"La contraseña debe ser de minimo 4 caracteres"),
