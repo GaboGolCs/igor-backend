@@ -38,6 +38,7 @@
     "nodemailer": "^10.1.0",
     "pg": "^8.23.0",
     "prisma": "^7.9.1",
+    "rate-limit-redis": "^6.0.1",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^14.0.2",
     "yaml": "^2.9.1",

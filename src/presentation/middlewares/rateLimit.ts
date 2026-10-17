@@ -1,17 +1,45 @@
-import { rateLimit } from "express-rate-limit";
+import { rateLimit, type RateLimitRequestHandler } from "express-rate-limit";
+import { RedisStore, type RedisReply } from "rate-limit-redis";
 import { env } from "../../infrastructure/config/env.js";
+import { redisConnection } from "../../infrastructure/messaging/redisConnection.js";
+
+interface RateLimitOptions {
+    prefix: string;
+    limit: number;
+    windowMs: number;
+}
+
+// Contadores en Redis (compartidos entre réplicas). Si Redis falla, deja pasar la petición sin límite
+// en lugar de responder 500.
+export function createRateLimit({ prefix, limit, windowMs }: RateLimitOptions): RateLimitRequestHandler {
+    return rateLimit({
+        windowMs,
+        limit,
+        standardHeaders: "draft-8",
+        legacyHeaders: false,
+        store: new RedisStore({
+            sendCommand: (command: string, ...args: string[]) =>
+                redisConnection.call(command, ...args) as Promise<RedisReply>,
+            prefix,
+        }),
+        passOnStoreError: true,
+        // express-rate-limit registra aquí los fallos del store ("allowing request without rate-limiting")
+        logger: {
+            warn: (error, message) => console.warn(`[RateLimit ${prefix}]`, message ?? "", error),
+            error: (error, message) => console.warn(`[RateLimit ${prefix}]`, message ?? "", error),
+        },
+        handler: (req, res) => {
+            res.status(429).json({
+                message: "Demasiados intentos. Intenta nuevamente más tarde.",
+                code: "RATE_LIMITED",
+            })
+        },
+    })
+}
 
 // Limita intentos por IP en login / forgot / reset (fuerza bruta y envío masivo de correos).
-// Store en memoria: suficiente para una sola instancia; con varias réplicas usar un store en Redis.
-export const authRateLimit = rateLimit({
-    windowMs: 15 * 60 * 1000,
+export const authRateLimit = createRateLimit({
+    prefix: "igor:rl:auth:",
     limit: env.AUTH_RATE_LIMIT_MAX,
-    standardHeaders: "draft-8",
-    legacyHeaders: false,
-    handler: (req, res) => {
-        res.status(429).json({
-            message: "Demasiados intentos. Intenta nuevamente más tarde.",
-            code: "RATE_LIMITED",
-        })
-    },
-})
+    windowMs: 15 * 60 * 1000,
+});
