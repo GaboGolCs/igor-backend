@@ -16,9 +16,15 @@ info:
     - 401: sin token, token inválido/expirado, credenciales incorrectas o usuario de la sesión inexistente.
     - 403: el rol del usuario no tiene acceso a la ruta.
     - 404: el recurso no existe **o pertenece a otra familia** (no se revela su existencia).
+    - 404 `ROUTE_NOT_FOUND`: la ruta no existe.
     - 409: duplicado o ya procesado.
-    - 429: demasiados intentos (login / forgot / reset).
-    - 500: error interno, con mensaje genérico.
+    - 413 `PAYLOAD_TOO_LARGE`: body de más de 100 KB.
+    - 429 `RATE_LIMITED`: demasiados intentos por IP cada 15 min (login / forgot / reset: 10; refresh: 60).
+      Las respuestas de esas rutas incluyen las cabeceras estándar `RateLimit` y `RateLimit-Policy`.
+    - 500 `INTERNAL_ERROR`: error interno, con mensaje genérico (puede ocurrir en cualquier endpoint).
+
+    **Otros recursos:** Swagger UI en `/api/docs` y este contrato en JSON en `/api/docs/openapi.json`;
+    estado del servicio en `/health`. Ninguno exige autenticación.
   version: 1.5.0
 servers:
   - url: http://localhost:3000/api/v1
@@ -55,7 +61,7 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
         "409":
-          description: "`EMAIL_TAKEN` o `ALIAS_TAKEN`"
+          description: "`EMAIL_TAKEN` o `ALIAS_TAKEN` (o `CONFLICT` si dos registros iguales llegan al mismo tiempo)"
           content:
             application/json:
               schema:
@@ -423,7 +429,7 @@ paths:
       summary: Listar recordatorios diarios
       description: |
         Cualquier rol. PARENT: todos los de su familia (filtro opcional `childId`). CHILD: solo los propios (`childId` se ignora).
-        Ordenados por `recurrence_time`.
+        Ordenados por `recurrence_time` y luego por fecha de creación. Incluye los pausados (`is_active: false`).
       security:
         - BearerAuth: []
       parameters:
@@ -858,10 +864,12 @@ components:
       properties:
         identifier:
           type: string
+          minLength: 1
           description: Email (apoderado) o alias (niño)
           example: apoderado@email.com
         secret:
           type: string
+          minLength: 1
           description: Contraseña (apoderado) o PIN (niño)
           example: clave1234
 
@@ -880,6 +888,8 @@ components:
       properties:
         token:
           type: string
+          minLength: 1
+          description: Token recibido en el enlace del correo
         newPassword:
           type: string
           minLength: 4
@@ -892,6 +902,7 @@ components:
       properties:
         refreshToken:
           type: string
+          minLength: 1
 
     CreateChildRequest:
       type: object
@@ -1089,6 +1100,8 @@ components:
       properties:
         token:
           type: string
+          minLength: 1
+          description: Token FCM del dispositivo (se ignoran espacios al inicio y al final)
         deviceType:
           type: string
           enum: [ANDROID, IOS, WEB]

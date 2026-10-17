@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 IGOR backend: REST API for a family socio-educational platform (parents + children). Express 5 + TypeScript (ESM, `NodeNext`), Prisma 7 on PostgreSQL, BullMQ/Redis for scheduled reminders, Firebase Cloud Messaging for push, Nodemailer (Gmail) for password recovery. Code, comments, commit messages and API error messages are in Spanish.
 
-The API contract is `openapi.yaml` (OpenAPI 3.0.3, version 1.4.0, base path `/api/v1`). It is served by Swagger UI at `/api/docs` (raw JSON at `/api/docs/openapi.json`). **The code is the source of truth**: when you change a request/response shape or status, update `openapi.yaml` to match. `docs/frontend-integration.md` is the guide for the frontend team (auth, error codes, CORS) and should be kept in sync too.
+The API contract is `openapi.yaml` (OpenAPI 3.0.3, version 1.5.0, base path `/api/v1`; 22 operations). It is served by Swagger UI at `/api/docs` (raw JSON at `/api/docs/openapi.json`). **The code is the source of truth**: when you change a request/response shape or status, update `openapi.yaml` to match. `docs/frontend-integration.md` is the guide for the frontend team (auth, error codes, CORS) and should be kept in sync too.
 
 ## Commands
 
@@ -37,7 +37,8 @@ There is no linter configured. `prisma` is a runtime dependency (not dev) becaus
 ## Tests
 
 - `tests/endpoints/<recurso>.test.ts` covers every endpoint: happy path, 400, 401 (missing, invalid and ghost-user tokens), 403 (wrong role), 404/409, and cross-family access. `tests/app.test.ts` covers CORS, JSON 404/400/413, helmet, `/health` and `/api/docs`. `tests/endpoints/auth-session.test.ts` covers refresh rotation, reuse detection, logout and revocation. `tests/rate-limit.test.ts` reloads the app with low limits (`vi.stubEnv` + `vi.resetModules`), loading it twice to simulate two replicas that share the Redis counter. `tests/reminder-worker.test.ts` and `tests/fcm-guard.test.ts` cover the BullMQ worker and FCM.
-- The suite runs against the docker-compose Postgres and Redis using `.env.test`: database `igor_test` and Redis db 1, so the dev data in `igor_db` is untouched. `tests/setup/global.ts` creates `igor_test` if missing and runs `prisma migrate deploy`. `tests/setup/env.ts` loads `.env.test` with `override` before each file's imports. Files run serially (`fileParallelism: false`).
+- The suite runs against the docker-compose Postgres and Redis using `.env.test`: database `igor_test` and Redis db 1, so the dev data in `igor_db` is untouched. `tests/setup/global.ts` creates the test database if missing, runs `prisma migrate deploy` and flushes the test Redis db, so rate-limit counters don't carry over between runs. `tests/setup/env.ts` loads `.env.test` with `override` before each file's imports. Files run serially (`fileParallelism: false`).
+- Two checkouts (worktrees or parallel sessions) running `npm test` at the same time against the shared `igor_test`/db 1 truncate each other's data and fail randomly. Give each checkout its own `DATABASE_URL` (e.g. `.../igor_test_<name>`) and Redis db in its **local** `.env.test`, and don't commit that change. The global setup creates the database by itself.
 - HTTP tests use `supertest` against `app` from `src/presentation/http/app.ts` (no `listen`). `server.ts` only adds `listen`, the worker, Firebase init and shutdown.
 - `tests/helpers/fixtures.ts`:
   - `createFamily()` returns a parent and a child, each with a `token` (access) and a `refreshToken`. `registerParent` and `registerChild` are the individual pieces.
@@ -80,8 +81,8 @@ Request flow: **route → `requireAuth` → `requireRole` → zod middleware →
 - `src/application/`
   - `errors/AppError.ts`: `ValidationError` (400), `UnauthorizedError` (401), `ForbiddenError` (403), `NotFoundError` (404), `ConflictError` (409), each with a stable `code`, plus `sessionUserNotFound()` (401). Use cases throw these; **never match on error message strings**.
   - `use-cases/U*.ts`: plain exported async functions (not classes). They `new` the concrete infrastructure repositories directly; there is no DI container.
-  - Authorization rule: before acting on a child, event target or reward, check it belongs to the caller's `family_id`. If it doesn't, return the **same 404** as "not found" so other families' ids aren't revealed. A token whose user no longer exists → `sessionUserNotFound()`.
-  - `dtos/`, `mappers/`: response shapes and entity→DTO mapping. Both logins return `{ accessToken, user: { id, role } }` via `mapUserEntityToAuthResponseDTO`.
+  - Authorization rule: before acting on a child, event target, reminder or reward, check it belongs to the caller's `family_id`. If it doesn't, return the **same 404** as "not found" so other families' ids aren't revealed. A token whose user no longer exists → `sessionUserNotFound()`.
+  - `dtos/`, `mappers/`: response shapes and entity→DTO mapping. Login (parent and child), register and refresh all return `{ accessToken, refreshToken, user: { id, role } }` through `issueSession` in `USession.ts`, which uses `mapUserEntityToAuthResponseDTO`. Never build tokens directly in a use case.
 - `src/domain/`
   - `entities/*Ent.ts`: classes with static factories (for example `UserEntity.createParent`, `RewardClaimEntity.createRewardClaim`) that generate UUIDs with `crypto.randomUUID()` and set defaults.
   - `repoContracts/`: interfaces implemented by the infrastructure repos.
