@@ -1,9 +1,8 @@
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
 import { verifyPassword } from "../../infrastructure/security/verifyPasswd.js";
-import {createJWToken} from "../../infrastructure/security/createJWToken.js"
 import { AuthResponseDTO } from "../dtos/AuthResponseDTO.js";
-import { mapUserEntityToAuthResponseDTO } from "../mappers/AuthResponseMapper.js";
 import { invalidCredentials } from "./ULoginParent.js";
+import { issueSession } from "./USession.js";
 
 export async function LoginChild(alias: string, passwordProvided: string): Promise<AuthResponseDTO> {
     const userFound = await new UserRepo().findByAlias(alias)
@@ -17,7 +16,6 @@ export async function LoginChild(alias: string, passwordProvided: string): Promi
         throw invalidCredentials()
     }
 
-    // Misma forma de respuesta que el login de padre: { accessToken, user }
-    const tokenToSend = createJWToken(userFound)
-    return mapUserEntityToAuthResponseDTO(userFound, tokenToSend)
+    // Misma forma de respuesta que el login de padre: { accessToken, refreshToken, user }
+    return await issueSession(userFound)
 }

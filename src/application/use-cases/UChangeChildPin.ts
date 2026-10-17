@@ -1,6 +1,7 @@
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
 import { hashPassword } from "../../infrastructure/security/hashingPasswd.js";
 import { NotFoundError, sessionUserNotFound } from "../errors/AppError.js";
+import { revokeAllSessions } from "./USession.js";
 
 
 export class UChangeChildPin{
@@ -22,5 +23,8 @@ export class UChangeChildPin{
 
         const pinHashed = await hashPassword(newPin)
         await userRepoInstance.updatePassword(_child.id,pinHashed)
+
+        // El niño debe volver a entrar con el PIN nuevo en todos sus dispositivos
+        await revokeAllSessions(_child.id)
     }
 }

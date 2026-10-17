@@ -6,6 +6,7 @@ import { UserRepo } from '../../infrastructure/database/UserRepo.js';
 import { RedisRecoveryTokenRepository } from '../../infrastructure/messaging/RedisRecoveryPassWdToken.js';
 import { hashPassword } from '../../infrastructure/security/hashingPasswd.js';
 import { AppError } from '../errors/AppError.js';
+import { revokeAllSessions } from './USession.js';
 
 export class parentForgotPasswd {
   constructor() {}
@@ -55,5 +56,8 @@ export class parentForgotPasswd {
     await new UserRepo().updatePassword(userId, passwordHash);
 
     await recoveryTokenRepository.delete(token);
+
+    // Con la contraseña nueva se cierran todas las sesiones abiertas (refresh tokens) del apoderado
+    await revokeAllSessions(userId);
   }
 }

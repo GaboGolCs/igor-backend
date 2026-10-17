@@ -18,7 +18,9 @@ const envSchema = z
         REDIS_URL: z.string().min(1).default('redis://127.0.0.1:6379'),
 
         JWT_SECRET: z.string().min(1),
-        JWT_EXPIRES_IN: z.string().min(1).default('24h'),
+        // Access token corto; la sesión se mantiene con el refresh token
+        JWT_EXPIRES_IN: z.string().min(1).default('15m'),
+        REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
 
         // Orígenes permitidos para CORS, separados por coma (ej: "http://localhost:5173,https://app.igor.cl")
         CORS_ORIGINS: z

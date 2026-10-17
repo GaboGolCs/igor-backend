@@ -1,9 +1,8 @@
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
-import { createJWToken } from "../../infrastructure/security/createJWToken.js";
 import { verifyPassword } from "../../infrastructure/security/verifyPasswd.js";
 import { AuthResponseDTO } from "../dtos/AuthResponseDTO.js";
-import { mapUserEntityToAuthResponseDTO } from "../mappers/AuthResponseMapper.js";
 import { UnauthorizedError } from "../errors/AppError.js";
+import { issueSession } from "./USession.js";
 
 // Mismo mensaje para usuario inexistente y contraseña incorrecta: no revela qué emails existen
 export const invalidCredentials = () =>
@@ -22,6 +21,5 @@ export async function LoginParent(email: string, passwordProvided: string): Prom
     }
 
     // Usamos el usuario de la BD: createParent generaría un id nuevo y el token no apuntaría al usuario real
-    const tokenToSend = createJWToken(userFound)
-    return mapUserEntityToAuthResponseDTO(userFound, tokenToSend)
+    return await issueSession(userFound)
 }

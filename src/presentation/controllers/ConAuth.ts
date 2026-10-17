@@ -2,6 +2,7 @@ import { CreateFamilyAndParent } from "../../application/use-cases/URegParentFam
 import { LoginParent } from "../../application/use-cases/ULoginParent.js"
 import { LoginChild } from "../../application/use-cases/ULoginChild.js"
 import { parentForgotPasswd } from "../../application/use-cases/UParentForgotPasswd.js"
+import { logoutSession, refreshSession } from "../../application/use-cases/USession.js"
 import {Response, Request} from "express"
 
 // Los errores se lanzan como AppError desde los use cases y los responde errorHandler
@@ -30,6 +31,20 @@ export class ConAuth{
     public static async parentForgotPassword(req: Request, res: Response){
         await parentForgotPasswd.forgotPassword(req.body.email)
         return res.status(200).json({ message: 'Si el correo está registrado, recibirás un enlace de recuperación.' });
+    }
+
+
+    // Público. El refresh token es la credencial: devuelve un par nuevo (rotación)
+    public static async RefreshSession(req: Request, res: Response) {
+        const useCaseResponse = await refreshSession(req.body.refreshToken)
+        return res.status(200).json({message: "Sesión renovada", data: useCaseResponse})
+    }
+
+
+    // Público e idempotente: revoca el refresh token recibido
+    public static async Logout(req: Request, res: Response) {
+        await logoutSession(req.body.refreshToken)
+        return res.status(204).send()
     }
 
 

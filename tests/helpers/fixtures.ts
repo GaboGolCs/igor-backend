@@ -45,6 +45,7 @@ export async function registerParent(overrides: Record<string, unknown> = {}) {
   return {
     payload,
     token: res.body.data.accessToken as string,
+    refreshToken: res.body.data.refreshToken as string,
     userId: res.body.data.user.id as string,
   };
 }
@@ -65,7 +66,13 @@ export async function registerChild(parentToken: string) {
     throw new Error(`login del niño falló (${login.status}): ${JSON.stringify(login.body)}`);
   }
 
-  return { userId: res.body.data.id as string, alias, pin, token: login.body.data.accessToken as string };
+  return {
+    userId: res.body.data.id as string,
+    alias,
+    pin,
+    token: login.body.data.accessToken as string,
+    refreshToken: login.body.data.refreshToken as string,
+  };
 }
 
 // Familia completa: apoderado + un niño, con sus tokens
