@@ -13,12 +13,14 @@ export class ReminderMessageProducer {
    * 
    * @param reminderId UUID del recordatorio generado en Postgres
    * @param childId UUID del niño destinatario
+   * @param title Título del recordatorio que se mostrará en la notificación push
    * @param time Hora en formato "HH:mm" (ej. "15:00")
    * @param timezone Zona horaria en formato IANA (ej. "America/Santiago")
    */
   static async scheduleDailyReminder(
     reminderId: string,
     childId: string,
+    title: string,
     time: string,
     timezone: string = 'America/Santiago'
   ): Promise<void> {
@@ -33,7 +35,8 @@ export class ReminderMessageProducer {
       },
       {
         name: 'send-reminder',
-        data: { reminderId, childId },
+        // Debe coincidir con ReminderJobPayload en ReminderWorker.ts
+        data: { reminderId, targetUserId: childId, title },
       }
     );
 

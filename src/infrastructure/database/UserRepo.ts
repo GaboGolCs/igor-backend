@@ -1,4 +1,5 @@
 import {prisma} from "./prisma.js"
+import type { Prisma } from "../../prisma/client.js";
 import { UserEntity } from "../../domain/entities/UserEnt.js";
 import { UserRepoContract } from "../../domain/repoContracts/UserRepoContract.js";
 import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
@@ -11,9 +12,10 @@ import { tryCatch } from "bullmq";
         return this
     }
 
-     public async createUser(_user: UserEntity, _family:FamilyEntity): Promise<object | null> {
+     // db: cliente de transacción (tx) cuando se llama dentro de executeTransaction
+     public async createUser(_user: UserEntity, _family:FamilyEntity, db: Prisma.TransactionClient = prisma): Promise<object | null> {
         try {
-            const dbResponse = await prisma.user.create({data: {
+            const dbResponse = await db.user.create({data: {
                 id: _user.id,
                 email: _user.email,
                 password_hash: _user.password_hash,

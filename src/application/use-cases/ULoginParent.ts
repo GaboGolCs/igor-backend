@@ -42,7 +42,8 @@ export async function LoginParent(email: string, passwordProvided: string): Prom
             throw new Error("Error de consistencia de datos: Email del usuario es null y no debería serlo")
         }
 
-        const _user = UserEntity.createParent(userFound.email, userFound.password_hash, userFound.avatar_icon, userFound.family_id, userFound.alias)
+        // Usamos el usuario de la BD: createParent generaría un id nuevo y el token no apuntaría al usuario real
+        const _user = userFound
         const tokenToSend = createJWToken(_user)
         if(!tokenToSend) {
             console.error("Error al crear el token")

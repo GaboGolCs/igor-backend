@@ -4,8 +4,8 @@ import { Worker, Job } from 'bullmq';
 import { redisConnection } from './redisConnection.js';
 import { FCMPushService } from './FCMPushService.js';
 import {prisma} from "../database/prisma.js"; // Para limpiar tokens inválidos
-// Ajustamos el nombre de la cola según tu configuración previa
-const REMINDER_QUEUE_NAME = 'reminders_queue'; 
+// Mismo nombre de cola que usa el productor
+import { REMINDER_QUEUE_NAME } from './ReminderQueue.js';
 
 // Instanciamos dependencias (en un entorno real podrías usar inyección de dependencias)
 const pushService = new FCMPushService(prisma);
@@ -21,8 +21,19 @@ export const startReminderWorker = () => {
   const worker = new Worker<ReminderJobPayload>(
     REMINDER_QUEUE_NAME,
     async (job: Job<ReminderJobPayload>) => {
-      const { reminderId, targetUserId, title, body = '¡Es hora de tu rutina!' } = job.data;
-      
+      let { reminderId, targetUserId, title, body = '¡Es hora de tu rutina!' } = job.data;
+
+      // Schedulers antiguos encolaban solo { reminderId, childId }: completamos los datos desde la BD
+      if (!targetUserId || !title) {
+        const reminder = await prisma.dailyReminder.findUnique({ where: { id: reminderId } });
+        if (!reminder || !reminder.is_active) {
+          console.warn(`[Worker] Recordatorio ${reminderId} inexistente o inactivo. Se omite.`);
+          return;
+        }
+        targetUserId = reminder.targeted_user_id;
+        title = reminder.title;
+      }
+
       console.log(`[Worker] ⏰ Procesando recordatorio ID: ${reminderId} para usuario: ${targetUserId}`);
       
       // Llamada real al servicio de FCM para despachar la notificación push
