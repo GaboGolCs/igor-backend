@@ -1,5 +1,5 @@
 import { ReminderEnt } from "../../domain/entities/ReminderEnt.js"
-import { ReminderRepoContract } from "../../domain/repoContracts/ReminderRepoContract.js"
+import { ReminderRepoContract, ReminderUpdateData } from "../../domain/repoContracts/ReminderRepoContract.js"
 import { prisma } from "./prisma.js"
 export class ReminderRepo implements ReminderRepoContract{
     
@@ -34,5 +34,26 @@ export class ReminderRepo implements ReminderRepoContract{
 
     public async deleteReminder(id: string): Promise<void> {
         await prisma.dailyReminder.delete({ where: { id } })
+    }
+
+    public async findById(id: string): Promise<ReminderEnt | null> {
+        const reminder = await prisma.dailyReminder.findUnique({ where: { id } })
+        return reminder as ReminderEnt | null
+    }
+
+    public async listByFamily(familyId: string, childId?: string): Promise<ReminderEnt[]> {
+        const reminders = await prisma.dailyReminder.findMany({
+            where: { family_id: familyId, ...(childId ? { targeted_user_id: childId } : {}) },
+            orderBy: [{ recurrence_time: "asc" }, { created_at: "asc" }]
+        })
+        return reminders as ReminderEnt[]
+    }
+
+    public async update(id: string, data: ReminderUpdateData): Promise<ReminderEnt> {
+        const updated = await prisma.dailyReminder.update({
+            where: { id },
+            data: { ...data, updated_at: new Date() }
+        })
+        return updated as ReminderEnt
     }
 }

@@ -44,4 +44,14 @@ export class ReminderMessageProducer {
       `[BullMQ] Recordatorio ${reminderId} programado para las ${time} hrs (${timezone}).`
     );
   }
+
+  /**
+   * Elimina el scheduler de un recordatorio. No falla si no existía.
+   *
+   * @param reminderId UUID del recordatorio (es la clave del scheduler)
+   */
+  static async removeDailyReminder(reminderId: string): Promise<void> {
+    await reminderQueue.removeJobScheduler(reminderId);
+    console.log(`[BullMQ] Recordatorio ${reminderId} desprogramado.`);
+  }
 }
