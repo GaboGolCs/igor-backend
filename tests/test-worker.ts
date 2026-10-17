@@ -1,13 +1,13 @@
 import { Queue } from 'bullmq';
+import { Redis } from 'ioredis';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
-const REDIS_PORT = Number(process.env.REDIS_PORT) || 6379;
+const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 
-// Nombre de la cola que escucha el Worker en server.ts
-const QUEUE_NAME = 'reminders_queue';
+// Nombre de la cola que escucha el Worker (REMINDER_QUEUE_NAME en ReminderQueue.ts)
+const QUEUE_NAME = 'daily-reminders';
 
 async function runTestWorker() {
   // Leemos el UUID del usuario del argumento de línea de comandos
@@ -16,23 +16,20 @@ async function runTestWorker() {
   if (!targetUserId) {
     console.error('❌ Error: Debes ingresar el UUID del usuario objetivo.');
     console.log('\n💡 Uso correcto:');
-    console.log('   npx ts-node src/scripts/test-worker.ts <UUID_DEL_USUARIO>\n');
+    console.log('   npm run test:worker -- <UUID_DEL_USUARIO>\n');
     process.exit(1);
   }
 
-  console.log(`📡 Conectando a Redis (${REDIS_HOST}:${REDIS_PORT})...`);
+  console.log(`📡 Conectando a Redis (${REDIS_URL})...`);
 
-  const remindersQueue = new Queue(QUEUE_NAME, {
-    connection: {
-      host: REDIS_HOST,
-      port: REDIS_PORT,
-    },
-  });
+  const connection = new Redis(REDIS_URL, { maxRetriesPerRequest: null });
+  const remindersQueue = new Queue(QUEUE_NAME, { connection });
 
   console.log(`🚀 Inyectando tarea de prueba en la cola "${QUEUE_NAME}"...`);
 
   // Agregamos el Job a la cola con los datos necesarios para el FCMPushService
   const job = await remindersQueue.add('send-push-reminder', {
+    reminderId: 'test-manual',
     targetUserId: targetUserId,
     title: '🔔 Recordatorio de Prueba IGOR',
     body: '¡Hola! Si ves este mensaje, la cola de Redis y el Worker con FCM funcionan correctamente.',
@@ -42,6 +39,7 @@ async function runTestWorker() {
   console.log('👀 Revisa la consola donde está corriendo tu servidor para ver el procesamiento del Worker en tiempo real.\n');
 
   await remindersQueue.close();
+  await connection.quit();
   process.exit(0);
 }
 

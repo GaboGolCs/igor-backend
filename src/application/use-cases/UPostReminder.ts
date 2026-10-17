@@ -52,6 +52,7 @@ export async function UPostReminder(title: string, childId: string, recurrenceTi
     await ReminderMessageProducer.scheduleDailyReminder(
       savedReminder.id,
       childId,
+      title,
       recurrenceTime,
       parentTimezone
     );

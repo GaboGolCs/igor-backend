@@ -1,4 +1,5 @@
 import {prisma} from "./prisma.js"
+import type { Prisma } from "../../prisma/client.js";
 import { FamilyEntity } from "../../domain/entities/FamilyEnt.js";
 import { FamilyRepoContract } from "../../domain/repoContracts/FamilyRepoContract.js";
 export class FamilyRepo implements FamilyRepoContract{
@@ -8,10 +9,11 @@ export class FamilyRepo implements FamilyRepoContract{
     }
 
 
-    async createFamily(_family: FamilyEntity): Promise<FamilyEntity | null> {
-      
+    // db: cliente de transacción (tx) cuando se llama dentro de executeTransaction
+    async createFamily(_family: FamilyEntity, db: Prisma.TransactionClient = prisma): Promise<FamilyEntity | null> {
+
         try {
-            const _familyCreated = await prisma.family.create({
+            const _familyCreated = await db.family.create({
                 data:{
                     id: _family.id,
                     name: _family.name,

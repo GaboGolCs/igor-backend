@@ -9,6 +9,12 @@ export class FCMPushService {
    * Despacha una notificación push y maneja la limpieza de tokens expirados.
    */
   public async sendPushNotification(targetUserId: string, title: string, body: string): Promise<void> {
+    // Sin usuario, Prisma ignora el filtro user_id y devolvería los tokens de TODOS los usuarios
+    if (!targetUserId) {
+      console.error('[FCM] targetUserId vacío. Se omite el push para no notificar a todos los dispositivos.');
+      return;
+    }
+
     // 1. Buscamos todos los tokens activos asociados a este usuario
     const userTokens = await this.prisma.pushToken.findMany({
       where: { user_id: targetUserId }

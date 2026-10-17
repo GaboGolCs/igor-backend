@@ -6,7 +6,8 @@ import {UserEntity} from "../entities/UserEnt.js";
 
 export interface UserRepoContract{
 
-    createUser(newUser: UserEntity, _family:FamilyEntity): Promise<object | null>;
+    // db: cliente de transacción opcional (se tipa en la implementación de infraestructura)
+    createUser(newUser: UserEntity, _family:FamilyEntity, db?: unknown): Promise<object | null>;
 
     findByEmail(mail: string): Promise<UserEntity | null>; 
 
