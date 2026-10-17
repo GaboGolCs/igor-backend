@@ -2,12 +2,12 @@ import express from "express"
 import { ConAuth } from "../controllers/ConAuth.js"
 import { zodMiddleware } from "../middlewares/zodMiddleware.js"
 import{RegFamilyParent, LoginUser, ForgotPasswd,ResetPasswd} from "../validators/authValidators.js"
-import { midIANAVerifier } from "../middlewares/IANAValidator.js"
+import { authRateLimit } from "../middlewares/rateLimit.js"
 
 export const rAuthInstance= express.Router()
 
-rAuthInstance.post("/register-parent" , zodMiddleware(RegFamilyParent), midIANAVerifier,  ConAuth.RegFamAndUser)
-rAuthInstance.post("/login", zodMiddleware(LoginUser), ConAuth.LoginUser)
-rAuthInstance.post('/forgot-password', zodMiddleware(ForgotPasswd), ConAuth.parentForgotPassword)
-rAuthInstance.post('/reset-password', zodMiddleware(ResetPasswd), ConAuth.parentResetPassword)
-
+// Rutas públicas. login / forgot / reset tienen rate limit por IP
+rAuthInstance.post("/register-parent" , zodMiddleware(RegFamilyParent), ConAuth.RegFamAndUser)
+rAuthInstance.post("/login", authRateLimit, zodMiddleware(LoginUser), ConAuth.LoginUser)
+rAuthInstance.post('/forgot-password', authRateLimit, zodMiddleware(ForgotPasswd), ConAuth.parentForgotPassword)
+rAuthInstance.post('/reset-password', authRateLimit, zodMiddleware(ResetPasswd), ConAuth.parentResetPassword)

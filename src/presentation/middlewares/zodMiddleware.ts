@@ -1,27 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import {ZodObject, ZodError } from "zod";
+import { ZodObject } from "zod";
 
+// Valida req.body. Si falla, Zod lanza ZodError y errorHandler responde 400 VALIDATION_ERROR
 export const zodMiddleware = (schema: ZodObject) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        try {
-            // Zod lanza una excepción si la validación falla
-            schema.parse(req.body);
-            next(); // Si pasa, continuamos al Caso de Uso
-        } catch (error) {
-            if (error instanceof ZodError) {
-                // Formateamos el error para el frontend
-                const formattedErrors = error.issues.map((issue) => ({
-                    field: issue.path.join("."), // Ej: "password" o "padre.email"
-                    message: issue.message       // Ej: "Debe contener al menos un número"
-                }));
-
-                return res.status(400).json({
-                    message: "Error de validación en los datos enviados",
-                    errors: formattedErrors
-                });
-            }
-            // Si es otro tipo de error, lo pasamos al manejador global
-            next(error);
-        }
+        req.body = schema.parse(req.body);
+        next();
     };
 };

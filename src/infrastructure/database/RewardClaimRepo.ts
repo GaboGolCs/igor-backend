@@ -29,7 +29,7 @@ export class RewardClaimRepository implements IRewardClaimRepository {
     );
   }
 
-  async getRewardClaim(rewardId: string, status?: RewardClaimStatus): Promise<RewardClaimEntity | null> {
+  async getRewardClaim(rewardId: string): Promise<RewardClaimEntity | null> {
     const record = await prisma.rewardClaim.findFirst({
       where: {
         id: rewardId 
@@ -51,11 +51,17 @@ export class RewardClaimRepository implements IRewardClaimRepository {
     );
   }
 
-  async updateStatus(rewardId: string, status: RewardClaimStatus): Promise<RewardClaimEntity> {
-    const record = await prisma.rewardClaim.update({
-      where: { id: rewardId },
-      data: { status, updated_at: new Date() }, // Es buena práctica registrar el momento exacto del update
+  async updateStatusIfPending(rewardId: string, status: RewardClaimStatus): Promise<RewardClaimEntity | null> {
+    // updateMany permite condicionar por estado: si otra petición ya la procesó, no se actualiza nada
+    const { count } = await prisma.rewardClaim.updateMany({
+      where: { id: rewardId, status: 'PENDING' },
+      data: { status, updated_at: new Date() },
     });
+    if (count === 0) {
+      return null;
+    }
+
+    const record = await prisma.rewardClaim.findUniqueOrThrow({ where: { id: rewardId } });
 
     return new RewardClaimEntity(
       record.id,

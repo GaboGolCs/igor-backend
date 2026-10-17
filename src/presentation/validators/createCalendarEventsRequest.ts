@@ -1,4 +1,4 @@
-import {refine, z} from "zod"
+import { z } from "zod"
 
 export const createCalendarEvent = z.object
 ({
@@ -10,6 +10,7 @@ export const createCalendarEvent = z.object
   }, {
     message: "La fecha no puede ser anterior al día de hoy",
   }),
-   title: z.string("El titulo debe ser de tipo string").min(1,"El titulo debe ser de largo minimo de 2 caracteres").max(150, "El titulo debe ser de máximo 150 caracteres"),
-   targeted_user_id: z.uuid(" targeted_user_id debe ser un uuid válido")
+   title: z.string("El titulo debe ser de tipo string").min(1,"El titulo no puede estar vacío").max(150, "El titulo debe ser de máximo 150 caracteres"),
+   // Opcional: si se omite, el evento se asigna al creador
+   targeted_user_id: z.uuid("targeted_user_id debe ser un uuid válido").optional()
 })

@@ -2,29 +2,21 @@ import {RewardClaimEntity} from '../../domain/entities/RewardClaimEnt.js';
 import {ClaimRewardOutputDTO } from '../dtos/ClaimRewardDTO.js';
 import {RewardClaimRepository} from '../../infrastructure/database/RewardClaimRepo.js';
 import {FamilyRepo} from '../../infrastructure/database/FamilyRepo.js';
+import { sessionUserNotFound } from '../errors/AppError.js';
 
 export async function ClaimRewardUseCase(childId: string, rewardTitle: string): Promise<ClaimRewardOutputDTO> {
 
-
-    const rewardClaimRepositoryInstance = new RewardClaimRepository();
-    const familyRepositoryInstance = new FamilyRepo();
-
-    
-    const _family = await familyRepositoryInstance.findFamilyByUserId(childId);
+    const _family = await new FamilyRepo().findFamilyByUserId(childId);
     if (!_family) {
-        throw new Error('Internal server error, no se encontró la familia para el usuario proporcionado.');
+        throw sessionUserNotFound();
     }
 
-    //Creamos la Claim en la memoria
     const newClaim = RewardClaimEntity.createRewardClaim(childId, _family.id, rewardTitle);
-
-//Guardamos el Claim en la BD
-    const savedClaim = await rewardClaimRepositoryInstance.create(newClaim);
+    const savedClaim = await new RewardClaimRepository().create(newClaim);
 
     return {
       id: savedClaim.id,
       rewardTitle: savedClaim.rewardTitle,
       status: savedClaim.status,
     }
-
-  }
+}

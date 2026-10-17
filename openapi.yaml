@@ -1,0 +1,981 @@
+openapi: 3.0.3
+info:
+  title: IGOR Backend API
+  description: |
+    API REST para la plataforma socioeducativa IGOR.
+
+    **Autenticación:** JWT en `Authorization: Bearer <token>`, obtenido en `/auth/login` o `/auth/register-parent`.
+
+    **Errores:** todas las respuestas de error usan el schema `Error` (`{ message, code, errors? }`).
+    El frontend debe ramificar por `code`, no por `message`.
+
+    **Convención de status:**
+    - 400: validación (`VALIDATION_ERROR`, `INVALID_JSON`) o token de recuperación inválido.
+    - 401: sin token, token inválido/expirado, credenciales incorrectas o usuario de la sesión inexistente.
+    - 403: el rol del usuario no tiene acceso a la ruta.
+    - 404: el recurso no existe **o pertenece a otra familia** (no se revela su existencia).
+    - 409: duplicado o ya procesado.
+    - 429: demasiados intentos (login / forgot / reset).
+    - 500: error interno, con mensaje genérico.
+  version: 1.4.0
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Servidor local de desarrollo
+tags:
+  - name: Autenticación
+  - name: Gestión Familiar
+  - name: Afectividad
+  - name: Calendario
+  - name: Recordatorios Cotidianos
+  - name: Notificaciones
+  - name: Gamificación
+  - name: Consejos e Interacción Parental
+  - name: Operación
+
+paths:
+  /auth/register-parent:
+    post:
+      tags: [Autenticación]
+      summary: Registro de apoderado y creación de su familia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterParentRequest"
+      responses:
+        "201":
+          description: Familia y apoderado creados. Devuelve la sesión iniciada.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthEnvelope"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          description: "`EMAIL_TAKEN` o `ALIAS_TAKEN`"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /auth/login:
+    post:
+      tags: [Autenticación]
+      summary: Iniciar sesión (apoderados con email, niños con alias)
+      description: |
+        Si `identifier` contiene `@` se trata como email de apoderado; si no, como alias de niño.
+        Un apoderado no puede entrar por alias ni un niño por email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Sesión iniciada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthEnvelope"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          description: "`INVALID_CREDENTIALS` (mismo mensaje para usuario inexistente y contraseña incorrecta)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+
+  /auth/forgot-password:
+    post:
+      tags: [Autenticación]
+      summary: Solicitar enlace de recuperación de contraseña (apoderados)
+      description: |
+        Público. Siempre responde 200 con el mismo mensaje, exista o no el email.
+        El correo enlaza a `${FRONTEND_URL}/reset-password?token=...`; el token expira en 15 minutos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordRequest"
+      responses:
+        "200":
+          description: Solicitud recibida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+
+  /auth/reset-password:
+    post:
+      tags: [Autenticación]
+      summary: Restablecer contraseña con el token recibido por correo
+      description: Público. El token es de un solo uso.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordRequest"
+      responses:
+        "200":
+          description: Contraseña actualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: "`VALIDATION_ERROR` o `INVALID_RESET_TOKEN` (inválido, expirado o ya usado)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /family/children:
+    post:
+      tags: [Gestión Familiar]
+      summary: Crear perfil de hijo en la familia del apoderado
+      description: Rol PARENT. Un niño nunca tiene email (el campo no se acepta).
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChildRequest"
+      responses:
+        "201":
+          description: Hijo creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/ChildProfile"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          description: "`ALIAS_TAKEN`"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /family/children/{childId}/pin:
+    patch:
+      tags: [Gestión Familiar]
+      summary: Cambiar el PIN de un hijo
+      description: Rol PARENT. Solo para niños de la propia familia.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: childId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePinRequest"
+      responses:
+        "201":
+          description: PIN cambiado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: "`CHILD_NOT_FOUND` (no existe, no es niño o es de otra familia)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /moods:
+    post:
+      tags: [Afectividad]
+      summary: Registrar estado emocional y actividad del niño
+      description: Rol CHILD.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MoodRequest"
+      responses:
+        "201":
+          description: Registro creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /moods/analytics:
+    get:
+      tags: [Afectividad]
+      summary: Reporte mensual de emociones de un hijo
+      description: Rol PARENT. Solo para niños de la propia familia. Mes calculado en UTC.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: childId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 2025
+            maximum: 2200
+      responses:
+        "200":
+          description: Conteo de emociones del mes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MoodAnalyticsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: "`CHILD_NOT_FOUND`"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /calendar/events:
+    get:
+      tags: [Calendario]
+      summary: Listar eventos de la familia en un mes
+      description: Cualquier rol. Devuelve solo los eventos de la familia del usuario, ordenados por fecha.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 2025
+            maximum: 2200
+      responses:
+        "200":
+          description: Eventos del mes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalendarEvent"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags: [Calendario]
+      summary: Crear evento (pruebas, reuniones, materiales)
+      description: Rol PARENT. Si se omite `targeted_user_id`, el evento se asigna al creador.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CalendarEventRequest"
+      responses:
+        "201":
+          description: Evento creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CalendarEvent"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: "`USER_NOT_FOUND` (destinatario inexistente o de otra familia)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /reminders:
+    post:
+      tags: [Recordatorios Cotidianos]
+      summary: Crear recordatorio diario para un hijo
+      description: Rol PARENT. Se programa todos los días a `recurrenceTime` en la zona horaria del apoderado.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReminderRequest"
+      responses:
+        "201":
+          description: Recordatorio creado y programado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyReminder"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: "`CHILD_NOT_FOUND`"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /push-tokens:
+    post:
+      tags: [Notificaciones]
+      summary: Registrar el token FCM del dispositivo
+      description: Cualquier rol. Si el token ya existía, el dispositivo pasa al usuario actual.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PushTokenRequest"
+      responses:
+        "200":
+          description: Token registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /games/questions/random:
+    get:
+      tags: [Gamificación]
+      summary: Obtener una pregunta de trivia al azar
+      description: Rol CHILD. No incluye la respuesta correcta.
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Pregunta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TriviaQuestion"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: "`NO_QUESTIONS` (no hay preguntas cargadas)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /games/rewards/claims:
+    post:
+      tags: [Gamificación]
+      summary: Solicitar una recompensa a los padres
+      description: Rol CHILD. La recompensa queda en estado PENDING.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RewardClaimRequest"
+      responses:
+        "201":
+          description: Solicitud creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardClaim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /games/rewards/{rewardId}/status:
+    patch:
+      tags: [Gamificación]
+      summary: Aceptar o rechazar una recompensa solicitada
+      description: Rol PARENT. Solo recompensas PENDING de la propia familia.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: rewardId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RewardStatusRequest"
+      responses:
+        "200":
+          description: Estado actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardClaim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: "`REWARD_NOT_FOUND` (no existe o es de otra familia)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: "`REWARD_ALREADY_PROCESSED`"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /tips:
+    get:
+      tags: [Consejos e Interacción Parental]
+      summary: Obtener consejos de crianza
+      description: Rol PARENT. Más recientes primero.
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Lista de consejos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ParentalTip"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /health:
+    get:
+      tags: [Operación]
+      summary: Estado de la API, Postgres y Redis
+      description: Fuera de `/api/v1`, en la raíz del servidor.
+      servers:
+        - url: http://localhost:3000
+      responses:
+        "200":
+          description: Todo responde
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "503":
+          description: Postgres o Redis no responden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: "`VALIDATION_ERROR` (con `errors` por campo) o `INVALID_JSON`"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: "`TOKEN_MISSING`, `TOKEN_INVALID` o `SESSION_USER_NOT_FOUND`"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: "`FORBIDDEN_ROLE`"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    TooManyRequests:
+      description: "`RATE_LIMITED`"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalError:
+      description: "`INTERNAL_ERROR`"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  schemas:
+    Error:
+      type: object
+      required: [message, code]
+      properties:
+        message:
+          type: string
+          example: Error de validación en los datos enviados
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        errors:
+          type: array
+          description: Solo en VALIDATION_ERROR
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: parentEmail
+              message:
+                type: string
+                example: Debe ingresar un email válido
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    Role:
+      type: string
+      enum: [PARENT, CHILD, ADMIN]
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1Ni...
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            role:
+              $ref: "#/components/schemas/Role"
+
+    AuthEnvelope:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: "#/components/schemas/AuthResponse"
+
+    RegisterParentRequest:
+      type: object
+      additionalProperties: false
+      required: [familyName, parentEmail, password, alias, timezone]
+      properties:
+        familyName:
+          type: string
+          minLength: 3
+          maxLength: 100
+          example: Familia Pérez
+        parentEmail:
+          type: string
+          format: email
+          example: apoderado@email.com
+        password:
+          type: string
+          minLength: 4
+          description: Debe contener al menos un número
+          example: clave1234
+        alias:
+          type: string
+          minLength: 5
+          maxLength: 50
+          description: No puede contener "@"
+          example: papa_perez
+        timezone:
+          type: string
+          maxLength: 50
+          description: Zona horaria IANA
+          example: America/Santiago
+        avatar_icon:
+          type: string
+          maxLength: 100
+
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [identifier, secret]
+      properties:
+        identifier:
+          type: string
+          description: Email (apoderado) o alias (niño)
+          example: apoderado@email.com
+        secret:
+          type: string
+          description: Contraseña (apoderado) o PIN (niño)
+          example: clave1234
+
+    ForgotPasswordRequest:
+      type: object
+      additionalProperties: false
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    ResetPasswordRequest:
+      type: object
+      required: [token, newPassword]
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
+          minLength: 4
+          description: Debe contener al menos un número
+
+    CreateChildRequest:
+      type: object
+      additionalProperties: false
+      required: [alias, password]
+      properties:
+        alias:
+          type: string
+          minLength: 5
+          maxLength: 50
+          description: No puede contener "@"
+          example: sofia_perez
+        password:
+          type: string
+          pattern: "^\\d{4}$"
+          description: PIN de exactamente 4 dígitos
+          example: "1234"
+        avatar_icon:
+          type: string
+          maxLength: 100
+
+    ChildProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        parentId:
+          type: string
+          format: uuid
+        alias:
+          type: string
+        role:
+          $ref: "#/components/schemas/Role"
+
+    ChangePinRequest:
+      type: object
+      required: [newPin]
+      properties:
+        newPin:
+          type: string
+          pattern: "^\\d{4}$"
+          example: "4321"
+
+    Emotion:
+      type: string
+      enum: [HAPPY, SAD, ANXIOUS, NEUTRAL, ANGRY]
+
+    MoodRequest:
+      type: object
+      required: [emotion, activityText]
+      properties:
+        emotion:
+          $ref: "#/components/schemas/Emotion"
+        activityText:
+          type: string
+        needText:
+          type: string
+
+    MoodAnalyticsResponse:
+      type: object
+      properties:
+        totalLogs:
+          type: integer
+        emotionBreakdown:
+          type: object
+          properties:
+            HAPPY:
+              type: integer
+            SAD:
+              type: integer
+            ANXIOUS:
+              type: integer
+            NEUTRAL:
+              type: integer
+            ANGRY:
+              type: integer
+
+    EventCategory:
+      type: string
+      enum: [EXAM, MEETING, MATERIAL, FAMILY, OTHER]
+
+    CalendarEventRequest:
+      type: object
+      required: [title, category, eventDate]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 150
+        category:
+          $ref: "#/components/schemas/EventCategory"
+        eventDate:
+          type: string
+          format: date-time
+          description: No puede ser anterior a hoy
+        targeted_user_id:
+          type: string
+          format: uuid
+          description: Miembro de la familia. Por defecto, el creador.
+
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        family_id:
+          type: string
+          format: uuid
+        created_by:
+          type: string
+          format: uuid
+        targeted_user_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        category:
+          $ref: "#/components/schemas/EventCategory"
+        event_date:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ReminderRequest:
+      type: object
+      required: [title, recurrenceTime, childId]
+      properties:
+        title:
+          type: string
+          minLength: 2
+          maxLength: 150
+          example: Lavarse los dientes
+        recurrenceTime:
+          type: string
+          pattern: "^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+          example: "08:30"
+        childId:
+          type: string
+          format: uuid
+
+    DailyReminder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        family_id:
+          type: string
+          format: uuid
+        targeted_user_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        recurrence_time:
+          type: string
+          example: "08:30"
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    PushTokenRequest:
+      type: object
+      required: [token, deviceType]
+      properties:
+        token:
+          type: string
+        deviceType:
+          type: string
+          enum: [ANDROID, IOS, WEB]
+
+    TriviaQuestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+
+    RewardClaimRequest:
+      type: object
+      required: [rewardTitle]
+      properties:
+        rewardTitle:
+          type: string
+          minLength: 3
+          maxLength: 100
+          example: Helado de chocolate
+
+    RewardClaim:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        rewardTitle:
+          type: string
+        status:
+          type: string
+          enum: [PENDING, ACCEPTED, REJECTED]
+
+    RewardStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [ACCEPTED, REJECTED]
+
+    ParentalTip:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ok, error]
+        database:
+          type: string
+          enum: [ok, error]
+        redis:
+          type: string
+          enum: [ok, error]

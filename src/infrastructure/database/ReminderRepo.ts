@@ -26,9 +26,13 @@ export class ReminderRepo implements ReminderRepoContract{
 
             return savedRemider as ReminderEnt
         } catch (error) {
-            console.error
-            throw error 
+            console.error(error)
+            throw error
         }
-        
+
+    }
+
+    public async deleteReminder(id: string): Promise<void> {
+        await prisma.dailyReminder.delete({ where: { id } })
     }
 }

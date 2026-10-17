@@ -1,44 +1,24 @@
 import { CalendarEventEntity } from "../../domain/entities/CalendarEventEnt.js";
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
-import { FamilyRepo } from "../../infrastructure/database/FamilyRepo.js";
 import { EventCategoryEnt } from "../../domain/entities/EventCategoryEnt.js";
 import { CalendarEventRepo } from "../../infrastructure/database/CalendarEventRepo.js";
+import { NotFoundError, sessionUserNotFound } from "../errors/AppError.js";
 
 export async function postCalendarEvents(created_by: string, targeted_user_id: string, title: string, category: EventCategoryEnt, event_date: Date):Promise<CalendarEventEntity>{
-    try {
+    const userRepoInstance = new UserRepo()
 
-        const userRepoInstance = new UserRepo()
-        const userFound = await userRepoInstance.findById(created_by)
-        if(!userFound){
-            throw new Error("Bad Request, No existe un usuario con la id ingresada")
-        }
-
-        const familyRepoInstance = new FamilyRepo()
-        const familyFound = await familyRepoInstance.findFamilyByUserId(created_by)
-        if(!familyFound){
-            throw new Error("Bad Request: no existe una familia asociada al usuario enviado")
-        }
-
-        const targetedUserFound = await userRepoInstance.findById(targeted_user_id)
-        if(!targetedUserFound){
-            throw new Error("Bad Request, no existe el usuario al que se le va a asignar el evento")
-        }
-
-        const calendarEventEntCreated = CalendarEventEntity.createCalendarEvent(familyFound.id, userFound.id, targetedUserFound.id, title, category, event_date)
-
-        const calendarEventRepoInstance = new CalendarEventRepo()
-        const calendarEventSaved = calendarEventRepoInstance.saveCalendarEvent(calendarEventEntCreated)
-
-        if (!calendarEventSaved){
-            throw new Error("Internal Server Error, No se ha podido crear el nuevo evento en el calendario")
-        }
-
-        return calendarEventSaved
-
-    } catch (error) {
-        console.error(error)
-        throw error
+    const userFound = await userRepoInstance.findById(created_by)
+    if(!userFound){
+        throw sessionUserNotFound()
     }
 
+    // El destinatario debe existir y pertenecer a la misma familia del creador
+    const targetedUserFound = await userRepoInstance.findById(targeted_user_id)
+    if(!targetedUserFound || targetedUserFound.family_id !== userFound.family_id){
+        throw new NotFoundError("No existe el usuario destinatario en tu familia", "USER_NOT_FOUND")
+    }
 
+    const calendarEventEntCreated = CalendarEventEntity.createCalendarEvent(userFound.family_id, userFound.id, targetedUserFound.id, title, category, event_date)
+
+    return await new CalendarEventRepo().saveCalendarEvent(calendarEventEntCreated)
 }

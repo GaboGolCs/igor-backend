@@ -26,4 +26,21 @@ services:
     ports:
       - 6379:6379
 
+  # API en contenedor (opcional). Solo se levanta con: docker compose --profile app up
+  # Toma las variables de .env y apunta la BD y Redis a los servicios de este compose.
+  api:
+    profiles: ["app"]
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/igor_db
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - redis
+
 

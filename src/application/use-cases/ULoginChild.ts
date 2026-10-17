@@ -1,51 +1,23 @@
 import { UserRepo } from "../../infrastructure/database/UserRepo.js";
 import { verifyPassword } from "../../infrastructure/security/verifyPasswd.js";
 import {createJWToken} from "../../infrastructure/security/createJWToken.js"
-import { UserEntity } from "../../domain/entities/UserEnt.js";
-export async function LoginChild(alias: string, passwordProvided: string){
-    const UserRepoInstance = new UserRepo()
-   
-    let userFound: UserEntity | null;
-    try {
-        if(!alias || !passwordProvided) {
-            console.error("Alias o contraseña no proporcionados")
-            throw new Error("Alias o contraseña no proporcionados")
-        } 
+import { AuthResponseDTO } from "../dtos/AuthResponseDTO.js";
+import { mapUserEntityToAuthResponseDTO } from "../mappers/AuthResponseMapper.js";
+import { invalidCredentials } from "./ULoginParent.js";
 
-        userFound = await UserRepoInstance.findByAlias(alias)
-        if(!userFound) {
-            console.error("Usuario no encontrado")
-            throw new Error("Usuario no encontrado")
-        }
-    } catch (error) {
-       console.error(error)
-       throw error 
+export async function LoginChild(alias: string, passwordProvided: string): Promise<AuthResponseDTO> {
+    const userFound = await new UserRepo().findByAlias(alias)
+
+    // El login por alias es solo para niños (un apoderado entra con su email)
+    if(!userFound || userFound.role !== "CHILD") {
+        throw invalidCredentials()
     }
 
-    try { 
-        ////ENVIAR EL ERROR A LA CAPA DE PRESENTACION PARA QUE SEAPA QUE FALLÓ LA CONTRASEÑA
-        const passComparation = await verifyPassword(userFound.password_hash, passwordProvided)
-        if(!passComparation) {
-            console.error("Contraseña incorrecta")
-            throw new Error("Contraseña incorrecta")
-        }
-
-    } catch (error) {
-        console.error(error)
-        throw error
+    if(!await verifyPassword(userFound.password_hash, passwordProvided)) {
+        throw invalidCredentials()
     }
 
-    try {
-
-        const tokenToSend = createJWToken(userFound) 
-        if(!tokenToSend) {
-            console.error("Error al crear el token")
-            throw new Error("Error al crear el token")
-        }
-        return tokenToSend
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-    
+    // Misma forma de respuesta que el login de padre: { accessToken, user }
+    const tokenToSend = createJWToken(userFound)
+    return mapUserEntityToAuthResponseDTO(userFound, tokenToSend)
 }

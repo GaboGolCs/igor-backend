@@ -1,8 +1,8 @@
-import "dotenv/config";
+import { env } from "../config/env.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../prisma/client.js";
 
-const connectionString = `${process.env.DATABASE_URL}`;
+const connectionString = env.DATABASE_URL;
 
 
 // 1. Función que genera la instancia pura de Prisma
@@ -21,6 +21,6 @@ declare global {
 export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 // 4. Prevenimos el agotamiento de conexiones en modo desarrollo
-if (process.env.NODE_ENV !== 'production') {
+if (env.NODE_ENV !== "production") {
   globalThis.prismaGlobal = prisma;
 }

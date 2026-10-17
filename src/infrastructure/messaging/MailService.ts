@@ -1,5 +1,6 @@
 // src/infrastructure/messaging/mail.service.ts
 import nodemailer from 'nodemailer';
+import { env } from '../config/env.js';
 
 export class MailService {
   private transporter;
@@ -9,8 +10,8 @@ export class MailService {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: env.GMAIL_USER,
+        pass: env.GMAIL_APP_PASSWORD,
       },
     });
   }
@@ -21,10 +22,10 @@ export class MailService {
    * @param resetToken Token generado y almacenado en Redis.
    */
   async sendPasswordResetEmail(to: string, resetToken: string): Promise<void> {
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+    const resetLink = `${env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
     const mailOptions = {
-      from: `"IGOR Soporte" <${process.env.GMAIL_USER}>`,
+      from: `"IGOR Soporte" <${env.GMAIL_USER}>`,
       to,
       subject: 'Recuperación de Contraseña - Proyecto IGOR',
       html: `
@@ -44,9 +45,9 @@ export class MailService {
 
     try {
       await this.transporter.sendMail(mailOptions);
-      console.log(`[MailService] Correo de recuperación enviado con éxito a: ${to}`);
+      console.log('[MailService] Correo de recuperación enviado.');
     } catch (error) {
-      console.error('[MailService] Error al enviar correo mediante Gmail SMTP:', error);
+      console.error('[MailService] Error al enviar correo mediante Gmail SMTP:', (error as Error).message);
       throw new Error('No se pudo enviar el correo de recuperación.');
     }
   }

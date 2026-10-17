@@ -16,8 +16,10 @@ export class PrismaQuestionRepository implements IQuestionRepository {
     const randomSkip = Math.floor(Math.random() * count);
 
     // 3. Obtenemos un registro aplicando el salto aleatorio
+    // orderBy fijo: sin él, el offset no apunta a un registro determinado
     const record = await prisma.triviaQuestion.findFirst({
       skip: randomSkip,
+      orderBy: { id: 'asc' },
     });
 
     if (!record) {

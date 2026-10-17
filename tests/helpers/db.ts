@@ -1,7 +1,7 @@
 import { prisma } from '../../src/infrastructure/database/prisma.js';
 import { redisConnection } from '../../src/infrastructure/messaging/redisConnection.js';
 
-// Tablas que escriben los tests (trivia_questions y parental_tips son datos de seed)
+// Todas las tablas de la app (la BD igor_test no tiene seeds; cada test crea lo que necesita)
 const TABLES = [
   'reward_claims',
   'daily_reminders',
@@ -10,6 +10,8 @@ const TABLES = [
   'push_tokens',
   'users',
   'families',
+  'trivia_questions',
+  'parental_tips',
 ];
 
 export async function resetDb() {

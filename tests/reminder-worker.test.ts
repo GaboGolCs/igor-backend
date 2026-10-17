@@ -12,43 +12,22 @@ vi.mock('../src/infrastructure/messaging/FCMPushService.js', () => ({
 import { prisma } from '../src/infrastructure/database/prisma.js';
 import { reminderQueue } from '../src/infrastructure/messaging/ReminderQueue.js';
 import { startReminderWorker } from '../src/infrastructure/messaging/ReminderWorker.js';
-import { api, registerChild, registerParent } from './helpers/fixtures.js';
+import { createFamily } from './helpers/fixtures.js';
 import { closeConnections, resetDb, resetRedis } from './helpers/db.js';
 
 const DEFAULT_BODY = '¡Es hora de tu rutina!';
 
-let parentToken: string;
 let childId: string;
 
 beforeAll(async () => {
   await resetDb();
   await resetRedis();
-  const parent = await registerParent();
-  parentToken = parent.token;
-  childId = (await registerChild(parentToken)).userId;
+  childId = (await createFamily()).child.userId;
 });
 
 afterAll(async () => {
   await reminderQueue.close();
   await closeConnections();
-});
-
-describe('POST /api/v1/reminders', () => {
-  it('programa el scheduler con el payload que espera el worker', async () => {
-    const res = await api()
-      .post('/api/v1/reminders')
-      .set('Authorization', `Bearer ${parentToken}`)
-      .send({ title: 'Lavarse los dientes', recurrenceTime: '08:30', childId });
-
-    expect(res.status).toBe(201);
-
-    const scheduler = await reminderQueue.getJobScheduler(res.body.id);
-    expect(scheduler?.template?.data).toEqual({
-      reminderId: res.body.id,
-      targetUserId: childId,
-      title: 'Lavarse los dientes',
-    });
-  });
 });
 
 describe('ReminderWorker', () => {

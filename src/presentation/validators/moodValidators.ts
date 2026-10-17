@@ -7,7 +7,7 @@ export const registerMood = z.object({
 })
 
 export const monthlyStatistics = z.object({
-    childId: z.coerce.string("se necesita un id para buscar").min(1),
+    childId: z.uuid("childId debe ser un UUID válido"),
     month: z.coerce.number().int().min(1,"El primer mes es el numero 1").max(12,"No existen mas de 12 meses"),
-    year: z.coerce.number().int().min(2025, "No se admiten años menores a 2025").max(2200, "No se admiten alos mayores a 2020")
+    year: z.coerce.number().int().min(2025, "No se admiten años menores a 2025").max(2200, "No se admiten alos mayores a 2200")
 })
