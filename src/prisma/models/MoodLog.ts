@@ -158,7 +158,7 @@ export type MoodLogGroupByOutputType = {
   user_id: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text: string | null
   logged_at: Date
   _count: MoodLogCountAggregateOutputType | null
   _min: MoodLogMinAggregateOutputType | null
@@ -188,7 +188,7 @@ export type MoodLogWhereInput = {
   user_id?: Prisma.UuidFilter<"MoodLog"> | string
   emotion?: Prisma.EnumEmotionFilter<"MoodLog"> | $Enums.Emotion
   activity_text?: Prisma.StringFilter<"MoodLog"> | string
-  need_text?: Prisma.StringFilter<"MoodLog"> | string
+  need_text?: Prisma.StringNullableFilter<"MoodLog"> | string | null
   logged_at?: Prisma.DateTimeFilter<"MoodLog"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -198,7 +198,7 @@ export type MoodLogOrderByWithRelationInput = {
   user_id?: Prisma.SortOrder
   emotion?: Prisma.SortOrder
   activity_text?: Prisma.SortOrder
-  need_text?: Prisma.SortOrder
+  need_text?: Prisma.SortOrderInput | Prisma.SortOrder
   logged_at?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -211,7 +211,7 @@ export type MoodLogWhereUniqueInput = Prisma.AtLeast<{
   user_id?: Prisma.UuidFilter<"MoodLog"> | string
   emotion?: Prisma.EnumEmotionFilter<"MoodLog"> | $Enums.Emotion
   activity_text?: Prisma.StringFilter<"MoodLog"> | string
-  need_text?: Prisma.StringFilter<"MoodLog"> | string
+  need_text?: Prisma.StringNullableFilter<"MoodLog"> | string | null
   logged_at?: Prisma.DateTimeFilter<"MoodLog"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -221,7 +221,7 @@ export type MoodLogOrderByWithAggregationInput = {
   user_id?: Prisma.SortOrder
   emotion?: Prisma.SortOrder
   activity_text?: Prisma.SortOrder
-  need_text?: Prisma.SortOrder
+  need_text?: Prisma.SortOrderInput | Prisma.SortOrder
   logged_at?: Prisma.SortOrder
   _count?: Prisma.MoodLogCountOrderByAggregateInput
   _max?: Prisma.MoodLogMaxOrderByAggregateInput
@@ -236,7 +236,7 @@ export type MoodLogScalarWhereWithAggregatesInput = {
   user_id?: Prisma.UuidWithAggregatesFilter<"MoodLog"> | string
   emotion?: Prisma.EnumEmotionWithAggregatesFilter<"MoodLog"> | $Enums.Emotion
   activity_text?: Prisma.StringWithAggregatesFilter<"MoodLog"> | string
-  need_text?: Prisma.StringWithAggregatesFilter<"MoodLog"> | string
+  need_text?: Prisma.StringNullableWithAggregatesFilter<"MoodLog"> | string | null
   logged_at?: Prisma.DateTimeWithAggregatesFilter<"MoodLog"> | Date | string
 }
 
@@ -244,7 +244,7 @@ export type MoodLogCreateInput = {
   id?: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text?: string | null
   logged_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutMood_logsInput
 }
@@ -254,7 +254,7 @@ export type MoodLogUncheckedCreateInput = {
   user_id: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text?: string | null
   logged_at?: Date | string
 }
 
@@ -262,7 +262,7 @@ export type MoodLogUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutMood_logsNestedInput
 }
@@ -272,7 +272,7 @@ export type MoodLogUncheckedUpdateInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -281,7 +281,7 @@ export type MoodLogCreateManyInput = {
   user_id: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text?: string | null
   logged_at?: Date | string
 }
 
@@ -289,7 +289,7 @@ export type MoodLogUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -298,7 +298,7 @@ export type MoodLogUncheckedUpdateManyInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -389,7 +389,7 @@ export type MoodLogCreateWithoutUserInput = {
   id?: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text?: string | null
   logged_at?: Date | string
 }
 
@@ -397,7 +397,7 @@ export type MoodLogUncheckedCreateWithoutUserInput = {
   id?: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text?: string | null
   logged_at?: Date | string
 }
 
@@ -435,7 +435,7 @@ export type MoodLogScalarWhereInput = {
   user_id?: Prisma.UuidFilter<"MoodLog"> | string
   emotion?: Prisma.EnumEmotionFilter<"MoodLog"> | $Enums.Emotion
   activity_text?: Prisma.StringFilter<"MoodLog"> | string
-  need_text?: Prisma.StringFilter<"MoodLog"> | string
+  need_text?: Prisma.StringNullableFilter<"MoodLog"> | string | null
   logged_at?: Prisma.DateTimeFilter<"MoodLog"> | Date | string
 }
 
@@ -443,7 +443,7 @@ export type MoodLogCreateManyUserInput = {
   id?: string
   emotion: $Enums.Emotion
   activity_text: string
-  need_text: string
+  need_text?: string | null
   logged_at?: Date | string
 }
 
@@ -451,7 +451,7 @@ export type MoodLogUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -459,7 +459,7 @@ export type MoodLogUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -467,7 +467,7 @@ export type MoodLogUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   emotion?: Prisma.EnumEmotionFieldUpdateOperationsInput | $Enums.Emotion
   activity_text?: Prisma.StringFieldUpdateOperationsInput | string
-  need_text?: Prisma.StringFieldUpdateOperationsInput | string
+  need_text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logged_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -533,7 +533,7 @@ export type $MoodLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     user_id: string
     emotion: $Enums.Emotion
     activity_text: string
-    need_text: string
+    need_text: string | null
     logged_at: Date
   }, ExtArgs["result"]["moodLog"]>
   composites: {}

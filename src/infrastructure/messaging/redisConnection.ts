@@ -1,7 +1,8 @@
 // src/infrastructure/messaging/redisConnection.ts
-import { Redis } from 'ioredis'; // Solución 1: Importación nombrada
+import { Redis } from 'ioredis';
+import { env } from '../config/env.js';
 
-const REDIS_URL = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
+const REDIS_URL = env.REDIS_URL;
 
 export const redisConnection = new Redis(REDIS_URL, {
   maxRetriesPerRequest: null,

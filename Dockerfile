@@ -23,7 +23,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
-COPY schema.prisma prisma.config.ts ./
+COPY schema.prisma prisma.config.ts openapi.yaml ./
 COPY src/prisma/migrations ./src/prisma/migrations
 
 EXPOSE 3000

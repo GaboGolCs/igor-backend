@@ -1,15 +1,16 @@
 import { IQuestionRepository } from '../../domain/repoContracts/QuestionRepoContract.js';
 import { TriviaQuestionDTO } from '../dtos/TriviaQuestionDTO.js';
 import {PrismaQuestionRepository} from "../../infrastructure/database/QuestionRepo.js";
+import { NotFoundError } from '../errors/AppError.js';
 
 export async function  GetRandomTriviaUseCase(): Promise<TriviaQuestionDTO> {
 
     const questionRepository: IQuestionRepository = new PrismaQuestionRepository();
-    
+
     const question = await questionRepository.getRandomQuestion();
 
     if (!question) {
-      throw new Error('Internal Server Error, No se han encontrado preguntas en la base de datos');
+      throw new NotFoundError('No hay preguntas de trivia disponibles', 'NO_QUESTIONS');
     }
 
     // Regla de Negocio (Anti-cheat): Solo devolvemos los campos seguros según OpenAPI.
@@ -19,5 +20,5 @@ export async function  GetRandomTriviaUseCase(): Promise<TriviaQuestionDTO> {
       questionText: question.questionText,
       options: question.options,
     };
-  
+
 }

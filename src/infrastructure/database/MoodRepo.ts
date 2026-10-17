@@ -39,8 +39,9 @@ export class MoodRepo implements MoodContract {
 
 async getMonthlyAnalytics(childId: string, month: number, year: number  ): Promise<MoodAnalyticsResult> {
     // 1. Definición del rango exacto del mes[cite: 1, 2]
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 1);
+    // En UTC, igual que el calendario, para no depender de la zona horaria del servidor
+    const startDate = new Date(Date.UTC(year, month - 1, 1));
+    const endDate = new Date(Date.UTC(year, month, 1));
 
     // 2. Agregación en base de datos usando el índice compuesto (user_id, logged_at)
     const groupedMoods = await prisma.moodLog.groupBy({

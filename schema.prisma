@@ -83,7 +83,7 @@ model MoodLog {
   user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   emotion       Emotion
   activity_text String   @db.Text
-  need_text     String   @db.Text
+  need_text     String?  @db.Text
   logged_at     DateTime @default(now())
 
   @@index([user_id, logged_at])

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import { env } from '../../infrastructure/config/env.js';
 
 import { app } from './app.js';
 
@@ -8,9 +8,8 @@ import { startReminderWorker } from '../../infrastructure/messaging/ReminderWork
 import { redisConnection } from '../../infrastructure/messaging/redisConnection.js';
 
 
-dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT;
 
 // Inicialización del servidor HTTP y encendido del Worker
 const server = app.listen(PORT, () => {

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { zodMiddleware } from "../middlewares/zodMiddleware.js";
-import { postReminderValidator } from "../validators/reminderValidators.js";
 import {TriviaController} from "../controllers/ConTrivia.js";
+import { requireAuth, requireRole } from "../middlewares/auth.js";
 
 const triviaControllerInstance = new TriviaController();
-const router = Router();
 
-export const rTriviaQuestion = router.get('/random', triviaControllerInstance.getRandomQuestion);
+export const rTriviaQuestion = Router();
+
+rTriviaQuestion.get('/random', requireAuth, requireRole("CHILD"), triviaControllerInstance.getRandomQuestion);

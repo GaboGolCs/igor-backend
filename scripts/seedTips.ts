@@ -1,4 +1,4 @@
-import {prisma} from "../../infrastructure/database/prisma.js"
+import {prisma} from "../src/infrastructure/database/prisma.js"
 
 const parentalTips = [
   {
