@@ -43,3 +43,10 @@ export const authRateLimit = createRateLimit({
     limit: env.AUTH_RATE_LIMIT_MAX,
     windowMs: 15 * 60 * 1000,
 });
+
+// Limita las renovaciones de sesión (/auth/refresh) con un contador propio, independiente del de login
+export const refreshRateLimit = createRateLimit({
+    prefix: "igor:rl:refresh:",
+    limit: env.REFRESH_RATE_LIMIT_MAX,
+    windowMs: 15 * 60 * 1000,
+});

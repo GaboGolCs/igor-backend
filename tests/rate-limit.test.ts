@@ -27,6 +27,7 @@ const attempt = (app: Express) =>
 
 beforeAll(async () => {
   vi.stubEnv('AUTH_RATE_LIMIT_MAX', '3');
+  vi.stubEnv('REFRESH_RATE_LIMIT_MAX', '2');
   a = await loadReplica();
   b = await loadReplica();
 });
@@ -83,6 +84,21 @@ describe('Rate limit de autenticación', () => {
       expect(res.body).toMatchObject({ code: 'INVALID_CREDENTIALS' });
     }
     expect(warn).toHaveBeenCalled();
+  });
+
+  it('/auth/refresh tiene su propio límite, independiente del de login', async () => {
+    const refresh = () => request(a.app).post('/api/v1/auth/refresh').send({ refreshToken: 'no-existe' });
+
+    // Agotar el límite de login no bloquea las renovaciones de sesión
+    for (let i = 0; i < 4; i++) await attempt(a.app);
+    expect((await refresh()).status).toBe(401);
+    expect((await refresh()).status).toBe(401);
+
+    // Tercer refresh: supera REFRESH_RATE_LIMIT_MAX (2)
+    const blocked = await refresh();
+    expect(blocked.status).toBe(429);
+    expect(blocked.body).toMatchObject({ code: 'RATE_LIMITED' });
+    expect((await a.redis.keys('igor:rl:refresh:*')).length).toBeGreaterThan(0);
   });
 
   it('no limita rutas fuera de auth', async () => {

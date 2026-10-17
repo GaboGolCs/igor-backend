@@ -36,6 +36,8 @@ const envSchema = z
             ),
         // Intentos permitidos por IP cada 15 minutos en login / forgot / reset
         AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
+        // Renovaciones de sesión por IP cada 15 minutos (más alto: varios dispositivos pueden compartir IP)
+        REFRESH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(60),
         API_DOCS_ENABLED: booleanFromString.default(true),
 
         FRONTEND_URL: z.url().optional(),
